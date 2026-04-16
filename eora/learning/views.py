@@ -261,6 +261,32 @@ def _recalculate_mastery_after_teacher_review(session, review_status, grade_2_5)
     )
 
 
+def _get_latest_final_review_attempt(session):
+    """Последняя отправка финальной задачи на проверку учителю для сессии."""
+    return (
+        TaskAttempt.objects.filter(session=session)
+        .exclude(teacher_review_status="")
+        .order_by("-created_at", "-id")
+        .first()
+    )
+
+
+def _build_final_review_payload(session):
+    attempt = _get_latest_final_review_attempt(session)
+    if not attempt:
+        return None
+    return {
+        "attempt_id": attempt.id,
+        "status": attempt.teacher_review_status or "pending",
+        "auto_is_correct": attempt.is_correct,
+        "teacher_grade_2_5": attempt.teacher_grade_2_5,
+        "teacher_comment": attempt.teacher_comment or "",
+        "reviewed_at": attempt.reviewed_at.isoformat() if attempt.reviewed_at else None,
+        "mastery_percent": session.mastery_percent,
+        "teacher_final_mark": session.teacher_final_mark,
+    }
+
+
 ALLOWED_STAGES = {
     "comprehension",
     "typical_task",
@@ -717,6 +743,9 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
                     "target_tasks_count": last_completed.target_tasks_count,
                     "score_percent": last_completed.score_percent,
                     "passed": last_completed.passed,
+                    "mastery_percent": last_completed.mastery_percent,
+                    "teacher_final_mark": last_completed.teacher_final_mark,
+                    "final_review": _build_final_review_payload(last_completed),
                     "last_completed": {
                         "id": last_completed.id,
                         "score_percent": last_completed.score_percent,
@@ -726,6 +755,9 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
                         "finished_at": last_completed.finished_at.isoformat() if last_completed.finished_at else None,
                         "passed": last_completed.passed,
                         "result_summary": _build_result_summary(last_completed),
+                        "mastery_percent": last_completed.mastery_percent,
+                        "teacher_final_mark": last_completed.teacher_final_mark,
+                        "final_review": _build_final_review_payload(last_completed),
                     },
                     "created": False,
                     "result_summary": _build_result_summary(last_completed),
@@ -755,12 +787,15 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
             "wrong_attempts_in_row": current_session.wrong_attempts_in_row,
             "score_percent": current_session.score_percent,
             "passed": current_session.passed,
+            "mastery_percent": current_session.mastery_percent,
+            "teacher_final_mark": current_session.teacher_final_mark,
             "started_at": current_session.started_at.isoformat(),
             "created": created,
             "has_completed": False,
             "step_by_step_completions": current_session.step_by_step_completions,
             "step_error_history": current_session.step_error_history or {},
             "result_summary": _build_result_summary(current_session),
+            "final_review": _build_final_review_payload(current_session),
         }
 
         # Добавляем информацию о последней завершенной сессии, если есть
@@ -774,6 +809,9 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
                 "finished_at": last_completed.finished_at.isoformat() if last_completed.finished_at else None,
                 "passed": last_completed.passed,
                 "result_summary": _build_result_summary(last_completed),
+                "mastery_percent": last_completed.mastery_percent,
+                "teacher_final_mark": last_completed.teacher_final_mark,
+                "final_review": _build_final_review_payload(last_completed),
             }
 
         return Response(response_data, status=status.HTTP_200_OK)
@@ -1138,7 +1176,9 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
             session.target_tasks_count = 6
             session.save(update_fields=["target_tasks_count"])
 
-        if session.tasks_solved_count >= session.target_tasks_count:
+        latest_final = _build_final_review_payload(session)
+        final_rejected = latest_final and latest_final.get("status") == "rejected"
+        if session.tasks_solved_count >= session.target_tasks_count and not final_rejected:
             if session.current_stage != "completed" or not session.finished_at:
                 session.current_stage = "completed"
                 if not session.finished_at:
@@ -1374,12 +1414,27 @@ class TaskViewSet(viewsets.GenericViewSet):
         ).exclude(pk=attempt.pk).exists()
 
         # Обновляем статистику сессии
-        if is_correct and not previously_solved:
-            session.tasks_solved_count += 1
-            session.tasks_correct_count += 1
-            session.wrong_attempts_in_row = 0
-        elif not is_correct:
-            session.wrong_attempts_in_row += 1
+        if is_final_grade_task:
+            # Финальная задача считается отправленной, даже если автопроверка не совпала:
+            # итог подтверждает учитель. Повторная отправка после "на доработку" не должна
+            # бесконечно увеличивать счётчик.
+            has_previous_final_submission = TaskAttempt.objects.filter(
+                session=session
+            ).exclude(teacher_review_status="").exclude(pk=attempt.pk).exists()
+            if not has_previous_final_submission:
+                session.tasks_solved_count += 1
+            if is_correct and not previously_solved:
+                session.tasks_correct_count += 1
+                session.wrong_attempts_in_row = 0
+            elif not is_correct:
+                session.wrong_attempts_in_row += 1
+        else:
+            if is_correct and not previously_solved:
+                session.tasks_solved_count += 1
+                session.tasks_correct_count += 1
+                session.wrong_attempts_in_row = 0
+            elif not is_correct:
+                session.wrong_attempts_in_row += 1
 
         session.save()
 
@@ -2738,6 +2793,11 @@ class TeacherFinalTaskReviewViewSet(viewsets.GenericViewSet):
                     {"detail": "Отметка должна быть в диапазоне 2–5"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+        if new_status == "accepted" and grade is None:
+            return Response(
+                {"detail": "Для принятия работы укажите отметку 2–5"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         if not attempt_id or new_status not in ("accepted", "rejected"):
             return Response(
                 {"detail": "Нужны attempt_id и status: accepted|rejected"},
@@ -2770,6 +2830,35 @@ class TeacherFinalTaskReviewViewSet(viewsets.GenericViewSet):
             ]
         )
         sess = attempt.session
+        target = max(2, int(sess.target_tasks_count or 6))
+        if new_status == "rejected":
+            if sess.tasks_solved_count >= target:
+                sess.tasks_solved_count = target - 1
+            if attempt.is_correct and sess.tasks_correct_count > 0:
+                sess.tasks_correct_count -= 1
+            sess.current_stage = "task_list"
+            sess.current_task_index = max(0, target - 1)
+            sess.finished_at = None
+            sess.save(
+                update_fields=[
+                    "tasks_solved_count",
+                    "tasks_correct_count",
+                    "current_stage",
+                    "current_task_index",
+                    "finished_at",
+                ]
+            )
+            _compute_and_save_score(sess)
+        else:
+            if sess.tasks_solved_count < target:
+                sess.tasks_solved_count = target
+            sess.current_stage = "completed"
+            if not sess.finished_at:
+                sess.finished_at = timezone.now()
+            sess.save(
+                update_fields=["tasks_solved_count", "current_stage", "finished_at"]
+            )
+            _compute_and_save_score(sess)
         _recalculate_mastery_after_teacher_review(sess, new_status, grade)
         return Response(
             {
@@ -2778,5 +2867,7 @@ class TeacherFinalTaskReviewViewSet(viewsets.GenericViewSet):
                 "status": new_status,
                 "mastery_percent": sess.mastery_percent,
                 "passed": sess.passed,
+                "teacher_grade_2_5": attempt.teacher_grade_2_5,
+                "teacher_comment": attempt.teacher_comment or "",
             }
         )

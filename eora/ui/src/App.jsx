@@ -689,6 +689,8 @@ function LearningView() {
   const { ksData, session, handleBackToCatalog } = useApp();
   const [resetting, setResetting] = useState(false);
   const stage = resolveLearningStage(session);
+  const [showTeacherReviewNotice, setShowTeacherReviewNotice] = useState(false);
+  const latestFinalReview = session?.final_review || null;
   const showTaskProgress = [
     "task_list",
     "solving_easy",
@@ -696,6 +698,28 @@ function LearningView() {
     "solving_hard",
     "step_by_step",
   ].includes(stage);
+
+  useEffect(() => {
+    if (!session?.id || !latestFinalReview?.attempt_id) {
+      setShowTeacherReviewNotice(false);
+      return;
+    }
+    if (latestFinalReview.status === "pending") {
+      setShowTeacherReviewNotice(false);
+      return;
+    }
+    const seenKey = `eora_final_review_seen_${session.id}_${latestFinalReview.attempt_id}`;
+    const seen = window.localStorage.getItem(seenKey);
+    setShowTeacherReviewNotice(!seen);
+  }, [session?.id, latestFinalReview?.attempt_id, latestFinalReview?.status]);
+
+  const closeTeacherReviewNotice = () => {
+    if (session?.id && latestFinalReview?.attempt_id) {
+      const seenKey = `eora_final_review_seen_${session.id}_${latestFinalReview.attempt_id}`;
+      window.localStorage.setItem(seenKey, "1");
+    }
+    setShowTeacherReviewNotice(false);
+  };
 
   const handleResetProgress = async () => {
     if (!session?.id) return;
@@ -742,6 +766,67 @@ function LearningView() {
       {/* Sidebar overlay (mobile) */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-[300] bg-black/50 md:hidden" onClick={() => setSidebarOpen(false)} />
+      )}
+
+      {showTeacherReviewNotice && latestFinalReview && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/55 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-lg w-full p-6 sm:p-7 animate-pop">
+            <div className="flex items-start gap-4">
+              <div
+                className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${
+                  latestFinalReview.status === "accepted"
+                    ? "bg-emerald-100"
+                    : "bg-amber-100"
+                }`}
+              >
+                {latestFinalReview.status === "accepted" ? "✅" : "🛠️"}
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-slate-900">
+                  {latestFinalReview.status === "accepted"
+                    ? "Учитель проверил итоговую задачу"
+                    : "Итоговая задача отправлена на доработку"}
+                </h3>
+                {latestFinalReview.teacher_grade_2_5 != null && (
+                  <p className="text-sm text-slate-700 mt-2">
+                    Оценка учителя:{" "}
+                    <span className="font-semibold">{latestFinalReview.teacher_grade_2_5}</span>
+                  </p>
+                )}
+                {latestFinalReview.mastery_percent != null && (
+                  <p className="text-sm text-slate-700">
+                    Итоговое усвоение (система + учитель):{" "}
+                    <span className="font-semibold">{latestFinalReview.mastery_percent}%</span>
+                  </p>
+                )}
+                {latestFinalReview.teacher_comment && (
+                  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
+                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">
+                      Комментарий учителя
+                    </p>
+                    <p className="text-sm text-slate-700 whitespace-pre-line">
+                      {latestFinalReview.teacher_comment}
+                    </p>
+                  </div>
+                )}
+                {latestFinalReview.status === "rejected" && (
+                  <p className="text-sm text-amber-700 mt-3">
+                    Откройте последнюю ситуацию и отправьте обновленное решение. После проверки уведомление придет снова.
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="mt-6">
+              <button
+                type="button"
+                onClick={closeTeacherReviewNotice}
+                className="btn-primary w-full"
+              >
+                {latestFinalReview.status === "accepted" ? "Понятно" : "Перейти к доработке"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Sidebar */}
@@ -3111,6 +3196,12 @@ function StageTaskList() {
   const taskNumber = (taskProgress?.tasks_solved ?? 0) + 1;
   const photoRequired = taskNumber === targetSlots;
   const needsDifficultyChoice = taskNumber === 1 && !session?.difficulty_choice;
+  const finalReview = session?.final_review || null;
+  const finalStatus = finalReview?.status || "";
+  const finalPending = finalStatus === "pending";
+  const finalRejected = finalStatus === "rejected";
+  const finalAccepted = finalStatus === "accepted";
+  const statusSlots = Array.from({ length: targetSlots }, (_, i) => i + 1);
 
   return (
     <div className="max-w-3xl mx-auto px-2">
@@ -3131,6 +3222,41 @@ function StageTaskList() {
           </span>
         </div>
       )}
+
+      <div className="card p-4 mb-5">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-3">Статусы ситуаций</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {statusSlots.map((n) => {
+            let text = "Ожидает";
+            let cls = "border-slate-200 bg-slate-50 text-slate-600";
+            if (n < taskNumber) {
+              text = "Решена";
+              cls = "border-emerald-200 bg-emerald-50 text-emerald-700";
+            } else if (n === taskNumber) {
+              text = "Текущая";
+              cls = "border-indigo-200 bg-indigo-50 text-indigo-700";
+            }
+            if (n === targetSlots && finalPending) {
+              text = "На оценивании";
+              cls = "border-blue-200 bg-blue-50 text-blue-700";
+            }
+            if (n === targetSlots && finalAccepted) {
+              text = "Проверено";
+              cls = "border-emerald-200 bg-emerald-50 text-emerald-700";
+            }
+            if (n === targetSlots && finalRejected) {
+              text = "На доработке";
+              cls = "border-amber-200 bg-amber-50 text-amber-700";
+            }
+            return (
+              <div key={n} className={`rounded-lg border px-3 py-2 ${cls}`}>
+                <p className="text-sm font-semibold">Ситуация {n}</p>
+                <p className="text-xs mt-0.5">{text}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
 
       {!trackHintDismissed && (session?.target_tasks_count || taskProgress?.target_tasks_count) ? (
         <div className="rounded-xl border border-sky-200 bg-sky-50/90 p-4 mb-5 text-sm text-sky-950 shadow-sm">
@@ -3156,6 +3282,23 @@ function StageTaskList() {
           </div>
         </div>
       ) : null}
+
+      {finalRejected && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 mb-5">
+          <p className="text-sm font-semibold text-amber-900">
+            Последняя ситуация отправлена на доработку
+          </p>
+          {finalReview?.teacher_comment ? (
+            <p className="text-sm text-amber-800 mt-2 whitespace-pre-line">
+              Комментарий учителя: {finalReview.teacher_comment}
+            </p>
+          ) : (
+            <p className="text-sm text-amber-800 mt-1">
+              Учитель попросил пересмотреть решение и отправить новую попытку.
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Task card */}
       <div className="card p-6 md:p-8">
@@ -3325,10 +3468,20 @@ function StageTaskList() {
               {!result ? (
                 <button
                   onClick={handleSubmit}
-                  disabled={!answer || (photoRequired && answerPhotos.length === 0) || submitting || needsDifficultyChoice}
+                  disabled={
+                    !answer ||
+                    (photoRequired && answerPhotos.length === 0) ||
+                    submitting ||
+                    needsDifficultyChoice ||
+                    (photoRequired && finalPending)
+                  }
                   className="btn-primary btn-lg w-full"
                 >
-                  {submitting ? "Проверка..." : "Отправить ответ"}
+                  {submitting
+                    ? "Проверка..."
+                    : photoRequired && finalPending
+                      ? "Ожидается проверка учителя"
+                      : "Отправить ответ"}
                 </button>
               ) : (
                 <div className="space-y-4">
@@ -3360,7 +3513,7 @@ function StageTaskList() {
                   onClick={handleFinishTask6}
                   className="btn-primary btn-lg w-full"
                 >
-                  Завершить работу с темой
+                  Перейти в итоговое окно
                 </button>
               </>
             ) : result.is_correct ? (
@@ -5927,6 +6080,7 @@ function StageCompleted() {
   const wrongAttempts = Math.max(0, totalAttempts - solved);
   const score = Number(snap?.score_percent || 0);
   const summaries = rs.task_summaries || [];
+  const finalReview = snap?.final_review || null;
 
   const handleStartNewFromCompleted = async () => {
     try {
@@ -5965,6 +6119,42 @@ function StageCompleted() {
         </div>
 
         <SemiCircleGauge value={score} />
+
+        {finalReview && (
+          <div
+            className={`mt-4 mb-6 rounded-xl border p-4 ${
+              finalReview.status === "accepted"
+                ? "border-emerald-200 bg-emerald-50"
+                : finalReview.status === "rejected"
+                  ? "border-amber-200 bg-amber-50"
+                  : "border-blue-200 bg-blue-50"
+            }`}
+          >
+            <p className="text-sm font-semibold text-slate-900">
+              Статус финальной проверки:{" "}
+              {finalReview.status === "accepted"
+                ? "принято"
+                : finalReview.status === "rejected"
+                  ? "на доработке"
+                  : "на оценивании"}
+            </p>
+            {finalReview.teacher_grade_2_5 != null && (
+              <p className="text-sm text-slate-700 mt-1">
+                Оценка учителя: <strong>{finalReview.teacher_grade_2_5}</strong>
+              </p>
+            )}
+            {snap?.mastery_percent != null && (
+              <p className="text-sm text-slate-700">
+                Итоговое усвоение (система + учитель): <strong>{snap.mastery_percent}%</strong>
+              </p>
+            )}
+            {finalReview.teacher_comment && (
+              <p className="text-sm text-slate-700 mt-2 whitespace-pre-line">
+                Комментарий учителя: {finalReview.teacher_comment}
+              </p>
+            )}
+          </div>
+        )}
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 mb-8">
           <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-center">

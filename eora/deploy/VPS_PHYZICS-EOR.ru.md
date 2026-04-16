@@ -2,7 +2,7 @@
 
 **Сервер:** `root@5.129.199.23` (ключ SSH).  
 **Репозиторий:** [https://github.com/viacheslavka0/phyzics_eor](https://github.com/viacheslavka0/phyzics_eor).  
-Код клонируется в `**/srv/eora-repo`**, симлинк `**/srv/eora**` ведёт на каталог с `**manage.py**`.
+Код клонируется в `**/srv/eora-repo`**, симлинк `**/srv/eora`** ведёт на каталог с `**manage.py**`.
 
 **Пользователь `www-data`** — системная учётная запись Linux, под которой обычно крутятся Nginx и (в нашем примере) Gunicorn. Отдельного пользователя `eora` создавать не нужно.
 

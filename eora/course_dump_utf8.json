@@ -1,0 +1,5865 @@
+[
+{
+  "model": "learning.schoolclass",
+  "pk": 1,
+  "fields": {
+    "number": 7,
+    "title": "7 класс"
+  }
+},
+{
+  "model": "learning.schoolclass",
+  "pk": 2,
+  "fields": {
+    "number": 8,
+    "title": "8 класс"
+  }
+},
+{
+  "model": "learning.schoolclass",
+  "pk": 3,
+  "fields": {
+    "number": 9,
+    "title": "9 класс"
+  }
+},
+{
+  "model": "learning.subjectsection",
+  "pk": 1,
+  "fields": {
+    "school_class": 1,
+    "title": "Механические явления",
+    "order": 1
+  }
+},
+{
+  "model": "learning.subjectsection",
+  "pk": 2,
+  "fields": {
+    "school_class": 1,
+    "title": "Свойства вещества",
+    "order": 2
+  }
+},
+{
+  "model": "learning.subjectsection",
+  "pk": 3,
+  "fields": {
+    "school_class": 1,
+    "title": "Силы и движение",
+    "order": 3
+  }
+},
+{
+  "model": "learning.subjectsection",
+  "pk": 4,
+  "fields": {
+    "school_class": 1,
+    "title": "Давление",
+    "order": 4
+  }
+},
+{
+  "model": "learning.subjectsection",
+  "pk": 5,
+  "fields": {
+    "school_class": 3,
+    "title": "Механика",
+    "order": 1
+  }
+},
+{
+  "model": "learning.subjectsection",
+  "pk": 6,
+  "fields": {
+    "school_class": 1,
+    "title": "Работа и энергия",
+    "order": 5
+  }
+},
+{
+  "model": "learning.subjectsection",
+  "pk": 7,
+  "fields": {
+    "school_class": 1,
+    "title": "Звуковые явления",
+    "order": 6
+  }
+},
+{
+  "model": "learning.subjectsection",
+  "pk": 8,
+  "fields": {
+    "school_class": 2,
+    "title": "Тепловые явления",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 1,
+  "fields": {
+    "section": 1,
+    "title": "Равномерное и неравномерное движение на участке траектории",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 2,
+  "fields": {
+    "section": 1,
+    "title": "Равномерное и неравномерное движение",
+    "order": 2
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 3,
+  "fields": {
+    "section": 1,
+    "title": "Относительность движения",
+    "order": 3
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 4,
+  "fields": {
+    "section": 1,
+    "title": "Равноускоренное прямолинейное движение",
+    "order": 4
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 5,
+  "fields": {
+    "section": 1,
+    "title": "Равномерное движение по окружности",
+    "order": 5
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 6,
+  "fields": {
+    "section": 1,
+    "title": "Механическое движение",
+    "order": 6
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 7,
+  "fields": {
+    "section": 2,
+    "title": "Свойства вещества",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 8,
+  "fields": {
+    "section": 3,
+    "title": "Равновесие и движение под действием сил",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 9,
+  "fields": {
+    "section": 4,
+    "title": "Давление в жидкостях и газах",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 10,
+  "fields": {
+    "section": 3,
+    "title": "Равноускоренное движение под действием сил",
+    "order": 2
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 11,
+  "fields": {
+    "section": 5,
+    "title": "Законы сохранения",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 12,
+  "fields": {
+    "section": 5,
+    "title": "Движение под действием сил",
+    "order": 2
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 13,
+  "fields": {
+    "section": 3,
+    "title": "Движение под действием сил",
+    "order": 3
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 14,
+  "fields": {
+    "section": 6,
+    "title": "Простые механизмы",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 15,
+  "fields": {
+    "section": 7,
+    "title": "Звуковые явления",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 16,
+  "fields": {
+    "section": 8,
+    "title": "Теплопередача",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 17,
+  "fields": {
+    "section": 8,
+    "title": "Изменение агрегатного состояния вещества",
+    "order": 2
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 1,
+  "fields": {
+    "topic": 1,
+    "title": "Равномерное и неравномерное движение",
+    "description": "Система знаний о равномерном и неравномерном движении тел на участке траектории",
+    "image": "ks/1.png",
+    "comprehension_image": "ks/comprehension/1_Dcm2SXO.png",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "Найти значения физических величин, характеризующих РиНД",
+    "typical_task_description": "Систему знаний о РиНД можно применить при решении задач типа \n«Найти значение одной из величин, описывающих равномерное или неравномерное движение тел».\n\nТакие задачи встречаются в ситуациях:\n- определение расстояния, пройденного телом за известное время\n- определение времени движения при известной скорости и пути\n- определение скорости по известным пути и времени\n- расчёт средней скорости при неравномерном движении",
+    "typical_task_cloze_text": "{{0}} движение и {{1}} величины, {{2}} равномерное или неравномерное движение {{3}} тел.",
+    "typical_task_cloze_blanks": [
+      {
+        "position": 0,
+        "correct": "Описать"
+      },
+      {
+        "position": 1,
+        "correct": "найти"
+      },
+      {
+        "position": 2,
+        "correct": "характеризующие"
+      },
+      {
+        "position": 3,
+        "correct": "конкретных"
+      }
+    ],
+    "typical_task_cloze_distractors": [
+      "Изучить",
+      "определить",
+      "описывающие",
+      "измерить",
+      "абстрактных",
+      "зависящие",
+      "вычислить",
+      "различных"
+    ],
+    "status": "published",
+    "version": 1,
+    "created_at": "2025-12-27T12:07:36.280Z",
+    "updated_at": "2026-02-26T14:07:35.613Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 2,
+  "fields": {
+    "topic": 2,
+    "title": "Равномерное и неравномерное движение на участке траектории",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:41:15.833Z",
+    "updated_at": "2026-01-12T17:09:46.207Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 3,
+  "fields": {
+    "topic": 3,
+    "title": "Относительность движения",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:01.937Z",
+    "updated_at": "2026-01-12T15:42:01.937Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 4,
+  "fields": {
+    "topic": 4,
+    "title": "Равноускоренное прямолинейное движение",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:01.984Z",
+    "updated_at": "2026-01-12T15:42:01.984Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 5,
+  "fields": {
+    "topic": 5,
+    "title": "Равномерное движение по окружности",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.040Z",
+    "updated_at": "2026-01-12T15:42:02.040Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 6,
+  "fields": {
+    "topic": 6,
+    "title": "Механическое движение разных видов",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.091Z",
+    "updated_at": "2026-01-12T15:42:02.091Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 7,
+  "fields": {
+    "topic": 7,
+    "title": "Основные свойства вещественных объектов",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.180Z",
+    "updated_at": "2026-01-12T15:42:02.180Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 8,
+  "fields": {
+    "topic": 8,
+    "title": "Равновесие и равномерное движение тела под действием сил тяжести, упругости, трения",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.339Z",
+    "updated_at": "2026-01-12T15:42:02.339Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 9,
+  "fields": {
+    "topic": 9,
+    "title": "Равновесие жидкости в сообщающихся сосудах",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.471Z",
+    "updated_at": "2026-01-12T15:42:02.471Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 10,
+  "fields": {
+    "topic": 9,
+    "title": "Равновесие тел в жидкостях и газах",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.502Z",
+    "updated_at": "2026-01-12T15:42:02.502Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 11,
+  "fields": {
+    "topic": 10,
+    "title": "Равноускоренное движение тел под действием сил тяжести, упругости, трения",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.556Z",
+    "updated_at": "2026-01-12T15:42:02.556Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 12,
+  "fields": {
+    "topic": 11,
+    "title": "Движение тел, образующих замкнутую систему",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.621Z",
+    "updated_at": "2026-01-12T15:42:02.622Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 13,
+  "fields": {
+    "topic": 12,
+    "title": "Разгон и торможение по горизонтали",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.660Z",
+    "updated_at": "2026-01-12T15:42:02.660Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 14,
+  "fields": {
+    "topic": 13,
+    "title": "Движение тел под действием сил тяжести и упругости",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.696Z",
+    "updated_at": "2026-01-12T15:42:02.696Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 15,
+  "fields": {
+    "topic": 14,
+    "title": "Простые механизмы",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.828Z",
+    "updated_at": "2026-01-12T15:42:02.828Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 16,
+  "fields": {
+    "topic": 15,
+    "title": "Звуковые явления",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.950Z",
+    "updated_at": "2026-01-12T15:42:02.950Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 17,
+  "fields": {
+    "topic": 16,
+    "title": "Виды теплопередачи",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:03.083Z",
+    "updated_at": "2026-01-12T15:42:03.084Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 18,
+  "fields": {
+    "topic": 16,
+    "title": "Нагревание или охлаждение тел при теплопередаче",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:03.166Z",
+    "updated_at": "2026-01-12T15:42:03.166Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 19,
+  "fields": {
+    "topic": 16,
+    "title": "Нагревание и охлаждение тел при теплопередаче в теплоизолированной оболочке",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:03.228Z",
+    "updated_at": "2026-01-12T15:42:03.228Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 20,
+  "fields": {
+    "topic": 16,
+    "title": "Нагревание тел при сгорании топлива или совершении механической работы",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:03.272Z",
+    "updated_at": "2026-01-12T15:42:03.272Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 21,
+  "fields": {
+    "topic": 17,
+    "title": "Нагревание (охлаждение), изменение агрегатного состояния вещества  при теплопередаче",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:03.321Z",
+    "updated_at": "2026-01-12T15:42:03.321Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 22,
+  "fields": {
+    "topic": 17,
+    "title": "Нагревание (охлаждение), изменение агрегатного состояния вещества при теплопередаче в теплоизолированной оболочке",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:03.387Z",
+    "updated_at": "2026-01-12T15:42:03.387Z"
+  }
+},
+{
+  "model": "learning.kszone",
+  "pk": 73,
+  "fields": {
+    "ks": 1,
+    "x": 180,
+    "y": 25,
+    "width": 148,
+    "height": 44,
+    "label": "А"
+  }
+},
+{
+  "model": "learning.kszone",
+  "pk": 74,
+  "fields": {
+    "ks": 1,
+    "x": 359,
+    "y": 25,
+    "width": 58,
+    "height": 70,
+    "label": "Б"
+  }
+},
+{
+  "model": "learning.kszone",
+  "pk": 75,
+  "fields": {
+    "ks": 1,
+    "x": 449,
+    "y": 24,
+    "width": 78,
+    "height": 71,
+    "label": "В"
+  }
+},
+{
+  "model": "learning.kszone",
+  "pk": 76,
+  "fields": {
+    "ks": 1,
+    "x": 406,
+    "y": 124,
+    "width": 159,
+    "height": 32,
+    "label": "Г"
+  }
+},
+{
+  "model": "learning.kszone",
+  "pk": 77,
+  "fields": {
+    "ks": 1,
+    "x": 171,
+    "y": 114,
+    "width": 134,
+    "height": 43,
+    "label": "Д"
+  }
+},
+{
+  "model": "learning.kszone",
+  "pk": 78,
+  "fields": {
+    "ks": 1,
+    "x": 173,
+    "y": 161,
+    "width": 139,
+    "height": 48,
+    "label": "Е"
+  }
+},
+{
+  "model": "learning.ksquestion",
+  "pk": 13,
+  "fields": {
+    "ks": 1,
+    "type": "match",
+    "text": "Выдели на таблице физическую модель движения тела со средней скоростью",
+    "order": 2,
+    "options": [
+      {
+        "text": "",
+        "is_correct": false
+      }
+    ],
+    "correct_answer_text": "",
+    "fuzzy_match": false,
+    "zones": [],
+    "correct_zones": [
+      77
+    ]
+  }
+},
+{
+  "model": "learning.ksquestion",
+  "pk": 14,
+  "fields": {
+    "ks": 1,
+    "type": "match",
+    "text": "Выдели на таблице физическую модель равномерного движения",
+    "order": 3,
+    "options": [
+      {
+        "text": "",
+        "is_correct": false
+      }
+    ],
+    "correct_answer_text": "",
+    "fuzzy_match": false,
+    "zones": [],
+    "correct_zones": [
+      73
+    ]
+  }
+},
+{
+  "model": "learning.ksquestion",
+  "pk": 15,
+  "fields": {
+    "ks": 1,
+    "type": "match",
+    "text": "Выдели на таблице график зависимости пути от времени для равномерного движения",
+    "order": 4,
+    "options": [
+      {
+        "text": "",
+        "is_correct": false
+      }
+    ],
+    "correct_answer_text": "",
+    "fuzzy_match": false,
+    "zones": [],
+    "correct_zones": [
+      74
+    ]
+  }
+},
+{
+  "model": "learning.ksquestion",
+  "pk": 16,
+  "fields": {
+    "ks": 1,
+    "type": "match",
+    "text": "Выдели на таблице график зависимости скорости от времени для равномерного движения",
+    "order": 5,
+    "options": [
+      {
+        "text": "",
+        "is_correct": false
+      }
+    ],
+    "correct_answer_text": "",
+    "fuzzy_match": false,
+    "zones": [],
+    "correct_zones": [
+      75
+    ]
+  }
+},
+{
+  "model": "learning.ksquestion",
+  "pk": 17,
+  "fields": {
+    "ks": 1,
+    "type": "match",
+    "text": "Выдели на таблице физическую модель неравномерного движения",
+    "order": 6,
+    "options": [
+      {
+        "text": "",
+        "is_correct": false
+      }
+    ],
+    "correct_answer_text": "",
+    "fuzzy_match": false,
+    "zones": [],
+    "correct_zones": [
+      77
+    ]
+  }
+},
+{
+  "model": "learning.kscloze",
+  "pk": 9,
+  "fields": {
+    "ks": 1,
+    "original_text": "Список обозначений в физике включает обозначения понятий в физике из школьного и университетского курсов. Также включены и общие математические понятия и операции для того, чтобы сделать возможным полное прочтение физических формул.",
+    "marked_text": "Список {{0}}в физике включает {{1}}понятий в физике из школьного и университетского курсов. Также включены и общие математические понятия и операции для того, чтобы сделать {{2}}полное прочтение физических формул.",
+    "blanks": [
+      {
+        "position": 0,
+        "correct": "обозначений ",
+        "start": 7,
+        "end": 19
+      },
+      {
+        "position": 1,
+        "correct": "обозначения ",
+        "start": 37,
+        "end": 49
+      },
+      {
+        "position": 2,
+        "correct": "возможным ",
+        "start": 187,
+        "end": 197
+      }
+    ],
+    "distractors": [
+      "пропуск слово"
+    ],
+    "order": 2
+  }
+},
+{
+  "model": "learning.solutionmethod",
+  "pk": 1,
+  "fields": {
+    "ks": 1,
+    "title": "Метод решения задач на применение системы знаний о РиНД",
+    "description": "Последовательность действий для решения задач на равномерное и неравномерное движение"
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 1,
+  "fields": {
+    "method": 1,
+    "order": 1,
+    "title": "Выделите движущееся тело (тела)",
+    "description": "Определите, какие тела участвуют в движении. Это могут быть автомобили, люди, животные, снаряды и т.д.",
+    "hint": "Ищите в условии задачи существительные, которые могут двигаться",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 2,
+  "fields": {
+    "method": 1,
+    "order": 2,
+    "title": "Выделите начальное положение тела и его характеристики. Изобразите",
+    "description": "Определите, где находилось тело в начальный момент времени. Нарисуйте схему.",
+    "hint": "Начальное положение часто указывается словами: 'находится', 'стоит', 'расположен'",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 3,
+  "fields": {
+    "method": 1,
+    "order": 3,
+    "title": "Выделите последующие положения тела. Изобразите",
+    "description": "Определите конечное положение тела или промежуточные точки траектории.",
+    "hint": "Конечное положение может быть указано как 'прибыл', 'достиг', 'оказался'",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 4,
+  "fields": {
+    "method": 1,
+    "order": 4,
+    "title": "Выделите участки движения и характеристики движения на каждом участке. Обозначьте",
+    "description": "Разбейте движение на участки. Для каждого участка определите: путь (s), время (t), скорость (v).",
+    "hint": "Если скорость меняется — это разные участки движения",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 5,
+  "fields": {
+    "method": 1,
+    "order": 5,
+    "title": "Составьте уравнение s = vt для каждого участка",
+    "description": "Для равномерного движения: s = v·t. Для неравномерного: s = v_ср·t",
+    "hint": "Помните: путь = скорость × время",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 6,
+  "fields": {
+    "method": 1,
+    "order": 6,
+    "title": "Установите известные характеристики и искомую величину. Запишите кратко данные",
+    "description": "Выпишите в столбик 'Дано:' все известные величины. Под чертой укажите, что нужно найти.",
+    "hint": "Не забудьте перевести единицы в СИ!",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 7,
+  "fields": {
+    "method": 1,
+    "order": 7,
+    "title": "Установите, входит ли искомая величина в составленные уравнения",
+    "description": "Проверьте, можно ли сразу найти искомую величину из уравнений шага 5.",
+    "hint": "Если искомая величина есть в уравнении — выразите её",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 8,
+  "fields": {
+    "method": 1,
+    "order": 8,
+    "title": "Составьте дополнительные уравнения при необходимости",
+    "description": "Если число уравнений меньше числа неизвестных — нужны дополнительные связи.",
+    "hint": "Дополнительные связи часто следуют из условия: 'одновременно', 'встретились', 'догнал'",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 9,
+  "fields": {
+    "method": 1,
+    "order": 9,
+    "title": "Найдите значение искомой величины",
+    "description": "а) Составьте формулу для расчёта искомой величины\nб) Выразите величины в единицах СИ\nв) Произведите расчёт\nг) Оцените разумность результата",
+    "hint": "Проверьте размерность! Если ищете время — ответ должен быть в секундах",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 10,
+  "fields": {
+    "method": 1,
+    "order": 10,
+    "title": "Сформулируйте ответ",
+    "description": "Запишите ответ полным предложением с указанием единиц измерения.",
+    "hint": "Ответ: 'Скорость автомобиля равна 20 м/с' или 'v = 20 м/с'",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 1,
+  "fields": {
+    "ks": 1,
+    "order": 1,
+    "title": "Задача детектива",
+    "text": "Вы – детектив и определяете область поиска преступника, который вышел из известного дома 20 мин назад и старается скрыться из города на автомобиле. Максимальная скорость автомобиля в городе — 60 км/ч. На каком максимальном расстоянии от дома может находиться преступник?",
+    "correct_answer": 20.0,
+    "answer_unit": "км",
+    "answer_tolerance": 1.0,
+    "correct_answer_text": "",
+    "difficulty": 2,
+    "solution_summary": "",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 2,
+  "fields": {
+    "ks": 1,
+    "order": 2,
+    "title": "Муха и скворец",
+    "text": "Какое расстояние успеет пролететь муха, за которой гонится скворец, если он заметил её на расстоянии 5 м? Скорость движения мухи – 5 м/c, скворца – 20 м/с.",
+    "correct_answer": 1.67,
+    "answer_unit": "м",
+    "answer_tolerance": 5.0,
+    "correct_answer_text": "",
+    "difficulty": 3,
+    "solution_summary": "t = a/(v_с - v_м) = 5/(20-5) = 1/3 c; s_м = v_м·t = 5·(1/3) ≈ 1,67 м",
+    "solution_detailed": "1. Движущиеся тела: муха и скворец\n2. Начальное положение: расстояние между ними a = 5 м\n3. Конечное положение: скворец догоняет муху\n4. v_м = 5 м/с, v_с = 20 м/с\n5. За время t муха пролетит: s_м = v_м·t\n   Скворец пролетит: s_с = v_с·t\n6. Условие встречи: s_с - s_м = a\n7. v_с·t - v_м·t = a → t = a/(v_с - v_м)\n8. t = 5/(20-5) = 5/15 = 1/3 с\n9. s_м = 5 · (1/3) ≈ 1,67 м\n10. Ответ: муха пролетит примерно 1,67 м",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 3,
+  "fields": {
+    "ks": 1,
+    "order": 3,
+    "title": "Переправа через реку",
+    "text": "Вы переплываете реку перпендикулярно течению. Какое расстояние вам придётся пройти вверх по течению, чтобы попасть в точку, расположенную напротив того места, откуда вы начали движение? Ширина реки – 9 м, скорость течения реки – 0,2 м/с. Вы способны плыть со скоростью 0,5 м/с.",
+    "correct_answer": 3.6,
+    "answer_unit": "м",
+    "answer_tolerance": 5.0,
+    "correct_answer_text": "",
+    "difficulty": 4,
+    "solution_summary": "t = d/v_пл = 9/0,5 = 18 с; снос = v_т·t = 0,2·18 = 3,6 м",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 4,
+  "fields": {
+    "ks": 1,
+    "order": 4,
+    "title": "Сигнал с Альфа Центавра",
+    "text": "Через сколько времени до Земли дойдёт радиосигнал, посланный «братьями по разуму» с Альфа Центавра, которая находится на расстоянии 39 000 000 000 000 км? При расчётах примите 1 год равным 30 000 000 с. Скорость радиосигнала составляет 300 000 км/с.",
+    "correct_answer": 4.33,
+    "answer_unit": "лет",
+    "answer_tolerance": 5.0,
+    "correct_answer_text": "",
+    "difficulty": 3,
+    "solution_summary": "",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 5,
+  "fields": {
+    "ks": 1,
+    "order": 5,
+    "title": "Космическая станция",
+    "text": "Является космическая станция искусственным спутником Земли, или она направляется к другим планетам, если за одну минуту она пролетает 480 км? Для полётов к другим планетам скорость должна быть не менее 11,9 км/с (вторая космическая скорость).",
+    "correct_answer": 8.0,
+    "answer_unit": "км/с",
+    "answer_tolerance": 5.0,
+    "correct_answer_text": "спутник Земли",
+    "difficulty": 2,
+    "solution_summary": "",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 6,
+  "fields": {
+    "ks": 1,
+    "order": 6,
+    "title": "Погрузка свёклы",
+    "text": "Найдите время погрузки свёклы с помощью транспортёра в автомашину грузоподъёмностью 3 т. Скорость движения транспортёра 0,5 м/с. Средняя масса корнеплодов – 2 кг, а расстояние между ними на ленте транспортёра 0,1 м.",
+    "correct_answer": 300.0,
+    "answer_unit": "с",
+    "answer_tolerance": 5.0,
+    "correct_answer_text": "",
+    "difficulty": 4,
+    "solution_summary": "",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 7,
+  "fields": {
+    "ks": 1,
+    "order": 7,
+    "title": "Пуля в вагоне",
+    "text": "Вагон поезда, движущегося со скоростью 36 км/ч, был пробит пулей, летевшей перпендикулярно движению вагона. Отверстия в стенках смещены на 3 см друг относительно друга, ширина вагона – 2,7 м. Определите скорость пули.",
+    "correct_answer": 900.0,
+    "answer_unit": "м/с",
+    "answer_tolerance": 5.0,
+    "correct_answer_text": "",
+    "difficulty": 4,
+    "solution_summary": "",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 8,
+  "fields": {
+    "ks": 1,
+    "order": 8,
+    "title": "Бикфордов шнур",
+    "text": "Какой длины бикфордов шнур нужно взять, чтобы при взрыве успеть отбежать на расстояние 300 м после того, как он будет зажжён? Скорость бега – 5 м/с, пламя распространяется по шнуру со скоростью 0,8 см/с.",
+    "correct_answer": 48.0,
+    "answer_unit": "см",
+    "answer_tolerance": 5.0,
+    "correct_answer_text": "",
+    "difficulty": 3,
+    "solution_summary": "",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 9,
+  "fields": {
+    "ks": 1,
+    "order": 9,
+    "title": "Перелёт самолёта",
+    "text": "Самолёт пролетает 2200 км со скоростью 1000 км/ч. Затем из-за встречного ветра скорость самолёта уменьшается, и следующие 1700 км он пролетает уже со скоростью 850 км/ч. Какова средняя скорость самолёта за такой перелёт?",
+    "correct_answer": 928.57,
+    "answer_unit": "км/ч",
+    "answer_tolerance": 2.0,
+    "correct_answer_text": "",
+    "difficulty": 3,
+    "solution_summary": "",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 10,
+  "fields": {
+    "ks": 1,
+    "order": 10,
+    "title": "Велосипедист на горке",
+    "text": "Катаясь на велосипеде, вы потрудились на подъёме, развивая скорость 6 км/ч, а обратно прокатились «с ветерком», разогнавшись до скорости 8 м/с. Какова средняя скорость вашего движения?",
+    "correct_answer": 2.82,
+    "answer_unit": "м/с",
+    "answer_tolerance": 5.0,
+    "correct_answer_text": "",
+    "difficulty": 3,
+    "solution_summary": "",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.typicaltaskoption",
+  "pk": 1,
+  "fields": {
+    "ks": 1,
+    "text": "Описать движение и найти величины, характеризующие равномерное или неравномерное движение конкретных тел.",
+    "is_correct": true,
+    "order": 1,
+    "explanation": "Верно! Система знаний описывает модели равномерного и неравномерного движения. Типовая задача — применить эти модели к конкретной ситуации: описать, как движется тело, и рассчитать характеристики этого движения (путь, скорость, время)."
+  }
+},
+{
+  "model": "learning.typicaltaskoption",
+  "pk": 2,
+  "fields": {
+    "ks": 1,
+    "text": "Определить вид движения тела по известным значениям пути, скорости и времени.",
+    "is_correct": false,
+    "order": 2,
+    "explanation": "Не совсем. Определить вид движения — это лишь часть задачи. Типовая задача требует не только классифицировать движение, но и описать его, найти неизвестные величины."
+  }
+},
+{
+  "model": "learning.typicaltaskoption",
+  "pk": 3,
+  "fields": {
+    "ks": 1,
+    "text": "Построить графики зависимости пути от времени и скорости от времени для движущегося тела.",
+    "is_correct": false,
+    "order": 3,
+    "explanation": "Построение графиков — это один из инструментов описания движения, но не цель типовой задачи. Задача шире: нужно описать движение в целом и найти числовые характеристики."
+  }
+},
+{
+  "model": "learning.typicaltaskoption",
+  "pk": 4,
+  "fields": {
+    "ks": 1,
+    "text": "Сравнить равномерное и неравномерное движение тел и объяснить причины различий между ними.",
+    "is_correct": false,
+    "order": 4,
+    "explanation": "Сравнение видов движения — это теоретический вопрос. Типовая задача — это практическая задача: применить систему знаний к конкретной ситуации движения и найти количественные характеристики."
+  }
+},
+{
+  "model": "learning.typicaltaskoption",
+  "pk": 5,
+  "fields": {
+    "ks": 1,
+    "text": "Записать уравнения движения для тела и определить его координату в заданный момент времени.",
+    "is_correct": false,
+    "order": 5,
+    "explanation": "Запись уравнений движения и нахождение координаты — это частный случай. Типовая задача формулируется шире: описать движение и найти любые характеризующие его величины, не только координату."
+  }
+},
+{
+  "model": "learning.typicaltaskoption",
+  "pk": 6,
+  "fields": {
+    "ks": 1,
+    "text": "Установить зависимость между путём, скоростью и временем и вывести формулы для их расчёта.",
+    "is_correct": false,
+    "order": 6,
+    "explanation": "Вывод формул — это работа с теорией, а не решение задачи. Типовая задача предполагает применение уже известных формул и моделей к конкретным ситуациям движения тел."
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 1,
+  "fields": {
+    "task": 1,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "детектив преступника",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 2,
+  "fields": {
+    "task": 1,
+    "step": 2,
+    "step_type": "schema",
+    "content": "",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "el_1769094861206_gvblj115k",
+          "type": "text",
+          "x": 250,
+          "y": 275,
+          "color": "#1a1a2e",
+          "fontSize": 16,
+          "text": "А"
+        },
+        {
+          "id": "el_1769095116838_29hvtr95j",
+          "type": "body-circle",
+          "x": 250,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 6,
+          "label": "A"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 3,
+  "fields": {
+    "task": 1,
+    "step": 3,
+    "step_type": "schema",
+    "content": "",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "el_1769094861206_gvblj115k",
+          "type": "text",
+          "x": 250,
+          "y": 275,
+          "color": "#1a1a2e",
+          "fontSize": 16,
+          "text": "А"
+        },
+        {
+          "id": "el_1769095116838_29hvtr95j",
+          "type": "body-circle",
+          "x": 250,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 6,
+          "label": "A"
+        },
+        {
+          "id": "el_1769095138334_65z01cymt",
+          "type": "line",
+          "x": 257.2785971087376,
+          "y": 251.0000000610352,
+          "color": "#1a1a2e",
+          "strokeWidth": 2,
+          "length": 192.44280578252446,
+          "rotation": 0
+        },
+        {
+          "id": "el_1769095148758_vvfsev1pq",
+          "type": "body-circle",
+          "x": 450,
+          "y": 250,
+          "color": "#ef4444",
+          "radius": 6,
+          "label": "B"
+        },
+        {
+          "id": "el_1769095184671_8z0gu5zok",
+          "type": "text",
+          "x": 450,
+          "y": 275,
+          "color": "#1a1a2e",
+          "fontSize": 16,
+          "text": "B"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 4,
+  "fields": {
+    "task": 1,
+    "step": 4,
+    "step_type": "schema",
+    "content": "",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "el_1769094861206_gvblj115k",
+          "type": "text",
+          "x": 250,
+          "y": 275,
+          "color": "#1a1a2e",
+          "fontSize": 16,
+          "text": "А"
+        },
+        {
+          "id": "el_1769095116838_29hvtr95j",
+          "type": "body-circle",
+          "x": 250,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 6,
+          "label": "A"
+        },
+        {
+          "id": "el_1769095138334_65z01cymt",
+          "type": "line",
+          "x": 257.2785971087376,
+          "y": 251.0000000610352,
+          "color": "#1a1a2e",
+          "strokeWidth": 2,
+          "length": 192.44280578252446,
+          "rotation": 0
+        },
+        {
+          "id": "el_1769095148758_vvfsev1pq",
+          "type": "body-circle",
+          "x": 450,
+          "y": 250,
+          "color": "#ef4444",
+          "radius": 6,
+          "label": "B"
+        },
+        {
+          "id": "el_1769095184671_8z0gu5zok",
+          "type": "text",
+          "x": 450,
+          "y": 275,
+          "color": "#1a1a2e",
+          "fontSize": 16,
+          "text": "B"
+        },
+        {
+          "id": "el_1769095236111_fiwvkzasf",
+          "type": "label",
+          "x": 350,
+          "y": 275,
+          "color": "#1a1a2e",
+          "fontSize": 18,
+          "symbol": "S",
+          "subscript": ""
+        },
+        {
+          "id": "el_1769095274255_qgsky7cco",
+          "type": "vector",
+          "x": 250,
+          "y": 200,
+          "color": "#000000",
+          "strokeWidth": 1,
+          "length": 22.498916654629614,
+          "label": "v",
+          "rotation": 0
+        },
+        {
+          "id": "el_1769095290550_wxhlz78e0",
+          "type": "label",
+          "x": 250,
+          "y": 200,
+          "color": "#1a1a2e",
+          "fontSize": 18,
+          "symbol": "v",
+          "subscript": ""
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 5,
+  "fields": {
+    "task": 1,
+    "step": 5,
+    "step_type": "text",
+    "content": "S = v*t",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 6,
+  "fields": {
+    "task": 1,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "Дано:\r\nt=20 мин.\r\nV= 60 км/ч",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "20 мин",
+          "symbol": "t",
+          "isTarget": false
+        },
+        {
+          "fragment": "60 км/ч",
+          "symbol": "v",
+          "isTarget": false
+        },
+        {
+          "fragment": "На каком максимальном расстоянии",
+          "symbol": "S",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 7,
+  "fields": {
+    "task": 1,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 8,
+  "fields": {
+    "task": 1,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 9,
+  "fields": {
+    "task": 1,
+    "step": 9,
+    "step_type": "solution",
+    "content": "S = 16,67·1200 = 20000м = 20 км",
+    "schema_data": {
+      "formula": "S = v×t",
+      "si": "t = 20 мин = 1200c\nv = 60 км⁄ч = 16,67 м⁄с",
+      "calc": "S = 16,67·1200 = 20000м = 20 км",
+      "reasoning": "Да, результат адекватный для автомобиля "
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 10,
+  "fields": {
+    "task": 1,
+    "step": 10,
+    "step_type": "text",
+    "content": "Преступник может находиться на максимальном расстоянии - 20км",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 11,
+  "fields": {
+    "task": 2,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "муха скворец",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 12,
+  "fields": {
+    "task": 2,
+    "step": 2,
+    "step_type": "schema",
+    "content": "Муха и скворец находятся на расстоянии 5 м друг от друга",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t2s2_p1",
+          "type": "body-circle",
+          "x": 200,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 8
+        },
+        {
+          "id": "t2s2_l1",
+          "type": "text",
+          "x": 185,
+          "y": 270,
+          "text": "Скворец",
+          "fontSize": 13,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s2_la",
+          "type": "label",
+          "x": 195,
+          "y": 225,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s2_p2",
+          "type": "body-circle",
+          "x": 400,
+          "y": 250,
+          "color": "#ef4444",
+          "radius": 6
+        },
+        {
+          "id": "t2s2_l2",
+          "type": "text",
+          "x": 390,
+          "y": 270,
+          "text": "Муха",
+          "fontSize": 13,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s2_lb",
+          "type": "label",
+          "x": 395,
+          "y": 225,
+          "symbol": "B",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s2_dim",
+          "type": "line",
+          "x": 200,
+          "y": 300,
+          "length": 200,
+          "rotation": 0,
+          "color": "#64748b",
+          "strokeWidth": 1,
+          "dashed": true
+        },
+        {
+          "id": "t2s2_dt",
+          "type": "text",
+          "x": 275,
+          "y": 310,
+          "text": "5 м",
+          "fontSize": 14,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 13,
+  "fields": {
+    "task": 2,
+    "step": 3,
+    "step_type": "schema",
+    "content": "Скворец догоняет муху в некоторой точке",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t2s3_p1",
+          "type": "body-circle",
+          "x": 200,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 8
+        },
+        {
+          "id": "t2s3_la",
+          "type": "label",
+          "x": 195,
+          "y": 225,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s3_p2",
+          "type": "body-circle",
+          "x": 400,
+          "y": 250,
+          "color": "#ef4444",
+          "radius": 6
+        },
+        {
+          "id": "t2s3_lb",
+          "type": "label",
+          "x": 395,
+          "y": 225,
+          "symbol": "B",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s3_meet",
+          "type": "body-circle",
+          "x": 467,
+          "y": 250,
+          "color": "#8b5cf6",
+          "radius": 8
+        },
+        {
+          "id": "t2s3_lc",
+          "type": "label",
+          "x": 462,
+          "y": 225,
+          "symbol": "C",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s3_lm",
+          "type": "text",
+          "x": 445,
+          "y": 270,
+          "text": "Встреча",
+          "fontSize": 12,
+          "color": "#8b5cf6"
+        },
+        {
+          "id": "t2s3_v1",
+          "type": "vector",
+          "x": 210,
+          "y": 210,
+          "length": 80,
+          "rotation": 0,
+          "color": "#22c55e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t2s3_v1l",
+          "type": "label",
+          "x": 235,
+          "y": 190,
+          "symbol": "v",
+          "subscript": "2",
+          "fontSize": 14,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t2s3_v2",
+          "type": "vector",
+          "x": 410,
+          "y": 210,
+          "length": 40,
+          "rotation": 0,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t2s3_v2l",
+          "type": "label",
+          "x": 420,
+          "y": 190,
+          "symbol": "v",
+          "subscript": "1",
+          "fontSize": 14,
+          "color": "#ef4444"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 14,
+  "fields": {
+    "task": 2,
+    "step": 4,
+    "step_type": "schema",
+    "content": "Один участок: муха летит расстояние S₁, скворец — S₂ = S₁ + 5 м",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t2s4_p1",
+          "type": "body-circle",
+          "x": 200,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 6
+        },
+        {
+          "id": "t2s4_la",
+          "type": "label",
+          "x": 195,
+          "y": 270,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s4_p2",
+          "type": "body-circle",
+          "x": 400,
+          "y": 250,
+          "color": "#ef4444",
+          "radius": 6
+        },
+        {
+          "id": "t2s4_lb",
+          "type": "label",
+          "x": 395,
+          "y": 270,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s4_pc",
+          "type": "body-circle",
+          "x": 467,
+          "y": 250,
+          "color": "#8b5cf6",
+          "radius": 6
+        },
+        {
+          "id": "t2s4_lc",
+          "type": "label",
+          "x": 462,
+          "y": 270,
+          "symbol": "C",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s4_line1",
+          "type": "line",
+          "x": 200,
+          "y": 250,
+          "length": 267,
+          "rotation": 0,
+          "color": "#22c55e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t2s4_s2",
+          "type": "text",
+          "x": 300,
+          "y": 215,
+          "text": "S₂ = v₂·t",
+          "fontSize": 13,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t2s4_line2",
+          "type": "line",
+          "x": 400,
+          "y": 250,
+          "length": 67,
+          "rotation": 0,
+          "color": "#ef4444",
+          "strokeWidth": 2,
+          "dashed": true
+        },
+        {
+          "id": "t2s4_s1",
+          "type": "text",
+          "x": 410,
+          "y": 215,
+          "text": "S₁ = v₁·t",
+          "fontSize": 13,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t2s4_d5",
+          "type": "text",
+          "x": 275,
+          "y": 295,
+          "text": "Δs = 5 м",
+          "fontSize": 13,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 15,
+  "fields": {
+    "task": 2,
+    "step": 5,
+    "step_type": "text",
+    "content": "S₁ = v₁·t (муха)\nS₂ = v₂·t (скворец)\nS₂ = S₁ + 5",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 16,
+  "fields": {
+    "task": 2,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "Дано:\nv₁ = 5 м/с (муха)\nv₂ = 20 м/с (скворец)\nΔS = 5 м\nНайти: S₁",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "5 м/c",
+          "symbol": "v₁",
+          "isTarget": false
+        },
+        {
+          "fragment": "20 м/с",
+          "symbol": "v₂",
+          "isTarget": false
+        },
+        {
+          "fragment": "на расстоянии 5 м",
+          "symbol": "ΔS",
+          "isTarget": false
+        },
+        {
+          "fragment": "Какое расстояние успеет пролететь муха",
+          "symbol": "S₁",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 17,
+  "fields": {
+    "task": 2,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 18,
+  "fields": {
+    "task": 2,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 19,
+  "fields": {
+    "task": 2,
+    "step": 9,
+    "step_type": "solution",
+    "content": "v₂·t = v₁·t + 5\nt = 5/(v₂ − v₁) = 5/(20 − 5) = 1/3 с\nS₁ = v₁·t = 5·(1/3) ≈ 1,67 м",
+    "schema_data": {
+      "formula": "S₁ = v₁ · ΔS / (v₂ − v₁)",
+      "si": "v₁ = 5 м/с\nv₂ = 20 м/с\nΔS = 5 м",
+      "calc": "t = 5/(20−5) = 1/3 с ≈ 0,33 с\nS₁ = 5 · 1/3 ≈ 1,67 м",
+      "reasoning": "Муха за 0,33 с пролетит ~1,67 м — реалистично"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 20,
+  "fields": {
+    "task": 2,
+    "step": 10,
+    "step_type": "text",
+    "content": "Муха успеет пролететь расстояние примерно 1,67 м, прежде чем её догонит скворец",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 21,
+  "fields": {
+    "task": 3,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "Вы",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 22,
+  "fields": {
+    "task": 3,
+    "step": 2,
+    "step_type": "schema",
+    "content": "Пловец на одном берегу реки шириной 9 м",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t3s2_bank1",
+          "type": "line",
+          "x": 150,
+          "y": 100,
+          "length": 350,
+          "rotation": 90,
+          "color": "#94a3b8",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t3s2_bank2",
+          "type": "line",
+          "x": 510,
+          "y": 100,
+          "length": 350,
+          "rotation": 90,
+          "color": "#94a3b8",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t3s2_bl",
+          "type": "text",
+          "x": 120,
+          "y": 90,
+          "text": "Берег 1",
+          "fontSize": 12,
+          "color": "#64748b"
+        },
+        {
+          "id": "t3s2_br",
+          "type": "text",
+          "x": 490,
+          "y": 90,
+          "text": "Берег 2",
+          "fontSize": 12,
+          "color": "#64748b"
+        },
+        {
+          "id": "t3s2_swimmer",
+          "type": "body-circle",
+          "x": 160,
+          "y": 300,
+          "color": "#3b82f6",
+          "radius": 8
+        },
+        {
+          "id": "t3s2_la",
+          "type": "label",
+          "x": 140,
+          "y": 310,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t3s2_d",
+          "type": "text",
+          "x": 310,
+          "y": 80,
+          "text": "d = 9 м",
+          "fontSize": 14,
+          "color": "#64748b"
+        },
+        {
+          "id": "t3s2_flow",
+          "type": "vector",
+          "x": 300,
+          "y": 420,
+          "length": 70,
+          "rotation": 90,
+          "color": "#06b6d4",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t3s2_flowl",
+          "type": "text",
+          "x": 320,
+          "y": 440,
+          "text": "течение",
+          "fontSize": 12,
+          "color": "#06b6d4"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 23,
+  "fields": {
+    "task": 3,
+    "step": 3,
+    "step_type": "schema",
+    "content": "Пловец переплывает на другой берег; течение сносит его вниз",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t3s3_bank1",
+          "type": "line",
+          "x": 150,
+          "y": 100,
+          "length": 350,
+          "rotation": 90,
+          "color": "#94a3b8",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t3s3_bank2",
+          "type": "line",
+          "x": 510,
+          "y": 100,
+          "length": 350,
+          "rotation": 90,
+          "color": "#94a3b8",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t3s3_swimmer",
+          "type": "body-circle",
+          "x": 160,
+          "y": 300,
+          "color": "#3b82f6",
+          "radius": 8
+        },
+        {
+          "id": "t3s3_la",
+          "type": "label",
+          "x": 140,
+          "y": 310,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t3s3_target",
+          "type": "point",
+          "x": 500,
+          "y": 300,
+          "color": "#22c55e",
+          "radius": 6
+        },
+        {
+          "id": "t3s3_lbt",
+          "type": "text",
+          "x": 510,
+          "y": 295,
+          "text": "Цель (B')",
+          "fontSize": 12,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t3s3_drift",
+          "type": "body-circle",
+          "x": 500,
+          "y": 400,
+          "color": "#ef4444",
+          "radius": 6
+        },
+        {
+          "id": "t3s3_lbd",
+          "type": "text",
+          "x": 510,
+          "y": 395,
+          "text": "B (снос)",
+          "fontSize": 12,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t3s3_swim",
+          "type": "vector",
+          "x": 160,
+          "y": 300,
+          "length": 340,
+          "rotation": 0,
+          "color": "#3b82f6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t3s3_vp",
+          "type": "label",
+          "x": 300,
+          "y": 275,
+          "symbol": "v",
+          "subscript": "п",
+          "fontSize": 14,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t3s3_driftv",
+          "type": "vector",
+          "x": 500,
+          "y": 300,
+          "length": 100,
+          "rotation": 90,
+          "color": "#06b6d4",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t3s3_vt",
+          "type": "label",
+          "x": 510,
+          "y": 340,
+          "symbol": "v",
+          "subscript": "т",
+          "fontSize": 14,
+          "color": "#06b6d4"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 24,
+  "fields": {
+    "task": 3,
+    "step": 4,
+    "step_type": "schema",
+    "content": "Два участка: переправа (перпендикулярно) и снос течением",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t3s4_bank1",
+          "type": "line",
+          "x": 150,
+          "y": 100,
+          "length": 350,
+          "rotation": 90,
+          "color": "#94a3b8",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t3s4_bank2",
+          "type": "line",
+          "x": 510,
+          "y": 100,
+          "length": 350,
+          "rotation": 90,
+          "color": "#94a3b8",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t3s4_a",
+          "type": "body-circle",
+          "x": 160,
+          "y": 300,
+          "color": "#3b82f6",
+          "radius": 6
+        },
+        {
+          "id": "t3s4_la",
+          "type": "label",
+          "x": 140,
+          "y": 310,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t3s4_b",
+          "type": "body-circle",
+          "x": 500,
+          "y": 400,
+          "color": "#ef4444",
+          "radius": 6
+        },
+        {
+          "id": "t3s4_lb",
+          "type": "label",
+          "x": 510,
+          "y": 395,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t3s4_swim_line",
+          "type": "line",
+          "x": 160,
+          "y": 300,
+          "length": 340,
+          "rotation": 0,
+          "color": "#3b82f6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t3s4_d",
+          "type": "text",
+          "x": 310,
+          "y": 275,
+          "text": "d = 9 м",
+          "fontSize": 13,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t3s4_drift_line",
+          "type": "line",
+          "x": 500,
+          "y": 300,
+          "length": 100,
+          "rotation": 90,
+          "color": "#ef4444",
+          "strokeWidth": 2,
+          "dashed": true
+        },
+        {
+          "id": "t3s4_s",
+          "type": "text",
+          "x": 510,
+          "y": 340,
+          "text": "S = ?",
+          "fontSize": 13,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t3s4_t1",
+          "type": "text",
+          "x": 250,
+          "y": 250,
+          "text": "t = d / v_плав",
+          "fontSize": 12,
+          "color": "#64748b"
+        },
+        {
+          "id": "t3s4_t2",
+          "type": "text",
+          "x": 510,
+          "y": 360,
+          "text": "S = v_теч · t",
+          "fontSize": 12,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 25,
+  "fields": {
+    "task": 3,
+    "step": 5,
+    "step_type": "text",
+    "content": "t = d / v_плавания\nS_сноса = v_течения · t",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 26,
+  "fields": {
+    "task": 3,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "Дано:\nd = 9 м\nv_течения = 0,2 м/с\nv_плавания = 0,5 м/с\nНайти: S_сноса",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "9 м",
+          "symbol": "d",
+          "isTarget": false
+        },
+        {
+          "fragment": "0,2 м/с",
+          "symbol": "v_теч",
+          "isTarget": false
+        },
+        {
+          "fragment": "0,5 м/с",
+          "symbol": "v_плав",
+          "isTarget": false
+        },
+        {
+          "fragment": "Какое расстояние вам придётся пройти",
+          "symbol": "S",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 27,
+  "fields": {
+    "task": 3,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 28,
+  "fields": {
+    "task": 3,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 29,
+  "fields": {
+    "task": 3,
+    "step": 9,
+    "step_type": "solution",
+    "content": "t = d / v_плавания = 9 / 0,5 = 18 с\nS_сноса = v_течения · t = 0,2 · 18 = 3,6 м",
+    "schema_data": {
+      "formula": "S = v_теч · d / v_плав",
+      "si": "d = 9 м\nv_теч = 0,2 м/с\nv_плав = 0,5 м/с",
+      "calc": "t = 9/0,5 = 18 с\nS = 0,2 · 18 = 3,6 м",
+      "reasoning": "Снос на 3,6 м при ширине реки 9 м — реалистично"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 30,
+  "fields": {
+    "task": 3,
+    "step": 10,
+    "step_type": "text",
+    "content": "Вам придётся пройти вверх по течению 3,6 м, чтобы вернуться на уровень точки старта",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 31,
+  "fields": {
+    "task": 4,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "радиосигнал",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 32,
+  "fields": {
+    "task": 4,
+    "step": 2,
+    "step_type": "schema",
+    "content": "Альфа Центавра — источник сигнала; Земля — приёмник",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t4s2_star",
+          "type": "body-circle",
+          "x": 150,
+          "y": 250,
+          "color": "#f59e0b",
+          "radius": 15
+        },
+        {
+          "id": "t4s2_ls",
+          "type": "text",
+          "x": 110,
+          "y": 280,
+          "text": "Альфа Центавра",
+          "fontSize": 12,
+          "color": "#f59e0b"
+        },
+        {
+          "id": "t4s2_la",
+          "type": "label",
+          "x": 145,
+          "y": 220,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 33,
+  "fields": {
+    "task": 4,
+    "step": 3,
+    "step_type": "schema",
+    "content": "Сигнал достигает Земли",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t4s3_star",
+          "type": "body-circle",
+          "x": 150,
+          "y": 250,
+          "color": "#f59e0b",
+          "radius": 15
+        },
+        {
+          "id": "t4s3_la",
+          "type": "label",
+          "x": 145,
+          "y": 220,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t4s3_earth",
+          "type": "body-circle",
+          "x": 600,
+          "y": 250,
+          "color": "#3b82f6",
+          "radius": 15
+        },
+        {
+          "id": "t4s3_le",
+          "type": "text",
+          "x": 580,
+          "y": 280,
+          "text": "Земля",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t4s3_lb",
+          "type": "label",
+          "x": 595,
+          "y": 220,
+          "symbol": "B",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t4s3_signal",
+          "type": "vector",
+          "x": 170,
+          "y": 250,
+          "length": 410,
+          "rotation": 0,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t4s3_vs",
+          "type": "text",
+          "x": 340,
+          "y": 225,
+          "text": "Радиосигнал",
+          "fontSize": 12,
+          "color": "#ef4444"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 34,
+  "fields": {
+    "task": 4,
+    "step": 4,
+    "step_type": "schema",
+    "content": "Один участок: равномерное движение сигнала от звезды до Земли",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t4s4_star",
+          "type": "body-circle",
+          "x": 150,
+          "y": 250,
+          "color": "#f59e0b",
+          "radius": 12
+        },
+        {
+          "id": "t4s4_la",
+          "type": "label",
+          "x": 145,
+          "y": 275,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t4s4_earth",
+          "type": "body-circle",
+          "x": 600,
+          "y": 250,
+          "color": "#3b82f6",
+          "radius": 12
+        },
+        {
+          "id": "t4s4_lb",
+          "type": "label",
+          "x": 595,
+          "y": 275,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t4s4_line",
+          "type": "line",
+          "x": 165,
+          "y": 250,
+          "length": 420,
+          "rotation": 0,
+          "color": "#1a1a2e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t4s4_s",
+          "type": "text",
+          "x": 330,
+          "y": 215,
+          "text": "S = 3,9·10¹³ км",
+          "fontSize": 13,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t4s4_v",
+          "type": "text",
+          "x": 330,
+          "y": 295,
+          "text": "v = 3·10⁵ км/с",
+          "fontSize": 13,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t4s4_t",
+          "type": "text",
+          "x": 330,
+          "y": 320,
+          "text": "t = S / v = ?",
+          "fontSize": 13,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 35,
+  "fields": {
+    "task": 4,
+    "step": 5,
+    "step_type": "text",
+    "content": "S = v · t",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 36,
+  "fields": {
+    "task": 4,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "Дано:\nS = 39 000 000 000 000 км = 3,9·10¹³ км\nv = 300 000 км/с = 3·10⁵ км/с\n1 год = 30 000 000 с = 3·10⁷ с\nНайти: t (в годах)",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "39 000 000 000 000 км",
+          "symbol": "S",
+          "isTarget": false
+        },
+        {
+          "fragment": "300 000 км/с",
+          "symbol": "v",
+          "isTarget": false
+        },
+        {
+          "fragment": "Через сколько времени",
+          "symbol": "t",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 37,
+  "fields": {
+    "task": 4,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 38,
+  "fields": {
+    "task": 4,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 39,
+  "fields": {
+    "task": 4,
+    "step": 9,
+    "step_type": "solution",
+    "content": "t = S / v = 3,9·10¹³ / 3·10⁵ = 1,3·10⁸ с\nt = 1,3·10⁸ / 3·10⁷ ≈ 4,33 года",
+    "schema_data": {
+      "formula": "t = S / v",
+      "si": "S = 3,9·10¹³ км\nv = 3·10⁵ км/с",
+      "calc": "t = 3,9·10¹³ / 3·10⁵ = 1,3·10⁸ с = 130 000 000 / 30 000 000 ≈ 4,33 года",
+      "reasoning": "4,33 года — известное расстояние до ближайшей звезды, результат адекватный"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 40,
+  "fields": {
+    "task": 4,
+    "step": 10,
+    "step_type": "text",
+    "content": "Радиосигнал от Альфа Центавра дойдёт до Земли примерно за 4,33 года",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 41,
+  "fields": {
+    "task": 5,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "космическая станция",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 42,
+  "fields": {
+    "task": 5,
+    "step": 2,
+    "step_type": "schema",
+    "content": "Космическая станция на орбите вокруг Земли",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t5s2_earth",
+          "type": "body-circle",
+          "x": 400,
+          "y": 300,
+          "color": "#3b82f6",
+          "radius": 30
+        },
+        {
+          "id": "t5s2_le",
+          "type": "text",
+          "x": 380,
+          "y": 295,
+          "text": "Земля",
+          "fontSize": 12,
+          "color": "white"
+        },
+        {
+          "id": "t5s2_station",
+          "type": "body-circle",
+          "x": 400,
+          "y": 170,
+          "color": "#f59e0b",
+          "radius": 8
+        },
+        {
+          "id": "t5s2_ls",
+          "type": "text",
+          "x": 420,
+          "y": 165,
+          "text": "Станция",
+          "fontSize": 12,
+          "color": "#f59e0b"
+        },
+        {
+          "id": "t5s2_la",
+          "type": "label",
+          "x": 395,
+          "y": 145,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 43,
+  "fields": {
+    "task": 5,
+    "step": 3,
+    "step_type": "schema",
+    "content": "Станция перемещается по орбите за одну минуту на 480 км",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t5s3_earth",
+          "type": "body-circle",
+          "x": 400,
+          "y": 300,
+          "color": "#3b82f6",
+          "radius": 30
+        },
+        {
+          "id": "t5s3_le",
+          "type": "text",
+          "x": 380,
+          "y": 295,
+          "text": "Земля",
+          "fontSize": 12,
+          "color": "white"
+        },
+        {
+          "id": "t5s3_a",
+          "type": "body-circle",
+          "x": 400,
+          "y": 170,
+          "color": "#f59e0b",
+          "radius": 6
+        },
+        {
+          "id": "t5s3_la",
+          "type": "label",
+          "x": 395,
+          "y": 148,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t5s3_b",
+          "type": "body-circle",
+          "x": 530,
+          "y": 200,
+          "color": "#22c55e",
+          "radius": 6
+        },
+        {
+          "id": "t5s3_lb",
+          "type": "label",
+          "x": 540,
+          "y": 195,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t5s3_v",
+          "type": "vector",
+          "x": 410,
+          "y": 170,
+          "length": 80,
+          "rotation": 15,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t5s3_vl",
+          "type": "label",
+          "x": 440,
+          "y": 145,
+          "symbol": "v",
+          "fontSize": 14,
+          "color": "#ef4444"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 44,
+  "fields": {
+    "task": 5,
+    "step": 4,
+    "step_type": "schema",
+    "content": "Один участок: равномерное движение станции",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t5s4_a",
+          "type": "body-circle",
+          "x": 250,
+          "y": 250,
+          "color": "#f59e0b",
+          "radius": 6
+        },
+        {
+          "id": "t5s4_la",
+          "type": "label",
+          "x": 245,
+          "y": 270,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t5s4_b",
+          "type": "body-circle",
+          "x": 550,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 6
+        },
+        {
+          "id": "t5s4_lb",
+          "type": "label",
+          "x": 545,
+          "y": 270,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t5s4_line",
+          "type": "line",
+          "x": 250,
+          "y": 250,
+          "length": 300,
+          "rotation": 0,
+          "color": "#1a1a2e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t5s4_s",
+          "type": "text",
+          "x": 360,
+          "y": 220,
+          "text": "S = 480 км",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t5s4_t",
+          "type": "text",
+          "x": 360,
+          "y": 290,
+          "text": "t = 1 мин = 60 с",
+          "fontSize": 13,
+          "color": "#64748b"
+        },
+        {
+          "id": "t5s4_vq",
+          "type": "text",
+          "x": 360,
+          "y": 315,
+          "text": "v = S/t = ?",
+          "fontSize": 13,
+          "color": "#ef4444"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 45,
+  "fields": {
+    "task": 5,
+    "step": 5,
+    "step_type": "text",
+    "content": "S = v · t → v = S / t",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 46,
+  "fields": {
+    "task": 5,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "Дано:\nS = 480 км\nt = 1 мин = 60 с\nv₂ = 11,9 км/с (вторая космическая)\nНайти: v",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "480 км",
+          "symbol": "S",
+          "isTarget": false
+        },
+        {
+          "fragment": "одну минуту",
+          "symbol": "t",
+          "isTarget": false
+        },
+        {
+          "fragment": "11,9 км/с",
+          "symbol": "v₂",
+          "isTarget": false
+        },
+        {
+          "fragment": "Является космическая станция искусственным спутником",
+          "symbol": "v",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 47,
+  "fields": {
+    "task": 5,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 48,
+  "fields": {
+    "task": 5,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 49,
+  "fields": {
+    "task": 5,
+    "step": 9,
+    "step_type": "solution",
+    "content": "v = S / t = 480 / 60 = 8 км/с\n8 км/с < 11,9 км/с → станция — спутник Земли",
+    "schema_data": {
+      "formula": "v = S / t",
+      "si": "S = 480 км\nt = 1 мин = 60 с",
+      "calc": "v = 480 / 60 = 8 км/с\nСравнение: 8 < 11,9 → спутник",
+      "reasoning": "8 км/с — типичная скорость орбитальной станции (МКС ~7,66 км/с), результат адекватный"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 50,
+  "fields": {
+    "task": 5,
+    "step": 10,
+    "step_type": "text",
+    "content": "Скорость станции — 8 км/с, что меньше второй космической скорости (11,9 км/с), значит, станция является искусственным спутником Земли",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 51,
+  "fields": {
+    "task": 6,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "корнеплоды свёкла транспортёр",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 52,
+  "fields": {
+    "task": 6,
+    "step": 2,
+    "step_type": "schema",
+    "content": "Транспортёр с корнеплодами, расположенными через 0,1 м друг от друга",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t6s2_belt",
+          "type": "line",
+          "x": 150,
+          "y": 280,
+          "length": 400,
+          "rotation": 0,
+          "color": "#64748b",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t6s2_blt",
+          "type": "text",
+          "x": 300,
+          "y": 295,
+          "text": "Лента транспортёра",
+          "fontSize": 12,
+          "color": "#64748b"
+        },
+        {
+          "id": "t6s2_b1",
+          "type": "body-circle",
+          "x": 200,
+          "y": 260,
+          "color": "#ef4444",
+          "radius": 8
+        },
+        {
+          "id": "t6s2_b2",
+          "type": "body-circle",
+          "x": 250,
+          "y": 260,
+          "color": "#ef4444",
+          "radius": 8
+        },
+        {
+          "id": "t6s2_b3",
+          "type": "body-circle",
+          "x": 300,
+          "y": 260,
+          "color": "#ef4444",
+          "radius": 8
+        },
+        {
+          "id": "t6s2_b4",
+          "type": "body-circle",
+          "x": 350,
+          "y": 260,
+          "color": "#ef4444",
+          "radius": 8
+        },
+        {
+          "id": "t6s2_dots",
+          "type": "text",
+          "x": 380,
+          "y": 255,
+          "text": "...",
+          "fontSize": 18,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t6s2_lb",
+          "type": "text",
+          "x": 240,
+          "y": 235,
+          "text": "Корнеплоды (m = 2 кг)",
+          "fontSize": 12,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t6s2_truck",
+          "type": "body-rect",
+          "x": 600,
+          "y": 250,
+          "width": 60,
+          "height": 40,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t6s2_lt",
+          "type": "text",
+          "x": 575,
+          "y": 300,
+          "text": "Автомашина (3 т)",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t6s2_la",
+          "type": "label",
+          "x": 145,
+          "y": 260,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 53,
+  "fields": {
+    "task": 6,
+    "step": 3,
+    "step_type": "schema",
+    "content": "Все корнеплоды загружены в автомашину",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t6s3_belt",
+          "type": "line",
+          "x": 150,
+          "y": 280,
+          "length": 400,
+          "rotation": 0,
+          "color": "#64748b",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t6s3_truck",
+          "type": "body-rect",
+          "x": 600,
+          "y": 250,
+          "width": 60,
+          "height": 40,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t6s3_lt",
+          "type": "text",
+          "x": 565,
+          "y": 300,
+          "text": "Загружена (3 т)",
+          "fontSize": 12,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t6s3_v",
+          "type": "vector",
+          "x": 200,
+          "y": 310,
+          "length": 120,
+          "rotation": 0,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t6s3_vl",
+          "type": "text",
+          "x": 230,
+          "y": 325,
+          "text": "v = 0,5 м/с",
+          "fontSize": 12,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t6s3_d",
+          "type": "text",
+          "x": 250,
+          "y": 250,
+          "text": "d = 0,1 м между корнеплодами",
+          "fontSize": 12,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 54,
+  "fields": {
+    "task": 6,
+    "step": 4,
+    "step_type": "schema",
+    "content": "Один участок: равномерное движение ленты транспортёра",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t6s4_a",
+          "type": "point",
+          "x": 150,
+          "y": 250,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t6s4_b",
+          "type": "point",
+          "x": 550,
+          "y": 250,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t6s4_line",
+          "type": "line",
+          "x": 150,
+          "y": 250,
+          "length": 400,
+          "rotation": 0,
+          "color": "#1a1a2e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t6s4_la",
+          "type": "label",
+          "x": 145,
+          "y": 265,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t6s4_lb",
+          "type": "label",
+          "x": 545,
+          "y": 265,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t6s4_n",
+          "type": "text",
+          "x": 250,
+          "y": 210,
+          "text": "N = M/m = 1500 шт.",
+          "fontSize": 13,
+          "color": "#64748b"
+        },
+        {
+          "id": "t6s4_l",
+          "type": "text",
+          "x": 300,
+          "y": 230,
+          "text": "L = N·d = 150 м",
+          "fontSize": 13,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t6s4_v",
+          "type": "text",
+          "x": 300,
+          "y": 290,
+          "text": "v = 0,5 м/с",
+          "fontSize": 13,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t6s4_t",
+          "type": "text",
+          "x": 300,
+          "y": 315,
+          "text": "t = L/v = ?",
+          "fontSize": 13,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 55,
+  "fields": {
+    "task": 6,
+    "step": 5,
+    "step_type": "text",
+    "content": "N = M / m (количество корнеплодов)\nL = N · d (длина ленты)\nt = L / v",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 56,
+  "fields": {
+    "task": 6,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "Дано:\nM = 3 т = 3000 кг\nm = 2 кг\nd = 0,1 м\nv = 0,5 м/с\nНайти: t",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "3 т",
+          "symbol": "M",
+          "isTarget": false
+        },
+        {
+          "fragment": "2 кг",
+          "symbol": "m",
+          "isTarget": false
+        },
+        {
+          "fragment": "0,1 м",
+          "symbol": "d",
+          "isTarget": false
+        },
+        {
+          "fragment": "0,5 м/с",
+          "symbol": "v",
+          "isTarget": false
+        },
+        {
+          "fragment": "Найдите время погрузки",
+          "symbol": "t",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 57,
+  "fields": {
+    "task": 6,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 58,
+  "fields": {
+    "task": 6,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 59,
+  "fields": {
+    "task": 6,
+    "step": 9,
+    "step_type": "solution",
+    "content": "N = M/m = 3000/2 = 1500 шт.\nL = N·d = 1500·0,1 = 150 м\nt = L/v = 150/0,5 = 300 с",
+    "schema_data": {
+      "formula": "t = (M · d) / (m · v)",
+      "si": "M = 3 т = 3000 кг\nm = 2 кг\nd = 0,1 м\nv = 0,5 м/с",
+      "calc": "N = 3000/2 = 1500\nL = 1500·0,1 = 150 м\nt = 150/0,5 = 300 с = 5 мин",
+      "reasoning": "5 минут на загрузку 3 тонн свёклы транспортёром — реалистичный результат"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 60,
+  "fields": {
+    "task": 6,
+    "step": 10,
+    "step_type": "text",
+    "content": "Время погрузки свёклы в автомашину составляет 300 с (5 минут)",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 61,
+  "fields": {
+    "task": 7,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "вагон пуля",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 62,
+  "fields": {
+    "task": 7,
+    "step": 2,
+    "step_type": "schema",
+    "content": "Вагон движется горизонтально; пуля летит перпендикулярно",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t7s2_wagon",
+          "type": "body-rect",
+          "x": 400,
+          "y": 250,
+          "width": 120,
+          "height": 60,
+          "color": "#94a3b8"
+        },
+        {
+          "id": "t7s2_lw",
+          "type": "text",
+          "x": 370,
+          "y": 250,
+          "text": "Вагон",
+          "fontSize": 13,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t7s2_v",
+          "type": "vector",
+          "x": 420,
+          "y": 200,
+          "length": 80,
+          "rotation": 0,
+          "color": "#3b82f6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t7s2_vl",
+          "type": "text",
+          "x": 440,
+          "y": 180,
+          "text": "v_ваг = 36 км/ч",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t7s2_bullet",
+          "type": "body-circle",
+          "x": 400,
+          "y": 150,
+          "color": "#ef4444",
+          "radius": 5
+        },
+        {
+          "id": "t7s2_bl",
+          "type": "text",
+          "x": 370,
+          "y": 135,
+          "text": "Пуля",
+          "fontSize": 12,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t7s2_bv",
+          "type": "vector",
+          "x": 400,
+          "y": 155,
+          "length": 60,
+          "rotation": 90,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 63,
+  "fields": {
+    "task": 7,
+    "step": 3,
+    "step_type": "schema",
+    "content": "Пуля пробивает обе стенки; отверстия смещены на 3 см",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t7s3_wagon",
+          "type": "body-rect",
+          "x": 400,
+          "y": 250,
+          "width": 120,
+          "height": 60,
+          "color": "#94a3b8"
+        },
+        {
+          "id": "t7s3_w1",
+          "type": "line",
+          "x": 340,
+          "y": 220,
+          "length": 60,
+          "rotation": 90,
+          "color": "#1a1a2e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t7s3_w2",
+          "type": "line",
+          "x": 460,
+          "y": 220,
+          "length": 60,
+          "rotation": 90,
+          "color": "#1a1a2e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t7s3_h1",
+          "type": "point",
+          "x": 340,
+          "y": 240,
+          "color": "#ef4444",
+          "radius": 5
+        },
+        {
+          "id": "t7s3_h2",
+          "type": "point",
+          "x": 463,
+          "y": 252,
+          "color": "#ef4444",
+          "radius": 5
+        },
+        {
+          "id": "t7s3_lh1",
+          "type": "text",
+          "x": 320,
+          "y": 225,
+          "text": "Вход",
+          "fontSize": 11,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t7s3_lh2",
+          "type": "text",
+          "x": 470,
+          "y": 240,
+          "text": "Выход",
+          "fontSize": 11,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t7s3_d",
+          "type": "text",
+          "x": 365,
+          "y": 310,
+          "text": "d = 2,7 м",
+          "fontSize": 13,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t7s3_delta",
+          "type": "text",
+          "x": 470,
+          "y": 265,
+          "text": "Δ = 3 см",
+          "fontSize": 12,
+          "color": "#8b5cf6"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 64,
+  "fields": {
+    "task": 7,
+    "step": 4,
+    "step_type": "schema",
+    "content": "Два одновременных движения: вагон (горизонтально) и пуля (перпендикулярно)",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t7s4_w1",
+          "type": "line",
+          "x": 300,
+          "y": 180,
+          "length": 140,
+          "rotation": 90,
+          "color": "#94a3b8",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t7s4_w2",
+          "type": "line",
+          "x": 500,
+          "y": 180,
+          "length": 140,
+          "rotation": 90,
+          "color": "#94a3b8",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t7s4_d",
+          "type": "line",
+          "x": 300,
+          "y": 330,
+          "length": 200,
+          "rotation": 0,
+          "color": "#1a1a2e",
+          "strokeWidth": 1,
+          "dashed": true
+        },
+        {
+          "id": "t7s4_dl",
+          "type": "text",
+          "x": 370,
+          "y": 340,
+          "text": "d = 2,7 м",
+          "fontSize": 13,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t7s4_bullet",
+          "type": "vector",
+          "x": 300,
+          "y": 230,
+          "length": 200,
+          "rotation": 84,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t7s4_bl",
+          "type": "text",
+          "x": 395,
+          "y": 200,
+          "text": "Пуля: v_п = ?",
+          "fontSize": 12,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t7s4_delta_l",
+          "type": "line",
+          "x": 500,
+          "y": 230,
+          "length": 15,
+          "rotation": 90,
+          "color": "#8b5cf6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t7s4_del",
+          "type": "text",
+          "x": 510,
+          "y": 235,
+          "text": "Δ = 3 см",
+          "fontSize": 12,
+          "color": "#8b5cf6"
+        },
+        {
+          "id": "t7s4_vw",
+          "type": "vector",
+          "x": 300,
+          "y": 180,
+          "length": 60,
+          "rotation": 0,
+          "color": "#3b82f6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t7s4_vwl",
+          "type": "text",
+          "x": 310,
+          "y": 160,
+          "text": "v_ваг",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 65,
+  "fields": {
+    "task": 7,
+    "step": 5,
+    "step_type": "text",
+    "content": "Δ = v_ваг · t (смещение отверстий)\nd = v_пули · t (ширина вагона)",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 66,
+  "fields": {
+    "task": 7,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "Дано:\nv_ваг = 36 км/ч\nΔ = 3 см = 0,03 м\nd = 2,7 м\nНайти: v_пули",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "36 км/ч",
+          "symbol": "v_ваг",
+          "isTarget": false
+        },
+        {
+          "fragment": "3 см",
+          "symbol": "Δ",
+          "isTarget": false
+        },
+        {
+          "fragment": "2,7 м",
+          "symbol": "d",
+          "isTarget": false
+        },
+        {
+          "fragment": "Определите скорость пули",
+          "symbol": "v_п",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 67,
+  "fields": {
+    "task": 7,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 68,
+  "fields": {
+    "task": 7,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 69,
+  "fields": {
+    "task": 7,
+    "step": 9,
+    "step_type": "solution",
+    "content": "v_ваг = 36 км/ч = 10 м/с\nt = Δ / v_ваг = 0,03 / 10 = 0,003 с\nv_пули = d / t = 2,7 / 0,003 = 900 м/с",
+    "schema_data": {
+      "formula": "v_п = d · v_ваг / Δ",
+      "si": "v_ваг = 36 км/ч = 10 м/с\nΔ = 3 см = 0,03 м\nd = 2,7 м",
+      "calc": "t = 0,03/10 = 0,003 с\nv_п = 2,7/0,003 = 900 м/с",
+      "reasoning": "900 м/с — типичная скорость пули из винтовки, результат адекватный"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 70,
+  "fields": {
+    "task": 7,
+    "step": 10,
+    "step_type": "text",
+    "content": "Скорость пули составляет 900 м/с",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 71,
+  "fields": {
+    "task": 8,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "человек пламя",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 72,
+  "fields": {
+    "task": 8,
+    "step": 2,
+    "step_type": "schema",
+    "content": "Человек у шнура, шнур подожжён",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t8s2_person",
+          "type": "body-circle",
+          "x": 250,
+          "y": 250,
+          "color": "#3b82f6",
+          "radius": 10
+        },
+        {
+          "id": "t8s2_lp",
+          "type": "text",
+          "x": 230,
+          "y": 270,
+          "text": "Человек",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t8s2_la",
+          "type": "label",
+          "x": 245,
+          "y": 225,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t8s2_fuse",
+          "type": "line",
+          "x": 250,
+          "y": 310,
+          "length": 80,
+          "rotation": 0,
+          "color": "#f59e0b",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t8s2_lf",
+          "type": "text",
+          "x": 255,
+          "y": 325,
+          "text": "Шнур (L = ?)",
+          "fontSize": 12,
+          "color": "#f59e0b"
+        },
+        {
+          "id": "t8s2_flame",
+          "type": "point",
+          "x": 250,
+          "y": 310,
+          "color": "#ef4444",
+          "radius": 5
+        },
+        {
+          "id": "t8s2_lfl",
+          "type": "text",
+          "x": 225,
+          "y": 335,
+          "text": "Пламя",
+          "fontSize": 11,
+          "color": "#ef4444"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 73,
+  "fields": {
+    "task": 8,
+    "step": 3,
+    "step_type": "schema",
+    "content": "Человек отбежал на 300 м; пламя дошло до конца шнура",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t8s3_a",
+          "type": "body-circle",
+          "x": 200,
+          "y": 250,
+          "color": "#3b82f6",
+          "radius": 8
+        },
+        {
+          "id": "t8s3_la",
+          "type": "label",
+          "x": 195,
+          "y": 225,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t8s3_b",
+          "type": "body-circle",
+          "x": 600,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 8
+        },
+        {
+          "id": "t8s3_lb",
+          "type": "label",
+          "x": 595,
+          "y": 225,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t8s3_lbt",
+          "type": "text",
+          "x": 575,
+          "y": 270,
+          "text": "Безопасно",
+          "fontSize": 11,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t8s3_run",
+          "type": "vector",
+          "x": 210,
+          "y": 250,
+          "length": 380,
+          "rotation": 0,
+          "color": "#3b82f6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t8s3_vr",
+          "type": "text",
+          "x": 370,
+          "y": 225,
+          "text": "Бег: v = 5 м/с",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t8s3_fuse",
+          "type": "line",
+          "x": 200,
+          "y": 310,
+          "length": 80,
+          "rotation": 0,
+          "color": "#f59e0b",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t8s3_flame",
+          "type": "vector",
+          "x": 200,
+          "y": 310,
+          "length": 80,
+          "rotation": 0,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t8s3_vf",
+          "type": "text",
+          "x": 210,
+          "y": 325,
+          "text": "Горение: 0,8 см/с",
+          "fontSize": 12,
+          "color": "#ef4444"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 74,
+  "fields": {
+    "task": 8,
+    "step": 4,
+    "step_type": "schema",
+    "content": "Два одновременных движения: человек бежит и пламя горит по шнуру",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t8s4_a",
+          "type": "point",
+          "x": 200,
+          "y": 250,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t8s4_la",
+          "type": "label",
+          "x": 195,
+          "y": 270,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t8s4_b",
+          "type": "point",
+          "x": 600,
+          "y": 250,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t8s4_lb",
+          "type": "label",
+          "x": 595,
+          "y": 270,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t8s4_run_line",
+          "type": "line",
+          "x": 200,
+          "y": 250,
+          "length": 400,
+          "rotation": 0,
+          "color": "#3b82f6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t8s4_s",
+          "type": "text",
+          "x": 360,
+          "y": 220,
+          "text": "S = 300 м, v = 5 м/с",
+          "fontSize": 13,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t8s4_fuse",
+          "type": "line",
+          "x": 200,
+          "y": 310,
+          "length": 80,
+          "rotation": 0,
+          "color": "#f59e0b",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t8s4_fl",
+          "type": "text",
+          "x": 210,
+          "y": 330,
+          "text": "L = ?, v_пл = 0,8 см/с",
+          "fontSize": 13,
+          "color": "#f59e0b"
+        },
+        {
+          "id": "t8s4_eq",
+          "type": "text",
+          "x": 300,
+          "y": 370,
+          "text": "t_бег = t_горения",
+          "fontSize": 14,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 75,
+  "fields": {
+    "task": 8,
+    "step": 5,
+    "step_type": "text",
+    "content": "S_бег = v_бег · t\nL_шнур = v_пламя · t",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 76,
+  "fields": {
+    "task": 8,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "Дано:\nS = 300 м\nv_бег = 5 м/с\nv_пламя = 0,8 см/с\nНайти: L (длина шнура)",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "300 м",
+          "symbol": "S",
+          "isTarget": false
+        },
+        {
+          "fragment": "5 м/с",
+          "symbol": "v_бег",
+          "isTarget": false
+        },
+        {
+          "fragment": "0,8 см/с",
+          "symbol": "v_пл",
+          "isTarget": false
+        },
+        {
+          "fragment": "Какой длины бикфордов шнур",
+          "symbol": "L",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 77,
+  "fields": {
+    "task": 8,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 78,
+  "fields": {
+    "task": 8,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 79,
+  "fields": {
+    "task": 8,
+    "step": 9,
+    "step_type": "solution",
+    "content": "t = S / v_бег = 300 / 5 = 60 с\nL = v_пламя · t = 0,8 · 60 = 48 см",
+    "schema_data": {
+      "formula": "L = v_пл · S / v_бег",
+      "si": "S = 300 м\nv_бег = 5 м/с\nv_пл = 0,8 см/с",
+      "calc": "t = 300/5 = 60 с\nL = 0,8 · 60 = 48 см",
+      "reasoning": "48 см шнура — реалистично для безопасного отбегания"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 80,
+  "fields": {
+    "task": 8,
+    "step": 10,
+    "step_type": "text",
+    "content": "Необходим бикфордов шнур длиной 48 см",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 81,
+  "fields": {
+    "task": 9,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "самолёт",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 82,
+  "fields": {
+    "task": 9,
+    "step": 2,
+    "step_type": "schema",
+    "content": "Самолёт в точке вылета",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t9s2_plane",
+          "type": "body-circle",
+          "x": 150,
+          "y": 250,
+          "color": "#3b82f6",
+          "radius": 10
+        },
+        {
+          "id": "t9s2_la",
+          "type": "label",
+          "x": 145,
+          "y": 225,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t9s2_lp",
+          "type": "text",
+          "x": 125,
+          "y": 270,
+          "text": "Вылет",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 83,
+  "fields": {
+    "task": 9,
+    "step": 3,
+    "step_type": "schema",
+    "content": "Самолёт в точке прилёта, пролетев два участка",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t9s3_a",
+          "type": "body-circle",
+          "x": 150,
+          "y": 250,
+          "color": "#3b82f6",
+          "radius": 8
+        },
+        {
+          "id": "t9s3_la",
+          "type": "label",
+          "x": 145,
+          "y": 225,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t9s3_m",
+          "type": "point",
+          "x": 400,
+          "y": 250,
+          "color": "#f59e0b",
+          "radius": 6
+        },
+        {
+          "id": "t9s3_lm",
+          "type": "label",
+          "x": 395,
+          "y": 225,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t9s3_c",
+          "type": "body-circle",
+          "x": 650,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 8
+        },
+        {
+          "id": "t9s3_lc",
+          "type": "label",
+          "x": 645,
+          "y": 225,
+          "symbol": "C",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t9s3_lct",
+          "type": "text",
+          "x": 625,
+          "y": 270,
+          "text": "Прилёт",
+          "fontSize": 12,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t9s3_v1",
+          "type": "vector",
+          "x": 160,
+          "y": 210,
+          "length": 100,
+          "rotation": 0,
+          "color": "#3b82f6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t9s3_v1l",
+          "type": "text",
+          "x": 180,
+          "y": 190,
+          "text": "v₁ = 1000 км/ч",
+          "fontSize": 11,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t9s3_v2",
+          "type": "vector",
+          "x": 410,
+          "y": 210,
+          "length": 80,
+          "rotation": 0,
+          "color": "#f59e0b",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t9s3_v2l",
+          "type": "text",
+          "x": 420,
+          "y": 190,
+          "text": "v₂ = 850 км/ч",
+          "fontSize": 11,
+          "color": "#f59e0b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 84,
+  "fields": {
+    "task": 9,
+    "step": 4,
+    "step_type": "schema",
+    "content": "Участок 1: S₁ = 2200 км, v₁ = 1000 км/ч\nУчасток 2: S₂ = 1700 км, v₂ = 850 км/ч",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t9s4_a",
+          "type": "point",
+          "x": 150,
+          "y": 250,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t9s4_la",
+          "type": "label",
+          "x": 145,
+          "y": 270,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t9s4_m",
+          "type": "point",
+          "x": 400,
+          "y": 250,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t9s4_lm",
+          "type": "label",
+          "x": 395,
+          "y": 270,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t9s4_c",
+          "type": "point",
+          "x": 600,
+          "y": 250,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t9s4_lc",
+          "type": "label",
+          "x": 595,
+          "y": 270,
+          "symbol": "C",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t9s4_l1",
+          "type": "line",
+          "x": 150,
+          "y": 250,
+          "length": 250,
+          "rotation": 0,
+          "color": "#3b82f6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t9s4_s1",
+          "type": "text",
+          "x": 225,
+          "y": 215,
+          "text": "S₁ = 2200 км, v₁ = 1000 км/ч",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t9s4_l2",
+          "type": "line",
+          "x": 400,
+          "y": 250,
+          "length": 200,
+          "rotation": 0,
+          "color": "#f59e0b",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t9s4_s2",
+          "type": "text",
+          "x": 440,
+          "y": 215,
+          "text": "S₂ = 1700 км, v₂ = 850 км/ч",
+          "fontSize": 12,
+          "color": "#f59e0b"
+        },
+        {
+          "id": "t9s4_vsr",
+          "type": "text",
+          "x": 300,
+          "y": 310,
+          "text": "v_ср = (S₁+S₂) / (t₁+t₂) = ?",
+          "fontSize": 13,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 85,
+  "fields": {
+    "task": 9,
+    "step": 5,
+    "step_type": "text",
+    "content": "S₁ = v₁ · t₁\nS₂ = v₂ · t₂\nv_ср = (S₁ + S₂) / (t₁ + t₂)",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 86,
+  "fields": {
+    "task": 9,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "Дано:\nS₁ = 2200 км\nv₁ = 1000 км/ч\nS₂ = 1700 км\nv₂ = 850 км/ч\nНайти: v_ср",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "2200 км",
+          "symbol": "S₁",
+          "isTarget": false
+        },
+        {
+          "fragment": "1000 км/ч",
+          "symbol": "v₁",
+          "isTarget": false
+        },
+        {
+          "fragment": "1700 км",
+          "symbol": "S₂",
+          "isTarget": false
+        },
+        {
+          "fragment": "850 км/ч",
+          "symbol": "v₂",
+          "isTarget": false
+        },
+        {
+          "fragment": "средняя скорость самолёта",
+          "symbol": "v_ср",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 87,
+  "fields": {
+    "task": 9,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 88,
+  "fields": {
+    "task": 9,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 89,
+  "fields": {
+    "task": 9,
+    "step": 9,
+    "step_type": "solution",
+    "content": "t₁ = S₁/v₁ = 2200/1000 = 2,2 ч\nt₂ = S₂/v₂ = 1700/850 = 2 ч\nv_ср = (2200+1700)/(2,2+2) = 3900/4,2 ≈ 928,57 км/ч",
+    "schema_data": {
+      "formula": "v_ср = (S₁ + S₂) / (S₁/v₁ + S₂/v₂)",
+      "si": "S₁ = 2200 км, v₁ = 1000 км/ч\nS₂ = 1700 км, v₂ = 850 км/ч",
+      "calc": "t₁ = 2200/1000 = 2,2 ч\nt₂ = 1700/850 = 2 ч\nv_ср = 3900/4,2 ≈ 928,57 км/ч",
+      "reasoning": "Средняя скорость между 850 и 1000 — адекватный результат"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 90,
+  "fields": {
+    "task": 9,
+    "step": 10,
+    "step_type": "text",
+    "content": "Средняя скорость самолёта за весь перелёт составляет примерно 928,57 км/ч",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 91,
+  "fields": {
+    "task": 10,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "вы велосипедист",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 92,
+  "fields": {
+    "task": 10,
+    "step": 2,
+    "step_type": "schema",
+    "content": "Велосипедист внизу подъёма",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t10s2_cyclist",
+          "type": "body-circle",
+          "x": 200,
+          "y": 300,
+          "color": "#3b82f6",
+          "radius": 10
+        },
+        {
+          "id": "t10s2_la",
+          "type": "label",
+          "x": 195,
+          "y": 275,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t10s2_lp",
+          "type": "text",
+          "x": 175,
+          "y": 320,
+          "text": "Старт (низ)",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t10s2_hill",
+          "type": "line",
+          "x": 200,
+          "y": 300,
+          "length": 250,
+          "rotation": -30,
+          "color": "#94a3b8",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t10s2_lh",
+          "type": "text",
+          "x": 350,
+          "y": 200,
+          "text": "Подъём",
+          "fontSize": 12,
+          "color": "#94a3b8"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 93,
+  "fields": {
+    "task": 10,
+    "step": 3,
+    "step_type": "schema",
+    "content": "Велосипедист вернулся в начальную точку после спуска",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t10s3_a",
+          "type": "body-circle",
+          "x": 200,
+          "y": 300,
+          "color": "#3b82f6",
+          "radius": 6
+        },
+        {
+          "id": "t10s3_la",
+          "type": "label",
+          "x": 195,
+          "y": 275,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t10s3_b",
+          "type": "body-circle",
+          "x": 450,
+          "y": 170,
+          "color": "#f59e0b",
+          "radius": 6
+        },
+        {
+          "id": "t10s3_lb",
+          "type": "label",
+          "x": 445,
+          "y": 148,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t10s3_lbt",
+          "type": "text",
+          "x": 455,
+          "y": 170,
+          "text": "Вершина",
+          "fontSize": 12,
+          "color": "#f59e0b"
+        },
+        {
+          "id": "t10s3_up",
+          "type": "line",
+          "x": 200,
+          "y": 300,
+          "length": 280,
+          "rotation": -28,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t10s3_v1",
+          "type": "text",
+          "x": 280,
+          "y": 210,
+          "text": "v₁ = 6 км/ч",
+          "fontSize": 12,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t10s3_down",
+          "type": "line",
+          "x": 450,
+          "y": 170,
+          "length": 280,
+          "rotation": 28,
+          "color": "#22c55e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t10s3_v2",
+          "type": "text",
+          "x": 530,
+          "y": 210,
+          "text": "v₂ = 8 м/с",
+          "fontSize": 12,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t10s3_a2",
+          "type": "body-circle",
+          "x": 700,
+          "y": 300,
+          "color": "#3b82f6",
+          "radius": 6
+        },
+        {
+          "id": "t10s3_la2",
+          "type": "label",
+          "x": 695,
+          "y": 275,
+          "symbol": "A'",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 94,
+  "fields": {
+    "task": 10,
+    "step": 4,
+    "step_type": "schema",
+    "content": "Участок 1 (подъём): v₁ = 6 км/ч\nУчасток 2 (спуск): v₂ = 8 м/с\nРасстояние одинаковое",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t10s4_a",
+          "type": "point",
+          "x": 150,
+          "y": 300,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t10s4_la",
+          "type": "label",
+          "x": 145,
+          "y": 315,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t10s4_b",
+          "type": "point",
+          "x": 400,
+          "y": 170,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t10s4_lb",
+          "type": "label",
+          "x": 395,
+          "y": 150,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t10s4_c",
+          "type": "point",
+          "x": 650,
+          "y": 300,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t10s4_lc",
+          "type": "label",
+          "x": 645,
+          "y": 315,
+          "symbol": "A'",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t10s4_up",
+          "type": "line",
+          "x": 150,
+          "y": 300,
+          "length": 280,
+          "rotation": -28,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t10s4_s1",
+          "type": "text",
+          "x": 220,
+          "y": 210,
+          "text": "S, v₁ = 6 км/ч ≈ 1,67 м/с",
+          "fontSize": 12,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t10s4_down",
+          "type": "line",
+          "x": 400,
+          "y": 170,
+          "length": 280,
+          "rotation": 28,
+          "color": "#22c55e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t10s4_s2",
+          "type": "text",
+          "x": 470,
+          "y": 210,
+          "text": "S, v₂ = 8 м/с",
+          "fontSize": 12,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t10s4_eq",
+          "type": "text",
+          "x": 280,
+          "y": 360,
+          "text": "S₁ = S₂ = S → v_ср = 2v₁v₂/(v₁+v₂)",
+          "fontSize": 13,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 95,
+  "fields": {
+    "task": 10,
+    "step": 5,
+    "step_type": "text",
+    "content": "S = v₁ · t₁ = v₂ · t₂\nv_ср = 2S / (t₁ + t₂) = 2v₁v₂ / (v₁ + v₂)",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 96,
+  "fields": {
+    "task": 10,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "Дано:\nv₁ = 6 км/ч ≈ 1,67 м/с\nv₂ = 8 м/с\nS₁ = S₂ = S\nНайти: v_ср",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "6 км/ч",
+          "symbol": "v₁",
+          "isTarget": false
+        },
+        {
+          "fragment": "8 м/с",
+          "symbol": "v₂",
+          "isTarget": false
+        },
+        {
+          "fragment": "средняя скорость вашего движения",
+          "symbol": "v_ср",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 97,
+  "fields": {
+    "task": 10,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 98,
+  "fields": {
+    "task": 10,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 99,
+  "fields": {
+    "task": 10,
+    "step": 9,
+    "step_type": "solution",
+    "content": "v₁ = 6 км/ч = 6/3,6 ≈ 1,67 м/с\nv_ср = 2·v₁·v₂/(v₁+v₂) = 2·1,67·8/(1,67+8) = 26,72/9,67 ≈ 2,76 м/с",
+    "schema_data": {
+      "formula": "v_ср = 2v₁v₂ / (v₁ + v₂)",
+      "si": "v₁ = 6 км/ч = 1,67 м/с\nv₂ = 8 м/с",
+      "calc": "v_ср = 2·1,67·8 / (1,67+8) = 26,72 / 9,67 ≈ 2,76 м/с",
+      "reasoning": "Средняя скорость ближе к меньшей из двух — адекватно для велосипеда"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 100,
+  "fields": {
+    "task": 10,
+    "step": 10,
+    "step_type": "text",
+    "content": "Средняя скорость движения велосипедиста составляет примерно 2,76 м/с",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.schemaelementcategory",
+  "pk": 1,
+  "fields": {
+    "name": "Точки и тела",
+    "slug": "points",
+    "description": "",
+    "icon": "●",
+    "order": 1,
+    "is_system": true
+  }
+},
+{
+  "model": "learning.schemaelementcategory",
+  "pk": 2,
+  "fields": {
+    "name": "Векторы",
+    "slug": "vectors",
+    "description": "",
+    "icon": "→",
+    "order": 2,
+    "is_system": true
+  }
+},
+{
+  "model": "learning.schemaelementcategory",
+  "pk": 3,
+  "fields": {
+    "name": "Линии и траектории",
+    "slug": "lines",
+    "description": "",
+    "icon": "—",
+    "order": 3,
+    "is_system": true
+  }
+},
+{
+  "model": "learning.schemaelementcategory",
+  "pk": 4,
+  "fields": {
+    "name": "Оси координат",
+    "slug": "axes",
+    "description": "",
+    "icon": "⊥",
+    "order": 4,
+    "is_system": true
+  }
+},
+{
+  "model": "learning.schemaelementcategory",
+  "pk": 5,
+  "fields": {
+    "name": "Надписи",
+    "slug": "labels",
+    "description": "",
+    "icon": "T",
+    "order": 5,
+    "is_system": true
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 1,
+  "fields": {
+    "category": 1,
+    "name": "Точка",
+    "description": "Обозначение положения тела (материальная точка)",
+    "svg_icon": "<circle cx=\"12\" cy=\"12\" r=\"6\" fill=\"currentColor\"/>",
+    "svg_template": "<circle cx=\"0\" cy=\"0\" r=\"{radius}\" fill=\"{color}\"/>",
+    "default_props": {
+      "color": "#1a1a2e",
+      "radius": 6
+    },
+    "editable_props": [
+      "color",
+      "radius",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.082Z",
+    "tags": "точка, положение, начало, конец",
+    "order": 1
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 2,
+  "fields": {
+    "category": 1,
+    "name": "Начальное положение",
+    "description": "Точка начального положения тела (A или с индексом 0)",
+    "svg_icon": "<circle cx=\"12\" cy=\"12\" r=\"5\" fill=\"#22c55e\" stroke=\"#15803d\" stroke-width=\"2\"/>",
+    "svg_template": "<circle cx=\"0\" cy=\"0\" r=\"{radius}\" fill=\"{color}\" stroke=\"#15803d\" stroke-width=\"2\"/>",
+    "default_props": {
+      "color": "#22c55e",
+      "radius": 6,
+      "label": "A"
+    },
+    "editable_props": [
+      "color",
+      "radius",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.090Z",
+    "tags": "начало, старт, исходное положение",
+    "order": 2
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 3,
+  "fields": {
+    "category": 1,
+    "name": "Конечное положение",
+    "description": "Точка конечного положения тела (B или с индексом)",
+    "svg_icon": "<circle cx=\"12\" cy=\"12\" r=\"5\" fill=\"#ef4444\" stroke=\"#b91c1c\" stroke-width=\"2\"/>",
+    "svg_template": "<circle cx=\"0\" cy=\"0\" r=\"{radius}\" fill=\"{color}\" stroke=\"#b91c1c\" stroke-width=\"2\"/>",
+    "default_props": {
+      "color": "#ef4444",
+      "radius": 6,
+      "label": "B"
+    },
+    "editable_props": [
+      "color",
+      "radius",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.106Z",
+    "tags": "конец, финиш, конечное положение",
+    "order": 3
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 4,
+  "fields": {
+    "category": 1,
+    "name": "Тело (круг)",
+    "description": "Изображение тела в виде круга",
+    "svg_icon": "<circle cx=\"12\" cy=\"12\" r=\"8\" fill=\"#3b82f6\" stroke=\"#1d4ed8\" stroke-width=\"2\"/>",
+    "svg_template": "<circle cx=\"0\" cy=\"0\" r=\"{radius}\" fill=\"{color}\" stroke=\"{strokeColor}\" stroke-width=\"2\"/>",
+    "default_props": {
+      "color": "#3b82f6",
+      "strokeColor": "#1d4ed8",
+      "radius": 15
+    },
+    "editable_props": [
+      "color",
+      "radius",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.122Z",
+    "tags": "тело, объект, материальная точка",
+    "order": 4
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 5,
+  "fields": {
+    "category": 1,
+    "name": "Тело (прямоугольник)",
+    "description": "Изображение тела в виде прямоугольника (автомобиль, вагон)",
+    "svg_icon": "<rect x=\"4\" y=\"8\" width=\"16\" height=\"8\" fill=\"#f59e0b\" stroke=\"#d97706\" stroke-width=\"2\"/>",
+    "svg_template": "<rect x=\"{-width/2}\" y=\"{-height/2}\" width=\"{width}\" height=\"{height}\" fill=\"{color}\" stroke=\"{strokeColor}\" stroke-width=\"2\"/>",
+    "default_props": {
+      "color": "#f59e0b",
+      "strokeColor": "#d97706",
+      "width": 40,
+      "height": 20
+    },
+    "editable_props": [
+      "color",
+      "width",
+      "height",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.136Z",
+    "tags": "тело, машина, вагон, объект",
+    "order": 5
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 6,
+  "fields": {
+    "category": 2,
+    "name": "Вектор скорости",
+    "description": "Вектор мгновенной скорости (v)",
+    "svg_icon": "<path d=\"M4 12 H18 M18 12 L14 8 M18 12 L14 16\" stroke=\"#ef4444\" stroke-width=\"2\" fill=\"none\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"{length}\" y2=\"0\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\"/><polygon points=\"{length},0 {length-10},-5 {length-10},5\" fill=\"{color}\"/>",
+    "default_props": {
+      "color": "#ef4444",
+      "strokeWidth": 2,
+      "length": 60,
+      "label": "v"
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "label",
+      "strokeWidth"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.147Z",
+    "tags": "скорость, вектор, v, направление движения",
+    "order": 1
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 7,
+  "fields": {
+    "category": 2,
+    "name": "Вектор перемещения",
+    "description": "Вектор перемещения (s или r)",
+    "svg_icon": "<path d=\"M4 12 H18 M18 12 L14 8 M18 12 L14 16\" stroke=\"#3b82f6\" stroke-width=\"2\" fill=\"none\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"{length}\" y2=\"0\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\"/><polygon points=\"{length},0 {length-10},-5 {length-10},5\" fill=\"{color}\"/>",
+    "default_props": {
+      "color": "#3b82f6",
+      "strokeWidth": 2,
+      "length": 80,
+      "label": "s"
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "label",
+      "strokeWidth"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.157Z",
+    "tags": "перемещение, вектор, s, путь",
+    "order": 2
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 8,
+  "fields": {
+    "category": 2,
+    "name": "Вектор ускорения",
+    "description": "Вектор ускорения (a)",
+    "svg_icon": "<path d=\"M4 12 H18 M18 12 L14 8 M18 12 L14 16\" stroke=\"#8b5cf6\" stroke-width=\"2\" fill=\"none\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"{length}\" y2=\"0\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\"/><polygon points=\"{length},0 {length-10},-5 {length-10},5\" fill=\"{color}\"/>",
+    "default_props": {
+      "color": "#8b5cf6",
+      "strokeWidth": 2,
+      "length": 50,
+      "label": "a"
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "label",
+      "strokeWidth"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.171Z",
+    "tags": "ускорение, вектор, a",
+    "order": 3
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 9,
+  "fields": {
+    "category": 2,
+    "name": "Вектор силы",
+    "description": "Вектор силы (F)",
+    "svg_icon": "<path d=\"M4 12 H18 M18 12 L14 8 M18 12 L14 16\" stroke=\"#22c55e\" stroke-width=\"3\" fill=\"none\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"{length}\" y2=\"0\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\"/><polygon points=\"{length},0 {length-12},-6 {length-12},6\" fill=\"{color}\"/>",
+    "default_props": {
+      "color": "#22c55e",
+      "strokeWidth": 3,
+      "length": 70,
+      "label": "F"
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "label",
+      "strokeWidth"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.188Z",
+    "tags": "сила, вектор, F",
+    "order": 4
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 10,
+  "fields": {
+    "category": 3,
+    "name": "Линия",
+    "description": "Прямая линия",
+    "svg_icon": "<line x1=\"4\" y1=\"12\" x2=\"20\" y2=\"12\" stroke=\"currentColor\" stroke-width=\"2\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"{length}\" y2=\"0\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\"/>",
+    "default_props": {
+      "color": "#1a1a2e",
+      "strokeWidth": 2,
+      "length": 100
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "strokeWidth"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.199Z",
+    "tags": "линия, прямая, отрезок",
+    "order": 1
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 11,
+  "fields": {
+    "category": 3,
+    "name": "Пунктирная линия",
+    "description": "Пунктирная линия для вспомогательных построений",
+    "svg_icon": "<line x1=\"4\" y1=\"12\" x2=\"20\" y2=\"12\" stroke=\"currentColor\" stroke-width=\"2\" stroke-dasharray=\"4 2\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"{length}\" y2=\"0\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\" stroke-dasharray=\"8 4\"/>",
+    "default_props": {
+      "color": "#6b7280",
+      "strokeWidth": 1,
+      "length": 100
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "strokeWidth"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.209Z",
+    "tags": "пунктир, вспомогательная, проекция",
+    "order": 2
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 12,
+  "fields": {
+    "category": 3,
+    "name": "Траектория",
+    "description": "Линия траектории движения",
+    "svg_icon": "<path d=\"M4 16 Q10 4 16 12 T22 8\" stroke=\"#3b82f6\" stroke-width=\"2\" fill=\"none\"/>",
+    "svg_template": "<path d=\"{path}\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\" fill=\"none\"/>",
+    "default_props": {
+      "color": "#3b82f6",
+      "strokeWidth": 2,
+      "path": "M0,0 Q50,-30 100,0"
+    },
+    "editable_props": [
+      "color",
+      "strokeWidth"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.223Z",
+    "tags": "траектория, путь движения",
+    "order": 3
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 13,
+  "fields": {
+    "category": 3,
+    "name": "Дуга угла",
+    "description": "Дуга для обозначения угла",
+    "svg_icon": "<path d=\"M16 12 A4 4 0 0 0 12 8\" stroke=\"#8b5cf6\" stroke-width=\"2\" fill=\"none\"/>",
+    "svg_template": "<path d=\"M{radius},0 A{radius},{radius} 0 0 1 {endX},{endY}\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\" fill=\"none\"/>",
+    "default_props": {
+      "color": "#8b5cf6",
+      "strokeWidth": 2,
+      "radius": 20,
+      "angle": 45
+    },
+    "editable_props": [
+      "color",
+      "radius",
+      "angle",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.234Z",
+    "tags": "угол, дуга, градус",
+    "order": 4
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 14,
+  "fields": {
+    "category": 4,
+    "name": "Ось X",
+    "description": "Горизонтальная ось координат",
+    "svg_icon": "<path d=\"M2 12 H20 M20 12 L16 9 M20 12 L16 15\" stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"{length}\" y2=\"0\" stroke=\"{color}\" stroke-width=\"2\"/><polygon points=\"{length},0 {length-8},-4 {length-8},4\" fill=\"{color}\"/><text x=\"{length+5}\" y=\"4\" font-size=\"14\" fill=\"{color}\">{label}</text>",
+    "default_props": {
+      "color": "#1a1a2e",
+      "length": 150,
+      "label": "x"
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.245Z",
+    "tags": "ось, x, горизонталь, координаты",
+    "order": 1
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 15,
+  "fields": {
+    "category": 4,
+    "name": "Ось Y",
+    "description": "Вертикальная ось координат",
+    "svg_icon": "<path d=\"M12 22 V4 M12 4 L9 8 M12 4 L15 8\" stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"-{length}\" stroke=\"{color}\" stroke-width=\"2\"/><polygon points=\"0,-{length} -4,-{length-8} 4,-{length-8}\" fill=\"{color}\"/><text x=\"5\" y=\"-{length}\" font-size=\"14\" fill=\"{color}\">{label}</text>",
+    "default_props": {
+      "color": "#1a1a2e",
+      "length": 150,
+      "label": "y"
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.254Z",
+    "tags": "ось, y, вертикаль, координаты",
+    "order": 2
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 16,
+  "fields": {
+    "category": 4,
+    "name": "Начало координат",
+    "description": "Точка начала координат (O)",
+    "svg_icon": "<circle cx=\"12\" cy=\"12\" r=\"3\" fill=\"currentColor\"/><text x=\"14\" y=\"22\" font-size=\"10\">O</text>",
+    "svg_template": "<circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"{color}\"/><text x=\"6\" y=\"14\" font-size=\"12\" fill=\"{color}\">O</text>",
+    "default_props": {
+      "color": "#1a1a2e"
+    },
+    "editable_props": [
+      "color"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.270Z",
+    "tags": "начало координат, O, центр",
+    "order": 3
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 17,
+  "fields": {
+    "category": 5,
+    "name": "Текст",
+    "description": "Произвольная надпись",
+    "svg_icon": "<text x=\"6\" y=\"16\" font-size=\"14\" font-weight=\"bold\">T</text>",
+    "svg_template": "<text x=\"0\" y=\"0\" font-size=\"{fontSize}\" fill=\"{color}\" font-family=\"serif\">{text}</text>",
+    "default_props": {
+      "color": "#1a1a2e",
+      "fontSize": 16,
+      "text": "Текст"
+    },
+    "editable_props": [
+      "color",
+      "fontSize",
+      "text"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.280Z",
+    "tags": "текст, надпись, подпись",
+    "order": 1
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 18,
+  "fields": {
+    "category": 5,
+    "name": "Индекс величины",
+    "description": "Обозначение физической величины с индексом (v₁, s₂)",
+    "svg_icon": "<text x=\"4\" y=\"14\" font-size=\"14\" font-style=\"italic\">v<tspan baseline-shift=\"sub\" font-size=\"10\">1</tspan></text>",
+    "svg_template": "<text x=\"0\" y=\"0\" font-size=\"{fontSize}\" fill=\"{color}\" font-family=\"serif\" font-style=\"italic\">{symbol}<tspan baseline-shift=\"sub\" font-size=\"{fontSize*0.7}\">{subscript}</tspan></text>",
+    "default_props": {
+      "color": "#1a1a2e",
+      "fontSize": 18,
+      "symbol": "v",
+      "subscript": "1"
+    },
+    "editable_props": [
+      "color",
+      "fontSize",
+      "symbol",
+      "subscript"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.290Z",
+    "tags": "индекс, подстрочный, величина",
+    "order": 2
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 19,
+  "fields": {
+    "category": 5,
+    "name": "Размерная линия",
+    "description": "Линия с размером (расстояние, путь)",
+    "svg_icon": "<line x1=\"4\" y1=\"12\" x2=\"20\" y2=\"12\" stroke=\"currentColor\" stroke-width=\"1\"/><line x1=\"4\" y1=\"8\" x2=\"4\" y2=\"16\" stroke=\"currentColor\" stroke-width=\"1\"/><line x1=\"20\" y1=\"8\" x2=\"20\" y2=\"16\" stroke=\"currentColor\" stroke-width=\"1\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"{length}\" y2=\"0\" stroke=\"{color}\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"{color}\" stroke-width=\"1\"/><line x1=\"{length}\" y1=\"-5\" x2=\"{length}\" y2=\"5\" stroke=\"{color}\" stroke-width=\"1\"/><text x=\"{length/2}\" y=\"-8\" font-size=\"12\" fill=\"{color}\" text-anchor=\"middle\">{label}</text>",
+    "default_props": {
+      "color": "#1a1a2e",
+      "length": 80,
+      "label": "s"
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.296Z",
+    "tags": "размер, расстояние, путь, s",
+    "order": 3
+  }
+},
+{
+  "model": "learning.schematemplate",
+  "pk": 1,
+  "fields": {
+    "task": 1,
+    "name": "Эталонная схема: Задача детектива",
+    "template_type": "reference",
+    "data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "el_1768246730213_s1bzx38m3",
+          "type": "body-circle",
+          "x": 250,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 6,
+          "label": "A"
+        },
+        {
+          "id": "el_1768246731157_1v6nm36z8",
+          "type": "body-circle",
+          "x": 400,
+          "y": 250,
+          "color": "#ef4444",
+          "radius": 6,
+          "label": "B"
+        },
+        {
+          "id": "el_1768246738956_7da2102ki",
+          "type": "line",
+          "x": 250,
+          "y": 250,
+          "color": "#1a1a2e",
+          "strokeWidth": 2,
+          "length": 134.65545868403115,
+          "rotation": 0
+        },
+        {
+          "id": "el_1768246786413_bt7tdtr5s",
+          "type": "text",
+          "x": 325,
+          "y": 250,
+          "color": "#1a1a2e",
+          "fontSize": 16,
+          "text": "r"
+        },
+        {
+          "id": "el_1768246815669_rgi7qqn5d",
+          "type": "vector",
+          "x": 250,
+          "y": 200,
+          "color": "#ef4444",
+          "strokeWidth": 2,
+          "length": 24.7619047619048,
+          "label": "v",
+          "rotation": 0
+        },
+        {
+          "id": "el_1768246828769_u6nn9qlmy",
+          "type": "label",
+          "x": 250,
+          "y": 200,
+          "color": "#1a1a2e",
+          "fontSize": 18,
+          "symbol": "v",
+          "subscript": ""
+        },
+        {
+          "id": "el_1768246862588_cd6295qsg",
+          "type": "label",
+          "x": 250,
+          "y": 250,
+          "color": "#1a1a2e",
+          "fontSize": 18,
+          "symbol": "A",
+          "subscript": "1"
+        },
+        {
+          "id": "el_1768246869877_q6pnr8w1y",
+          "type": "label",
+          "x": 400,
+          "y": 275,
+          "color": "#1a1a2e",
+          "fontSize": 18,
+          "symbol": "A",
+          "subscript": "2"
+        }
+      ]
+    },
+    "preview_image": "",
+    "created_at": "2026-01-08T16:30:53.673Z",
+    "updated_at": "2026-01-12T19:41:21.191Z"
+  }
+}
+]

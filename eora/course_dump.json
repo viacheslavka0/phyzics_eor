@@ -1,0 +1,5865 @@
+﻿[
+{
+  "model": "learning.schoolclass",
+  "pk": 1,
+  "fields": {
+    "number": 7,
+    "title": "7 ╨║╨╗╨░╤Б╤Б"
+  }
+},
+{
+  "model": "learning.schoolclass",
+  "pk": 2,
+  "fields": {
+    "number": 8,
+    "title": "8 ╨║╨╗╨░╤Б╤Б"
+  }
+},
+{
+  "model": "learning.schoolclass",
+  "pk": 3,
+  "fields": {
+    "number": 9,
+    "title": "9 ╨║╨╗╨░╤Б╤Б"
+  }
+},
+{
+  "model": "learning.subjectsection",
+  "pk": 1,
+  "fields": {
+    "school_class": 1,
+    "title": "╨Ь╨╡╤Е╨░╨╜╨╕╤З╨╡╤Б╨║╨╕╨╡ ╤П╨▓╨╗╨╡╨╜╨╕╤П",
+    "order": 1
+  }
+},
+{
+  "model": "learning.subjectsection",
+  "pk": 2,
+  "fields": {
+    "school_class": 1,
+    "title": "╨б╨▓╨╛╨╣╤Б╤В╨▓╨░ ╨▓╨╡╤Й╨╡╤Б╤В╨▓╨░",
+    "order": 2
+  }
+},
+{
+  "model": "learning.subjectsection",
+  "pk": 3,
+  "fields": {
+    "school_class": 1,
+    "title": "╨б╨╕╨╗╤Л ╨╕ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡",
+    "order": 3
+  }
+},
+{
+  "model": "learning.subjectsection",
+  "pk": 4,
+  "fields": {
+    "school_class": 1,
+    "title": "╨Ф╨░╨▓╨╗╨╡╨╜╨╕╨╡",
+    "order": 4
+  }
+},
+{
+  "model": "learning.subjectsection",
+  "pk": 5,
+  "fields": {
+    "school_class": 3,
+    "title": "╨Ь╨╡╤Е╨░╨╜╨╕╨║╨░",
+    "order": 1
+  }
+},
+{
+  "model": "learning.subjectsection",
+  "pk": 6,
+  "fields": {
+    "school_class": 1,
+    "title": "╨а╨░╨▒╨╛╤В╨░ ╨╕ ╤Н╨╜╨╡╤А╨│╨╕╤П",
+    "order": 5
+  }
+},
+{
+  "model": "learning.subjectsection",
+  "pk": 7,
+  "fields": {
+    "school_class": 1,
+    "title": "╨Ч╨▓╤Г╨║╨╛╨▓╤Л╨╡ ╤П╨▓╨╗╨╡╨╜╨╕╤П",
+    "order": 6
+  }
+},
+{
+  "model": "learning.subjectsection",
+  "pk": 8,
+  "fields": {
+    "school_class": 2,
+    "title": "╨в╨╡╨┐╨╗╨╛╨▓╤Л╨╡ ╤П╨▓╨╗╨╡╨╜╨╕╤П",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 1,
+  "fields": {
+    "section": 1,
+    "title": "╨а╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨╕ ╨╜╨╡╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╨╜╨░ ╤Г╤З╨░╤Б╤В╨║╨╡ ╤В╤А╨░╨╡╨║╤В╨╛╤А╨╕╨╕",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 2,
+  "fields": {
+    "section": 1,
+    "title": "╨а╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨╕ ╨╜╨╡╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡",
+    "order": 2
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 3,
+  "fields": {
+    "section": 1,
+    "title": "╨Ю╤В╨╜╨╛╤Б╨╕╤В╨╡╨╗╤М╨╜╨╛╤Б╤В╤М ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П",
+    "order": 3
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 4,
+  "fields": {
+    "section": 1,
+    "title": "╨а╨░╨▓╨╜╨╛╤Г╤Б╨║╨╛╤А╨╡╨╜╨╜╨╛╨╡ ╨┐╤А╤П╨╝╨╛╨╗╨╕╨╜╨╡╨╣╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡",
+    "order": 4
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 5,
+  "fields": {
+    "section": 1,
+    "title": "╨а╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╨┐╨╛ ╨╛╨║╤А╤Г╨╢╨╜╨╛╤Б╤В╨╕",
+    "order": 5
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 6,
+  "fields": {
+    "section": 1,
+    "title": "╨Ь╨╡╤Е╨░╨╜╨╕╤З╨╡╤Б╨║╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡",
+    "order": 6
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 7,
+  "fields": {
+    "section": 2,
+    "title": "╨б╨▓╨╛╨╣╤Б╤В╨▓╨░ ╨▓╨╡╤Й╨╡╤Б╤В╨▓╨░",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 8,
+  "fields": {
+    "section": 3,
+    "title": "╨а╨░╨▓╨╜╨╛╨▓╨╡╤Б╨╕╨╡ ╨╕ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╨┐╨╛╨┤ ╨┤╨╡╨╣╤Б╤В╨▓╨╕╨╡╨╝ ╤Б╨╕╨╗",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 9,
+  "fields": {
+    "section": 4,
+    "title": "╨Ф╨░╨▓╨╗╨╡╨╜╨╕╨╡ ╨▓ ╨╢╨╕╨┤╨║╨╛╤Б╤В╤П╤Е ╨╕ ╨│╨░╨╖╨░╤Е",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 10,
+  "fields": {
+    "section": 3,
+    "title": "╨а╨░╨▓╨╜╨╛╤Г╤Б╨║╨╛╤А╨╡╨╜╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╨┐╨╛╨┤ ╨┤╨╡╨╣╤Б╤В╨▓╨╕╨╡╨╝ ╤Б╨╕╨╗",
+    "order": 2
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 11,
+  "fields": {
+    "section": 5,
+    "title": "╨Ч╨░╨║╨╛╨╜╤Л ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╨╕╤П",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 12,
+  "fields": {
+    "section": 5,
+    "title": "╨Ф╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╨┐╨╛╨┤ ╨┤╨╡╨╣╤Б╤В╨▓╨╕╨╡╨╝ ╤Б╨╕╨╗",
+    "order": 2
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 13,
+  "fields": {
+    "section": 3,
+    "title": "╨Ф╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╨┐╨╛╨┤ ╨┤╨╡╨╣╤Б╤В╨▓╨╕╨╡╨╝ ╤Б╨╕╨╗",
+    "order": 3
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 14,
+  "fields": {
+    "section": 6,
+    "title": "╨Я╤А╨╛╤Б╤В╤Л╨╡ ╨╝╨╡╤Е╨░╨╜╨╕╨╖╨╝╤Л",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 15,
+  "fields": {
+    "section": 7,
+    "title": "╨Ч╨▓╤Г╨║╨╛╨▓╤Л╨╡ ╤П╨▓╨╗╨╡╨╜╨╕╤П",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 16,
+  "fields": {
+    "section": 8,
+    "title": "╨в╨╡╨┐╨╗╨╛╨┐╨╡╤А╨╡╨┤╨░╤З╨░",
+    "order": 1
+  }
+},
+{
+  "model": "learning.topic",
+  "pk": 17,
+  "fields": {
+    "section": 8,
+    "title": "╨Ш╨╖╨╝╨╡╨╜╨╡╨╜╨╕╨╡ ╨░╨│╤А╨╡╨│╨░╤В╨╜╨╛╨│╨╛ ╤Б╨╛╤Б╤В╨╛╤П╨╜╨╕╤П ╨▓╨╡╤Й╨╡╤Б╤В╨▓╨░",
+    "order": 2
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 1,
+  "fields": {
+    "topic": 1,
+    "title": "╨а╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨╕ ╨╜╨╡╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡",
+    "description": "╨б╨╕╤Б╤В╨╡╨╝╨░ ╨╖╨╜╨░╨╜╨╕╨╣ ╨╛ ╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╝ ╨╕ ╨╜╨╡╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╝ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╕ ╤В╨╡╨╗ ╨╜╨░ ╤Г╤З╨░╤Б╤В╨║╨╡ ╤В╤А╨░╨╡╨║╤В╨╛╤А╨╕╨╕",
+    "image": "ks/1.png",
+    "comprehension_image": "ks/comprehension/1_Dcm2SXO.png",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "╨Э╨░╨╣╤В╨╕ ╨╖╨╜╨░╤З╨╡╨╜╨╕╤П ╤Д╨╕╨╖╨╕╤З╨╡╤Б╨║╨╕╤Е ╨▓╨╡╨╗╨╕╤З╨╕╨╜, ╤Е╨░╤А╨░╨║╤В╨╡╤А╨╕╨╖╤Г╤О╤Й╨╕╤Е ╨а╨╕╨Э╨Ф",
+    "typical_task_description": "╨б╨╕╤Б╤В╨╡╨╝╤Г ╨╖╨╜╨░╨╜╨╕╨╣ ╨╛ ╨а╨╕╨Э╨Ф ╨╝╨╛╨╢╨╜╨╛ ╨┐╤А╨╕╨╝╨╡╨╜╨╕╤В╤М ╨┐╤А╨╕ ╤А╨╡╤И╨╡╨╜╨╕╨╕ ╨╖╨░╨┤╨░╤З ╤В╨╕╨┐╨░ \n┬л╨Э╨░╨╣╤В╨╕ ╨╖╨╜╨░╤З╨╡╨╜╨╕╨╡ ╨╛╨┤╨╜╨╛╨╣ ╨╕╨╖ ╨▓╨╡╨╗╨╕╤З╨╕╨╜, ╨╛╨┐╨╕╤Б╤Л╨▓╨░╤О╤Й╨╕╤Е ╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨╕╨╗╨╕ ╨╜╨╡╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╤В╨╡╨╗┬╗.\n\n╨в╨░╨║╨╕╨╡ ╨╖╨░╨┤╨░╤З╨╕ ╨▓╤Б╤В╤А╨╡╤З╨░╤О╤В╤Б╤П ╨▓ ╤Б╨╕╤В╤Г╨░╤Ж╨╕╤П╤Е:\n- ╨╛╨┐╤А╨╡╨┤╨╡╨╗╨╡╨╜╨╕╨╡ ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╤П, ╨┐╤А╨╛╨╣╨┤╨╡╨╜╨╜╨╛╨│╨╛ ╤В╨╡╨╗╨╛╨╝ ╨╖╨░ ╨╕╨╖╨▓╨╡╤Б╤В╨╜╨╛╨╡ ╨▓╤А╨╡╨╝╤П\n- ╨╛╨┐╤А╨╡╨┤╨╡╨╗╨╡╨╜╨╕╨╡ ╨▓╤А╨╡╨╝╨╡╨╜╨╕ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П ╨┐╤А╨╕ ╨╕╨╖╨▓╨╡╤Б╤В╨╜╨╛╨╣ ╤Б╨║╨╛╤А╨╛╤Б╤В╨╕ ╨╕ ╨┐╤Г╤В╨╕\n- ╨╛╨┐╤А╨╡╨┤╨╡╨╗╨╡╨╜╨╕╨╡ ╤Б╨║╨╛╤А╨╛╤Б╤В╨╕ ╨┐╨╛ ╨╕╨╖╨▓╨╡╤Б╤В╨╜╤Л╨╝ ╨┐╤Г╤В╨╕ ╨╕ ╨▓╤А╨╡╨╝╨╡╨╜╨╕\n- ╤А╨░╤Б╤З╤С╤В ╤Б╤А╨╡╨┤╨╜╨╡╨╣ ╤Б╨║╨╛╤А╨╛╤Б╤В╨╕ ╨┐╤А╨╕ ╨╜╨╡╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╝ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╕",
+    "typical_task_cloze_text": "{{0}} ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╨╕ {{1}} ╨▓╨╡╨╗╨╕╤З╨╕╨╜╤Л, {{2}} ╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨╕╨╗╨╕ ╨╜╨╡╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ {{3}} ╤В╨╡╨╗.",
+    "typical_task_cloze_blanks": [
+      {
+        "position": 0,
+        "correct": "╨Ю╨┐╨╕╤Б╨░╤В╤М"
+      },
+      {
+        "position": 1,
+        "correct": "╨╜╨░╨╣╤В╨╕"
+      },
+      {
+        "position": 2,
+        "correct": "╤Е╨░╤А╨░╨║╤В╨╡╤А╨╕╨╖╤Г╤О╤Й╨╕╨╡"
+      },
+      {
+        "position": 3,
+        "correct": "╨║╨╛╨╜╨║╤А╨╡╤В╨╜╤Л╤Е"
+      }
+    ],
+    "typical_task_cloze_distractors": [
+      "╨Ш╨╖╤Г╤З╨╕╤В╤М",
+      "╨╛╨┐╤А╨╡╨┤╨╡╨╗╨╕╤В╤М",
+      "╨╛╨┐╨╕╤Б╤Л╨▓╨░╤О╤Й╨╕╨╡",
+      "╨╕╨╖╨╝╨╡╤А╨╕╤В╤М",
+      "╨░╨▒╤Б╤В╤А╨░╨║╤В╨╜╤Л╤Е",
+      "╨╖╨░╨▓╨╕╤Б╤П╤Й╨╕╨╡",
+      "╨▓╤Л╤З╨╕╤Б╨╗╨╕╤В╤М",
+      "╤А╨░╨╖╨╗╨╕╤З╨╜╤Л╤Е"
+    ],
+    "status": "published",
+    "version": 1,
+    "created_at": "2025-12-27T12:07:36.280Z",
+    "updated_at": "2026-02-26T14:07:35.613Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 2,
+  "fields": {
+    "topic": 2,
+    "title": "╨а╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨╕ ╨╜╨╡╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╨╜╨░ ╤Г╤З╨░╤Б╤В╨║╨╡ ╤В╤А╨░╨╡╨║╤В╨╛╤А╨╕╨╕",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:41:15.833Z",
+    "updated_at": "2026-01-12T17:09:46.207Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 3,
+  "fields": {
+    "topic": 3,
+    "title": "╨Ю╤В╨╜╨╛╤Б╨╕╤В╨╡╨╗╤М╨╜╨╛╤Б╤В╤М ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:01.937Z",
+    "updated_at": "2026-01-12T15:42:01.937Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 4,
+  "fields": {
+    "topic": 4,
+    "title": "╨а╨░╨▓╨╜╨╛╤Г╤Б╨║╨╛╤А╨╡╨╜╨╜╨╛╨╡ ╨┐╤А╤П╨╝╨╛╨╗╨╕╨╜╨╡╨╣╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:01.984Z",
+    "updated_at": "2026-01-12T15:42:01.984Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 5,
+  "fields": {
+    "topic": 5,
+    "title": "╨а╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╨┐╨╛ ╨╛╨║╤А╤Г╨╢╨╜╨╛╤Б╤В╨╕",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.040Z",
+    "updated_at": "2026-01-12T15:42:02.040Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 6,
+  "fields": {
+    "topic": 6,
+    "title": "╨Ь╨╡╤Е╨░╨╜╨╕╤З╨╡╤Б╨║╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╤А╨░╨╖╨╜╤Л╤Е ╨▓╨╕╨┤╨╛╨▓",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.091Z",
+    "updated_at": "2026-01-12T15:42:02.091Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 7,
+  "fields": {
+    "topic": 7,
+    "title": "╨Ю╤Б╨╜╨╛╨▓╨╜╤Л╨╡ ╤Б╨▓╨╛╨╣╤Б╤В╨▓╨░ ╨▓╨╡╤Й╨╡╤Б╤В╨▓╨╡╨╜╨╜╤Л╤Е ╨╛╨▒╤К╨╡╨║╤В╨╛╨▓",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.180Z",
+    "updated_at": "2026-01-12T15:42:02.180Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 8,
+  "fields": {
+    "topic": 8,
+    "title": "╨а╨░╨▓╨╜╨╛╨▓╨╡╤Б╨╕╨╡ ╨╕ ╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╤В╨╡╨╗╨░ ╨┐╨╛╨┤ ╨┤╨╡╨╣╤Б╤В╨▓╨╕╨╡╨╝ ╤Б╨╕╨╗ ╤В╤П╨╢╨╡╤Б╤В╨╕, ╤Г╨┐╤А╤Г╨│╨╛╤Б╤В╨╕, ╤В╤А╨╡╨╜╨╕╤П",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.339Z",
+    "updated_at": "2026-01-12T15:42:02.339Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 9,
+  "fields": {
+    "topic": 9,
+    "title": "╨а╨░╨▓╨╜╨╛╨▓╨╡╤Б╨╕╨╡ ╨╢╨╕╨┤╨║╨╛╤Б╤В╨╕ ╨▓ ╤Б╨╛╨╛╨▒╤Й╨░╤О╤Й╨╕╤Е╤Б╤П ╤Б╨╛╤Б╤Г╨┤╨░╤Е",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.471Z",
+    "updated_at": "2026-01-12T15:42:02.471Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 10,
+  "fields": {
+    "topic": 9,
+    "title": "╨а╨░╨▓╨╜╨╛╨▓╨╡╤Б╨╕╨╡ ╤В╨╡╨╗ ╨▓ ╨╢╨╕╨┤╨║╨╛╤Б╤В╤П╤Е ╨╕ ╨│╨░╨╖╨░╤Е",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.502Z",
+    "updated_at": "2026-01-12T15:42:02.502Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 11,
+  "fields": {
+    "topic": 10,
+    "title": "╨а╨░╨▓╨╜╨╛╤Г╤Б╨║╨╛╤А╨╡╨╜╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╤В╨╡╨╗ ╨┐╨╛╨┤ ╨┤╨╡╨╣╤Б╤В╨▓╨╕╨╡╨╝ ╤Б╨╕╨╗ ╤В╤П╨╢╨╡╤Б╤В╨╕, ╤Г╨┐╤А╤Г╨│╨╛╤Б╤В╨╕, ╤В╤А╨╡╨╜╨╕╤П",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.556Z",
+    "updated_at": "2026-01-12T15:42:02.556Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 12,
+  "fields": {
+    "topic": 11,
+    "title": "╨Ф╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╤В╨╡╨╗, ╨╛╨▒╤А╨░╨╖╤Г╤О╤Й╨╕╤Е ╨╖╨░╨╝╨║╨╜╤Г╤В╤Г╤О ╤Б╨╕╤Б╤В╨╡╨╝╤Г",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.621Z",
+    "updated_at": "2026-01-12T15:42:02.622Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 13,
+  "fields": {
+    "topic": 12,
+    "title": "╨а╨░╨╖╨│╨╛╨╜ ╨╕ ╤В╨╛╤А╨╝╨╛╨╢╨╡╨╜╨╕╨╡ ╨┐╨╛ ╨│╨╛╤А╨╕╨╖╨╛╨╜╤В╨░╨╗╨╕",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.660Z",
+    "updated_at": "2026-01-12T15:42:02.660Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 14,
+  "fields": {
+    "topic": 13,
+    "title": "╨Ф╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╤В╨╡╨╗ ╨┐╨╛╨┤ ╨┤╨╡╨╣╤Б╤В╨▓╨╕╨╡╨╝ ╤Б╨╕╨╗ ╤В╤П╨╢╨╡╤Б╤В╨╕ ╨╕ ╤Г╨┐╤А╤Г╨│╨╛╤Б╤В╨╕",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.696Z",
+    "updated_at": "2026-01-12T15:42:02.696Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 15,
+  "fields": {
+    "topic": 14,
+    "title": "╨Я╤А╨╛╤Б╤В╤Л╨╡ ╨╝╨╡╤Е╨░╨╜╨╕╨╖╨╝╤Л",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.828Z",
+    "updated_at": "2026-01-12T15:42:02.828Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 16,
+  "fields": {
+    "topic": 15,
+    "title": "╨Ч╨▓╤Г╨║╨╛╨▓╤Л╨╡ ╤П╨▓╨╗╨╡╨╜╨╕╤П",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:02.950Z",
+    "updated_at": "2026-01-12T15:42:02.950Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 17,
+  "fields": {
+    "topic": 16,
+    "title": "╨Т╨╕╨┤╤Л ╤В╨╡╨┐╨╗╨╛╨┐╨╡╤А╨╡╨┤╨░╤З╨╕",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:03.083Z",
+    "updated_at": "2026-01-12T15:42:03.084Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 18,
+  "fields": {
+    "topic": 16,
+    "title": "╨Э╨░╨│╤А╨╡╨▓╨░╨╜╨╕╨╡ ╨╕╨╗╨╕ ╨╛╤Е╨╗╨░╨╢╨┤╨╡╨╜╨╕╨╡ ╤В╨╡╨╗ ╨┐╤А╨╕ ╤В╨╡╨┐╨╗╨╛╨┐╨╡╤А╨╡╨┤╨░╤З╨╡",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:03.166Z",
+    "updated_at": "2026-01-12T15:42:03.166Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 19,
+  "fields": {
+    "topic": 16,
+    "title": "╨Э╨░╨│╤А╨╡╨▓╨░╨╜╨╕╨╡ ╨╕ ╨╛╤Е╨╗╨░╨╢╨┤╨╡╨╜╨╕╨╡ ╤В╨╡╨╗ ╨┐╤А╨╕ ╤В╨╡╨┐╨╗╨╛╨┐╨╡╤А╨╡╨┤╨░╤З╨╡ ╨▓ ╤В╨╡╨┐╨╗╨╛╨╕╨╖╨╛╨╗╨╕╤А╨╛╨▓╨░╨╜╨╜╨╛╨╣ ╨╛╨▒╨╛╨╗╨╛╤З╨║╨╡",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:03.228Z",
+    "updated_at": "2026-01-12T15:42:03.228Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 20,
+  "fields": {
+    "topic": 16,
+    "title": "╨Э╨░╨│╤А╨╡╨▓╨░╨╜╨╕╨╡ ╤В╨╡╨╗ ╨┐╤А╨╕ ╤Б╨│╨╛╤А╨░╨╜╨╕╨╕ ╤В╨╛╨┐╨╗╨╕╨▓╨░ ╨╕╨╗╨╕ ╤Б╨╛╨▓╨╡╤А╤И╨╡╨╜╨╕╨╕ ╨╝╨╡╤Е╨░╨╜╨╕╤З╨╡╤Б╨║╨╛╨╣ ╤А╨░╨▒╨╛╤В╤Л",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:03.272Z",
+    "updated_at": "2026-01-12T15:42:03.272Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 21,
+  "fields": {
+    "topic": 17,
+    "title": "╨Э╨░╨│╤А╨╡╨▓╨░╨╜╨╕╨╡ (╨╛╤Е╨╗╨░╨╢╨┤╨╡╨╜╨╕╨╡), ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╨╡ ╨░╨│╤А╨╡╨│╨░╤В╨╜╨╛╨│╨╛ ╤Б╨╛╤Б╤В╨╛╤П╨╜╨╕╤П ╨▓╨╡╤Й╨╡╤Б╤В╨▓╨░  ╨┐╤А╨╕ ╤В╨╡╨┐╨╗╨╛╨┐╨╡╤А╨╡╨┤╨░╤З╨╡",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:03.321Z",
+    "updated_at": "2026-01-12T15:42:03.321Z"
+  }
+},
+{
+  "model": "learning.knowledgesystem",
+  "pk": 22,
+  "fields": {
+    "topic": 17,
+    "title": "╨Э╨░╨│╤А╨╡╨▓╨░╨╜╨╕╨╡ (╨╛╤Е╨╗╨░╨╢╨┤╨╡╨╜╨╕╨╡), ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╨╡ ╨░╨│╤А╨╡╨│╨░╤В╨╜╨╛╨│╨╛ ╤Б╨╛╤Б╤В╨╛╤П╨╜╨╕╤П ╨▓╨╡╤Й╨╡╤Б╤В╨▓╨░ ╨┐╤А╨╕ ╤В╨╡╨┐╨╗╨╛╨┐╨╡╤А╨╡╨┤╨░╤З╨╡ ╨▓ ╤В╨╡╨┐╨╗╨╛╨╕╨╖╨╛╨╗╨╕╤А╨╛╨▓╨░╨╜╨╜╨╛╨╣ ╨╛╨▒╨╛╨╗╨╛╤З╨║╨╡",
+    "description": "",
+    "image": "",
+    "comprehension_image": "",
+    "show_zones_by_default": true,
+    "comprehension_pass_threshold": 85,
+    "typical_task_title": "",
+    "typical_task_description": "",
+    "typical_task_cloze_text": "",
+    "typical_task_cloze_blanks": [],
+    "typical_task_cloze_distractors": [],
+    "status": "draft",
+    "version": 1,
+    "created_at": "2026-01-12T15:42:03.387Z",
+    "updated_at": "2026-01-12T15:42:03.387Z"
+  }
+},
+{
+  "model": "learning.kszone",
+  "pk": 73,
+  "fields": {
+    "ks": 1,
+    "x": 180,
+    "y": 25,
+    "width": 148,
+    "height": 44,
+    "label": "╨Р"
+  }
+},
+{
+  "model": "learning.kszone",
+  "pk": 74,
+  "fields": {
+    "ks": 1,
+    "x": 359,
+    "y": 25,
+    "width": 58,
+    "height": 70,
+    "label": "╨С"
+  }
+},
+{
+  "model": "learning.kszone",
+  "pk": 75,
+  "fields": {
+    "ks": 1,
+    "x": 449,
+    "y": 24,
+    "width": 78,
+    "height": 71,
+    "label": "╨Т"
+  }
+},
+{
+  "model": "learning.kszone",
+  "pk": 76,
+  "fields": {
+    "ks": 1,
+    "x": 406,
+    "y": 124,
+    "width": 159,
+    "height": 32,
+    "label": "╨У"
+  }
+},
+{
+  "model": "learning.kszone",
+  "pk": 77,
+  "fields": {
+    "ks": 1,
+    "x": 171,
+    "y": 114,
+    "width": 134,
+    "height": 43,
+    "label": "╨Ф"
+  }
+},
+{
+  "model": "learning.kszone",
+  "pk": 78,
+  "fields": {
+    "ks": 1,
+    "x": 173,
+    "y": 161,
+    "width": 139,
+    "height": 48,
+    "label": "╨Х"
+  }
+},
+{
+  "model": "learning.ksquestion",
+  "pk": 13,
+  "fields": {
+    "ks": 1,
+    "type": "match",
+    "text": "╨Т╤Л╨┤╨╡╨╗╨╕ ╨╜╨░ ╤В╨░╨▒╨╗╨╕╤Ж╨╡ ╤Д╨╕╨╖╨╕╤З╨╡╤Б╨║╤Г╤О ╨╝╨╛╨┤╨╡╨╗╤М ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П ╤В╨╡╨╗╨░ ╤Б╨╛ ╤Б╤А╨╡╨┤╨╜╨╡╨╣ ╤Б╨║╨╛╤А╨╛╤Б╤В╤М╤О",
+    "order": 2,
+    "options": [
+      {
+        "text": "",
+        "is_correct": false
+      }
+    ],
+    "correct_answer_text": "",
+    "fuzzy_match": false,
+    "zones": [],
+    "correct_zones": [
+      77
+    ]
+  }
+},
+{
+  "model": "learning.ksquestion",
+  "pk": 14,
+  "fields": {
+    "ks": 1,
+    "type": "match",
+    "text": "╨Т╤Л╨┤╨╡╨╗╨╕ ╨╜╨░ ╤В╨░╨▒╨╗╨╕╤Ж╨╡ ╤Д╨╕╨╖╨╕╤З╨╡╤Б╨║╤Г╤О ╨╝╨╛╨┤╨╡╨╗╤М ╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨│╨╛ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П",
+    "order": 3,
+    "options": [
+      {
+        "text": "",
+        "is_correct": false
+      }
+    ],
+    "correct_answer_text": "",
+    "fuzzy_match": false,
+    "zones": [],
+    "correct_zones": [
+      73
+    ]
+  }
+},
+{
+  "model": "learning.ksquestion",
+  "pk": 15,
+  "fields": {
+    "ks": 1,
+    "type": "match",
+    "text": "╨Т╤Л╨┤╨╡╨╗╨╕ ╨╜╨░ ╤В╨░╨▒╨╗╨╕╤Ж╨╡ ╨│╤А╨░╤Д╨╕╨║ ╨╖╨░╨▓╨╕╤Б╨╕╨╝╨╛╤Б╤В╨╕ ╨┐╤Г╤В╨╕ ╨╛╤В ╨▓╤А╨╡╨╝╨╡╨╜╨╕ ╨┤╨╗╤П ╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨│╨╛ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П",
+    "order": 4,
+    "options": [
+      {
+        "text": "",
+        "is_correct": false
+      }
+    ],
+    "correct_answer_text": "",
+    "fuzzy_match": false,
+    "zones": [],
+    "correct_zones": [
+      74
+    ]
+  }
+},
+{
+  "model": "learning.ksquestion",
+  "pk": 16,
+  "fields": {
+    "ks": 1,
+    "type": "match",
+    "text": "╨Т╤Л╨┤╨╡╨╗╨╕ ╨╜╨░ ╤В╨░╨▒╨╗╨╕╤Ж╨╡ ╨│╤А╨░╤Д╨╕╨║ ╨╖╨░╨▓╨╕╤Б╨╕╨╝╨╛╤Б╤В╨╕ ╤Б╨║╨╛╤А╨╛╤Б╤В╨╕ ╨╛╤В ╨▓╤А╨╡╨╝╨╡╨╜╨╕ ╨┤╨╗╤П ╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨│╨╛ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П",
+    "order": 5,
+    "options": [
+      {
+        "text": "",
+        "is_correct": false
+      }
+    ],
+    "correct_answer_text": "",
+    "fuzzy_match": false,
+    "zones": [],
+    "correct_zones": [
+      75
+    ]
+  }
+},
+{
+  "model": "learning.ksquestion",
+  "pk": 17,
+  "fields": {
+    "ks": 1,
+    "type": "match",
+    "text": "╨Т╤Л╨┤╨╡╨╗╨╕ ╨╜╨░ ╤В╨░╨▒╨╗╨╕╤Ж╨╡ ╤Д╨╕╨╖╨╕╤З╨╡╤Б╨║╤Г╤О ╨╝╨╛╨┤╨╡╨╗╤М ╨╜╨╡╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨│╨╛ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П",
+    "order": 6,
+    "options": [
+      {
+        "text": "",
+        "is_correct": false
+      }
+    ],
+    "correct_answer_text": "",
+    "fuzzy_match": false,
+    "zones": [],
+    "correct_zones": [
+      77
+    ]
+  }
+},
+{
+  "model": "learning.kscloze",
+  "pk": 9,
+  "fields": {
+    "ks": 1,
+    "original_text": "╨б╨┐╨╕╤Б╨╛╨║ ╨╛╨▒╨╛╨╖╨╜╨░╤З╨╡╨╜╨╕╨╣ ╨▓ ╤Д╨╕╨╖╨╕╨║╨╡ ╨▓╨║╨╗╤О╤З╨░╨╡╤В ╨╛╨▒╨╛╨╖╨╜╨░╤З╨╡╨╜╨╕╤П ╨┐╨╛╨╜╤П╤В╨╕╨╣ ╨▓ ╤Д╨╕╨╖╨╕╨║╨╡ ╨╕╨╖ ╤И╨║╨╛╨╗╤М╨╜╨╛╨│╨╛ ╨╕ ╤Г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В╤Б╨║╨╛╨│╨╛ ╨║╤Г╤А╤Б╨╛╨▓. ╨в╨░╨║╨╢╨╡ ╨▓╨║╨╗╤О╤З╨╡╨╜╤Л ╨╕ ╨╛╨▒╤Й╨╕╨╡ ╨╝╨░╤В╨╡╨╝╨░╤В╨╕╤З╨╡╤Б╨║╨╕╨╡ ╨┐╨╛╨╜╤П╤В╨╕╤П ╨╕ ╨╛╨┐╨╡╤А╨░╤Ж╨╕╨╕ ╨┤╨╗╤П ╤В╨╛╨│╨╛, ╤З╤В╨╛╨▒╤Л ╤Б╨┤╨╡╨╗╨░╤В╤М ╨▓╨╛╨╖╨╝╨╛╨╢╨╜╤Л╨╝ ╨┐╨╛╨╗╨╜╨╛╨╡ ╨┐╤А╨╛╤З╤В╨╡╨╜╨╕╨╡ ╤Д╨╕╨╖╨╕╤З╨╡╤Б╨║╨╕╤Е ╤Д╨╛╤А╨╝╤Г╨╗.",
+    "marked_text": "╨б╨┐╨╕╤Б╨╛╨║ {{0}}╨▓ ╤Д╨╕╨╖╨╕╨║╨╡ ╨▓╨║╨╗╤О╤З╨░╨╡╤В {{1}}╨┐╨╛╨╜╤П╤В╨╕╨╣ ╨▓ ╤Д╨╕╨╖╨╕╨║╨╡ ╨╕╨╖ ╤И╨║╨╛╨╗╤М╨╜╨╛╨│╨╛ ╨╕ ╤Г╨╜╨╕╨▓╨╡╤А╤Б╨╕╤В╨╡╤В╤Б╨║╨╛╨│╨╛ ╨║╤Г╤А╤Б╨╛╨▓. ╨в╨░╨║╨╢╨╡ ╨▓╨║╨╗╤О╤З╨╡╨╜╤Л ╨╕ ╨╛╨▒╤Й╨╕╨╡ ╨╝╨░╤В╨╡╨╝╨░╤В╨╕╤З╨╡╤Б╨║╨╕╨╡ ╨┐╨╛╨╜╤П╤В╨╕╤П ╨╕ ╨╛╨┐╨╡╤А╨░╤Ж╨╕╨╕ ╨┤╨╗╤П ╤В╨╛╨│╨╛, ╤З╤В╨╛╨▒╤Л ╤Б╨┤╨╡╨╗╨░╤В╤М {{2}}╨┐╨╛╨╗╨╜╨╛╨╡ ╨┐╤А╨╛╤З╤В╨╡╨╜╨╕╨╡ ╤Д╨╕╨╖╨╕╤З╨╡╤Б╨║╨╕╤Е ╤Д╨╛╤А╨╝╤Г╨╗.",
+    "blanks": [
+      {
+        "position": 0,
+        "correct": "╨╛╨▒╨╛╨╖╨╜╨░╤З╨╡╨╜╨╕╨╣ ",
+        "start": 7,
+        "end": 19
+      },
+      {
+        "position": 1,
+        "correct": "╨╛╨▒╨╛╨╖╨╜╨░╤З╨╡╨╜╨╕╤П ",
+        "start": 37,
+        "end": 49
+      },
+      {
+        "position": 2,
+        "correct": "╨▓╨╛╨╖╨╝╨╛╨╢╨╜╤Л╨╝ ",
+        "start": 187,
+        "end": 197
+      }
+    ],
+    "distractors": [
+      "╨┐╤А╨╛╨┐╤Г╤Б╨║ ╤Б╨╗╨╛╨▓╨╛"
+    ],
+    "order": 2
+  }
+},
+{
+  "model": "learning.solutionmethod",
+  "pk": 1,
+  "fields": {
+    "ks": 1,
+    "title": "╨Ь╨╡╤В╨╛╨┤ ╤А╨╡╤И╨╡╨╜╨╕╤П ╨╖╨░╨┤╨░╤З ╨╜╨░ ╨┐╤А╨╕╨╝╨╡╨╜╨╡╨╜╨╕╨╡ ╤Б╨╕╤Б╤В╨╡╨╝╤Л ╨╖╨╜╨░╨╜╨╕╨╣ ╨╛ ╨а╨╕╨Э╨Ф",
+    "description": "╨Я╨╛╤Б╨╗╨╡╨┤╨╛╨▓╨░╤В╨╡╨╗╤М╨╜╨╛╤Б╤В╤М ╨┤╨╡╨╣╤Б╤В╨▓╨╕╨╣ ╨┤╨╗╤П ╤А╨╡╤И╨╡╨╜╨╕╤П ╨╖╨░╨┤╨░╤З ╨╜╨░ ╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨╕ ╨╜╨╡╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡"
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 1,
+  "fields": {
+    "method": 1,
+    "order": 1,
+    "title": "╨Т╤Л╨┤╨╡╨╗╨╕╤В╨╡ ╨┤╨▓╨╕╨╢╤Г╤Й╨╡╨╡╤Б╤П ╤В╨╡╨╗╨╛ (╤В╨╡╨╗╨░)",
+    "description": "╨Ю╨┐╤А╨╡╨┤╨╡╨╗╨╕╤В╨╡, ╨║╨░╨║╨╕╨╡ ╤В╨╡╨╗╨░ ╤Г╤З╨░╤Б╤В╨▓╤Г╤О╤В ╨▓ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╕. ╨н╤В╨╛ ╨╝╨╛╨│╤Г╤В ╨▒╤Л╤В╤М ╨░╨▓╤В╨╛╨╝╨╛╨▒╨╕╨╗╨╕, ╨╗╤О╨┤╨╕, ╨╢╨╕╨▓╨╛╤В╨╜╤Л╨╡, ╤Б╨╜╨░╤А╤П╨┤╤Л ╨╕ ╤В.╨┤.",
+    "hint": "╨Ш╤Й╨╕╤В╨╡ ╨▓ ╤Г╤Б╨╗╨╛╨▓╨╕╨╕ ╨╖╨░╨┤╨░╤З╨╕ ╤Б╤Г╤Й╨╡╤Б╤В╨▓╨╕╤В╨╡╨╗╤М╨╜╤Л╨╡, ╨║╨╛╤В╨╛╤А╤Л╨╡ ╨╝╨╛╨│╤Г╤В ╨┤╨▓╨╕╨│╨░╤В╤М╤Б╤П",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 2,
+  "fields": {
+    "method": 1,
+    "order": 2,
+    "title": "╨Т╤Л╨┤╨╡╨╗╨╕╤В╨╡ ╨╜╨░╤З╨░╨╗╤М╨╜╨╛╨╡ ╨┐╨╛╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╤В╨╡╨╗╨░ ╨╕ ╨╡╨│╨╛ ╤Е╨░╤А╨░╨║╤В╨╡╤А╨╕╤Б╤В╨╕╨║╨╕. ╨Ш╨╖╨╛╨▒╤А╨░╨╖╨╕╤В╨╡",
+    "description": "╨Ю╨┐╤А╨╡╨┤╨╡╨╗╨╕╤В╨╡, ╨│╨┤╨╡ ╨╜╨░╤Е╨╛╨┤╨╕╨╗╨╛╤Б╤М ╤В╨╡╨╗╨╛ ╨▓ ╨╜╨░╤З╨░╨╗╤М╨╜╤Л╨╣ ╨╝╨╛╨╝╨╡╨╜╤В ╨▓╤А╨╡╨╝╨╡╨╜╨╕. ╨Э╨░╤А╨╕╤Б╤Г╨╣╤В╨╡ ╤Б╤Е╨╡╨╝╤Г.",
+    "hint": "╨Э╨░╤З╨░╨╗╤М╨╜╨╛╨╡ ╨┐╨╛╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╤З╨░╤Б╤В╨╛ ╤Г╨║╨░╨╖╤Л╨▓╨░╨╡╤В╤Б╤П ╤Б╨╗╨╛╨▓╨░╨╝╨╕: '╨╜╨░╤Е╨╛╨┤╨╕╤В╤Б╤П', '╤Б╤В╨╛╨╕╤В', '╤А╨░╤Б╨┐╨╛╨╗╨╛╨╢╨╡╨╜'",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 3,
+  "fields": {
+    "method": 1,
+    "order": 3,
+    "title": "╨Т╤Л╨┤╨╡╨╗╨╕╤В╨╡ ╨┐╨╛╤Б╨╗╨╡╨┤╤Г╤О╤Й╨╕╨╡ ╨┐╨╛╨╗╨╛╨╢╨╡╨╜╨╕╤П ╤В╨╡╨╗╨░. ╨Ш╨╖╨╛╨▒╤А╨░╨╖╨╕╤В╨╡",
+    "description": "╨Ю╨┐╤А╨╡╨┤╨╡╨╗╨╕╤В╨╡ ╨║╨╛╨╜╨╡╤З╨╜╨╛╨╡ ╨┐╨╛╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╤В╨╡╨╗╨░ ╨╕╨╗╨╕ ╨┐╤А╨╛╨╝╨╡╨╢╤Г╤В╨╛╤З╨╜╤Л╨╡ ╤В╨╛╤З╨║╨╕ ╤В╤А╨░╨╡╨║╤В╨╛╤А╨╕╨╕.",
+    "hint": "╨Ъ╨╛╨╜╨╡╤З╨╜╨╛╨╡ ╨┐╨╛╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╨╝╨╛╨╢╨╡╤В ╨▒╤Л╤В╤М ╤Г╨║╨░╨╖╨░╨╜╨╛ ╨║╨░╨║ '╨┐╤А╨╕╨▒╤Л╨╗', '╨┤╨╛╤Б╤В╨╕╨│', '╨╛╨║╨░╨╖╨░╨╗╤Б╤П'",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 4,
+  "fields": {
+    "method": 1,
+    "order": 4,
+    "title": "╨Т╤Л╨┤╨╡╨╗╨╕╤В╨╡ ╤Г╤З╨░╤Б╤В╨║╨╕ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П ╨╕ ╤Е╨░╤А╨░╨║╤В╨╡╤А╨╕╤Б╤В╨╕╨║╨╕ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П ╨╜╨░ ╨║╨░╨╢╨┤╨╛╨╝ ╤Г╤З╨░╤Б╤В╨║╨╡. ╨Ю╨▒╨╛╨╖╨╜╨░╤З╤М╤В╨╡",
+    "description": "╨а╨░╨╖╨▒╨╡╨╣╤В╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╨╜╨░ ╤Г╤З╨░╤Б╤В╨║╨╕. ╨Ф╨╗╤П ╨║╨░╨╢╨┤╨╛╨│╨╛ ╤Г╤З╨░╤Б╤В╨║╨░ ╨╛╨┐╤А╨╡╨┤╨╡╨╗╨╕╤В╨╡: ╨┐╤Г╤В╤М (s), ╨▓╤А╨╡╨╝╤П (t), ╤Б╨║╨╛╤А╨╛╤Б╤В╤М (v).",
+    "hint": "╨Х╤Б╨╗╨╕ ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╨╝╨╡╨╜╤П╨╡╤В╤Б╤П тАФ ╤Н╤В╨╛ ╤А╨░╨╖╨╜╤Л╨╡ ╤Г╤З╨░╤Б╤В╨║╨╕ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 5,
+  "fields": {
+    "method": 1,
+    "order": 5,
+    "title": "╨б╨╛╤Б╤В╨░╨▓╤М╤В╨╡ ╤Г╤А╨░╨▓╨╜╨╡╨╜╨╕╨╡ s = vt ╨┤╨╗╤П ╨║╨░╨╢╨┤╨╛╨│╨╛ ╤Г╤З╨░╤Б╤В╨║╨░",
+    "description": "╨Ф╨╗╤П ╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨│╨╛ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П: s = v┬╖t. ╨Ф╨╗╤П ╨╜╨╡╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨│╨╛: s = v_╤Б╤А┬╖t",
+    "hint": "╨Я╨╛╨╝╨╜╨╕╤В╨╡: ╨┐╤Г╤В╤М = ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ├Ч ╨▓╤А╨╡╨╝╤П",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 6,
+  "fields": {
+    "method": 1,
+    "order": 6,
+    "title": "╨г╤Б╤В╨░╨╜╨╛╨▓╨╕╤В╨╡ ╨╕╨╖╨▓╨╡╤Б╤В╨╜╤Л╨╡ ╤Е╨░╤А╨░╨║╤В╨╡╤А╨╕╤Б╤В╨╕╨║╨╕ ╨╕ ╨╕╤Б╨║╨╛╨╝╤Г╤О ╨▓╨╡╨╗╨╕╤З╨╕╨╜╤Г. ╨Ч╨░╨┐╨╕╤И╨╕╤В╨╡ ╨║╤А╨░╤В╨║╨╛ ╨┤╨░╨╜╨╜╤Л╨╡",
+    "description": "╨Т╤Л╨┐╨╕╤И╨╕╤В╨╡ ╨▓ ╤Б╤В╨╛╨╗╨▒╨╕╨║ '╨Ф╨░╨╜╨╛:' ╨▓╤Б╨╡ ╨╕╨╖╨▓╨╡╤Б╤В╨╜╤Л╨╡ ╨▓╨╡╨╗╨╕╤З╨╕╨╜╤Л. ╨Я╨╛╨┤ ╤З╨╡╤А╤В╨╛╨╣ ╤Г╨║╨░╨╢╨╕╤В╨╡, ╤З╤В╨╛ ╨╜╤Г╨╢╨╜╨╛ ╨╜╨░╨╣╤В╨╕.",
+    "hint": "╨Э╨╡ ╨╖╨░╨▒╤Г╨┤╤М╤В╨╡ ╨┐╨╡╤А╨╡╨▓╨╡╤Б╤В╨╕ ╨╡╨┤╨╕╨╜╨╕╤Ж╤Л ╨▓ ╨б╨Ш!",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 7,
+  "fields": {
+    "method": 1,
+    "order": 7,
+    "title": "╨г╤Б╤В╨░╨╜╨╛╨▓╨╕╤В╨╡, ╨▓╤Е╨╛╨┤╨╕╤В ╨╗╨╕ ╨╕╤Б╨║╨╛╨╝╨░╤П ╨▓╨╡╨╗╨╕╤З╨╕╨╜╨░ ╨▓ ╤Б╨╛╤Б╤В╨░╨▓╨╗╨╡╨╜╨╜╤Л╨╡ ╤Г╤А╨░╨▓╨╜╨╡╨╜╨╕╤П",
+    "description": "╨Я╤А╨╛╨▓╨╡╤А╤М╤В╨╡, ╨╝╨╛╨╢╨╜╨╛ ╨╗╨╕ ╤Б╤А╨░╨╖╤Г ╨╜╨░╨╣╤В╨╕ ╨╕╤Б╨║╨╛╨╝╤Г╤О ╨▓╨╡╨╗╨╕╤З╨╕╨╜╤Г ╨╕╨╖ ╤Г╤А╨░╨▓╨╜╨╡╨╜╨╕╨╣ ╤И╨░╨│╨░ 5.",
+    "hint": "╨Х╤Б╨╗╨╕ ╨╕╤Б╨║╨╛╨╝╨░╤П ╨▓╨╡╨╗╨╕╤З╨╕╨╜╨░ ╨╡╤Б╤В╤М ╨▓ ╤Г╤А╨░╨▓╨╜╨╡╨╜╨╕╨╕ тАФ ╨▓╤Л╤А╨░╨╖╨╕╤В╨╡ ╨╡╤С",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 8,
+  "fields": {
+    "method": 1,
+    "order": 8,
+    "title": "╨б╨╛╤Б╤В╨░╨▓╤М╤В╨╡ ╨┤╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╤Л╨╡ ╤Г╤А╨░╨▓╨╜╨╡╨╜╨╕╤П ╨┐╤А╨╕ ╨╜╨╡╨╛╨▒╤Е╨╛╨┤╨╕╨╝╨╛╤Б╤В╨╕",
+    "description": "╨Х╤Б╨╗╨╕ ╤З╨╕╤Б╨╗╨╛ ╤Г╤А╨░╨▓╨╜╨╡╨╜╨╕╨╣ ╨╝╨╡╨╜╤М╤И╨╡ ╤З╨╕╤Б╨╗╨░ ╨╜╨╡╨╕╨╖╨▓╨╡╤Б╤В╨╜╤Л╤Е тАФ ╨╜╤Г╨╢╨╜╤Л ╨┤╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╤Л╨╡ ╤Б╨▓╤П╨╖╨╕.",
+    "hint": "╨Ф╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╤Л╨╡ ╤Б╨▓╤П╨╖╨╕ ╤З╨░╤Б╤В╨╛ ╤Б╨╗╨╡╨┤╤Г╤О╤В ╨╕╨╖ ╤Г╤Б╨╗╨╛╨▓╨╕╤П: '╨╛╨┤╨╜╨╛╨▓╤А╨╡╨╝╨╡╨╜╨╜╨╛', '╨▓╤Б╤В╤А╨╡╤В╨╕╨╗╨╕╤Б╤М', '╨┤╨╛╨│╨╜╨░╨╗'",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 9,
+  "fields": {
+    "method": 1,
+    "order": 9,
+    "title": "╨Э╨░╨╣╨┤╨╕╤В╨╡ ╨╖╨╜╨░╤З╨╡╨╜╨╕╨╡ ╨╕╤Б╨║╨╛╨╝╨╛╨╣ ╨▓╨╡╨╗╨╕╤З╨╕╨╜╤Л",
+    "description": "╨░) ╨б╨╛╤Б╤В╨░╨▓╤М╤В╨╡ ╤Д╨╛╤А╨╝╤Г╨╗╤Г ╨┤╨╗╤П ╤А╨░╤Б╤З╤С╤В╨░ ╨╕╤Б╨║╨╛╨╝╨╛╨╣ ╨▓╨╡╨╗╨╕╤З╨╕╨╜╤Л\n╨▒) ╨Т╤Л╤А╨░╨╖╨╕╤В╨╡ ╨▓╨╡╨╗╨╕╤З╨╕╨╜╤Л ╨▓ ╨╡╨┤╨╕╨╜╨╕╤Ж╨░╤Е ╨б╨Ш\n╨▓) ╨Я╤А╨╛╨╕╨╖╨▓╨╡╨┤╨╕╤В╨╡ ╤А╨░╤Б╤З╤С╤В\n╨│) ╨Ю╤Ж╨╡╨╜╨╕╤В╨╡ ╤А╨░╨╖╤Г╨╝╨╜╨╛╤Б╤В╤М ╤А╨╡╨╖╤Г╨╗╤М╤В╨░╤В╨░",
+    "hint": "╨Я╤А╨╛╨▓╨╡╤А╤М╤В╨╡ ╤А╨░╨╖╨╝╨╡╤А╨╜╨╛╤Б╤В╤М! ╨Х╤Б╨╗╨╕ ╨╕╤Й╨╡╤В╨╡ ╨▓╤А╨╡╨╝╤П тАФ ╨╛╤В╨▓╨╡╤В ╨┤╨╛╨╗╨╢╨╡╨╜ ╨▒╤Л╤В╤М ╨▓ ╤Б╨╡╨║╤Г╨╜╨┤╨░╤Е",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.solutionstep",
+  "pk": 10,
+  "fields": {
+    "method": 1,
+    "order": 10,
+    "title": "╨б╤Д╨╛╤А╨╝╤Г╨╗╨╕╤А╤Г╨╣╤В╨╡ ╨╛╤В╨▓╨╡╤В",
+    "description": "╨Ч╨░╨┐╨╕╤И╨╕╤В╨╡ ╨╛╤В╨▓╨╡╤В ╨┐╨╛╨╗╨╜╤Л╨╝ ╨┐╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜╨╕╨╡╨╝ ╤Б ╤Г╨║╨░╨╖╨░╨╜╨╕╨╡╨╝ ╨╡╨┤╨╕╨╜╨╕╤Ж ╨╕╨╖╨╝╨╡╤А╨╡╨╜╨╕╤П.",
+    "hint": "╨Ю╤В╨▓╨╡╤В: '╨б╨║╨╛╤А╨╛╤Б╤В╤М ╨░╨▓╤В╨╛╨╝╨╛╨▒╨╕╨╗╤П ╤А╨░╨▓╨╜╨░ 20 ╨╝/╤Б' ╨╕╨╗╨╕ 'v = 20 ╨╝/╤Б'",
+    "hide_title_in_composition": false
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 1,
+  "fields": {
+    "ks": 1,
+    "order": 1,
+    "title": "╨Ч╨░╨┤╨░╤З╨░ ╨┤╨╡╤В╨╡╨║╤В╨╕╨▓╨░",
+    "text": "╨Т╤Л тАУ ╨┤╨╡╤В╨╡╨║╤В╨╕╨▓ ╨╕ ╨╛╨┐╤А╨╡╨┤╨╡╨╗╤П╨╡╤В╨╡ ╨╛╨▒╨╗╨░╤Б╤В╤М ╨┐╨╛╨╕╤Б╨║╨░ ╨┐╤А╨╡╤Б╤В╤Г╨┐╨╜╨╕╨║╨░, ╨║╨╛╤В╨╛╤А╤Л╨╣ ╨▓╤Л╤И╨╡╨╗ ╨╕╨╖ ╨╕╨╖╨▓╨╡╤Б╤В╨╜╨╛╨│╨╛ ╨┤╨╛╨╝╨░ 20 ╨╝╨╕╨╜ ╨╜╨░╨╖╨░╨┤ ╨╕ ╤Б╤В╨░╤А╨░╨╡╤В╤Б╤П ╤Б╨║╤А╤Л╤В╤М╤Б╤П ╨╕╨╖ ╨│╨╛╤А╨╛╨┤╨░ ╨╜╨░ ╨░╨▓╤В╨╛╨╝╨╛╨▒╨╕╨╗╨╡. ╨Ь╨░╨║╤Б╨╕╨╝╨░╨╗╤М╨╜╨░╤П ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╨░╨▓╤В╨╛╨╝╨╛╨▒╨╕╨╗╤П ╨▓ ╨│╨╛╤А╨╛╨┤╨╡ тАФ 60 ╨║╨╝/╤З. ╨Э╨░ ╨║╨░╨║╨╛╨╝ ╨╝╨░╨║╤Б╨╕╨╝╨░╨╗╤М╨╜╨╛╨╝ ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╕ ╨╛╤В ╨┤╨╛╨╝╨░ ╨╝╨╛╨╢╨╡╤В ╨╜╨░╤Е╨╛╨┤╨╕╤В╤М╤Б╤П ╨┐╤А╨╡╤Б╤В╤Г╨┐╨╜╨╕╨║?",
+    "correct_answer": 20.0,
+    "answer_unit": "╨║╨╝",
+    "answer_tolerance": 1.0,
+    "correct_answer_text": "",
+    "difficulty": 2,
+    "solution_summary": "",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 2,
+  "fields": {
+    "ks": 1,
+    "order": 2,
+    "title": "╨Ь╤Г╤Е╨░ ╨╕ ╤Б╨║╨▓╨╛╤А╨╡╤Ж",
+    "text": "╨Ъ╨░╨║╨╛╨╡ ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╡ ╤Г╤Б╨┐╨╡╨╡╤В ╨┐╤А╨╛╨╗╨╡╤В╨╡╤В╤М ╨╝╤Г╤Е╨░, ╨╖╨░ ╨║╨╛╤В╨╛╤А╨╛╨╣ ╨│╨╛╨╜╨╕╤В╤Б╤П ╤Б╨║╨▓╨╛╤А╨╡╤Ж, ╨╡╤Б╨╗╨╕ ╨╛╨╜ ╨╖╨░╨╝╨╡╤В╨╕╨╗ ╨╡╤С ╨╜╨░ ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╕ 5 ╨╝? ╨б╨║╨╛╤А╨╛╤Б╤В╤М ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П ╨╝╤Г╤Е╨╕ тАУ 5 ╨╝/c, ╤Б╨║╨▓╨╛╤А╤Ж╨░ тАУ 20 ╨╝/╤Б.",
+    "correct_answer": 1.67,
+    "answer_unit": "╨╝",
+    "answer_tolerance": 5.0,
+    "correct_answer_text": "",
+    "difficulty": 3,
+    "solution_summary": "t = a/(v_╤Б - v_╨╝) = 5/(20-5) = 1/3 c; s_╨╝ = v_╨╝┬╖t = 5┬╖(1/3) тЙИ 1,67 ╨╝",
+    "solution_detailed": "1. ╨Ф╨▓╨╕╨╢╤Г╤Й╨╕╨╡╤Б╤П ╤В╨╡╨╗╨░: ╨╝╤Г╤Е╨░ ╨╕ ╤Б╨║╨▓╨╛╤А╨╡╤Ж\n2. ╨Э╨░╤З╨░╨╗╤М╨╜╨╛╨╡ ╨┐╨╛╨╗╨╛╨╢╨╡╨╜╨╕╨╡: ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╡ ╨╝╨╡╨╢╨┤╤Г ╨╜╨╕╨╝╨╕ a = 5 ╨╝\n3. ╨Ъ╨╛╨╜╨╡╤З╨╜╨╛╨╡ ╨┐╨╛╨╗╨╛╨╢╨╡╨╜╨╕╨╡: ╤Б╨║╨▓╨╛╤А╨╡╤Ж ╨┤╨╛╨│╨╛╨╜╤П╨╡╤В ╨╝╤Г╤Е╤Г\n4. v_╨╝ = 5 ╨╝/╤Б, v_╤Б = 20 ╨╝/╤Б\n5. ╨Ч╨░ ╨▓╤А╨╡╨╝╤П t ╨╝╤Г╤Е╨░ ╨┐╤А╨╛╨╗╨╡╤В╨╕╤В: s_╨╝ = v_╨╝┬╖t\n   ╨б╨║╨▓╨╛╤А╨╡╤Ж ╨┐╤А╨╛╨╗╨╡╤В╨╕╤В: s_╤Б = v_╤Б┬╖t\n6. ╨г╤Б╨╗╨╛╨▓╨╕╨╡ ╨▓╤Б╤В╤А╨╡╤З╨╕: s_╤Б - s_╨╝ = a\n7. v_╤Б┬╖t - v_╨╝┬╖t = a тЖТ t = a/(v_╤Б - v_╨╝)\n8. t = 5/(20-5) = 5/15 = 1/3 ╤Б\n9. s_╨╝ = 5 ┬╖ (1/3) тЙИ 1,67 ╨╝\n10. ╨Ю╤В╨▓╨╡╤В: ╨╝╤Г╤Е╨░ ╨┐╤А╨╛╨╗╨╡╤В╨╕╤В ╨┐╤А╨╕╨╝╨╡╤А╨╜╨╛ 1,67 ╨╝",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 3,
+  "fields": {
+    "ks": 1,
+    "order": 3,
+    "title": "╨Я╨╡╤А╨╡╨┐╤А╨░╨▓╨░ ╤З╨╡╤А╨╡╨╖ ╤А╨╡╨║╤Г",
+    "text": "╨Т╤Л ╨┐╨╡╤А╨╡╨┐╨╗╤Л╨▓╨░╨╡╤В╨╡ ╤А╨╡╨║╤Г ╨┐╨╡╤А╨┐╨╡╨╜╨┤╨╕╨║╤Г╨╗╤П╤А╨╜╨╛ ╤В╨╡╤З╨╡╨╜╨╕╤О. ╨Ъ╨░╨║╨╛╨╡ ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╡ ╨▓╨░╨╝ ╨┐╤А╨╕╨┤╤С╤В╤Б╤П ╨┐╤А╨╛╨╣╤В╨╕ ╨▓╨▓╨╡╤А╤Е ╨┐╨╛ ╤В╨╡╤З╨╡╨╜╨╕╤О, ╤З╤В╨╛╨▒╤Л ╨┐╨╛╨┐╨░╤Б╤В╤М ╨▓ ╤В╨╛╤З╨║╤Г, ╤А╨░╤Б╨┐╨╛╨╗╨╛╨╢╨╡╨╜╨╜╤Г╤О ╨╜╨░╨┐╤А╨╛╤В╨╕╨▓ ╤В╨╛╨│╨╛ ╨╝╨╡╤Б╤В╨░, ╨╛╤В╨║╤Г╨┤╨░ ╨▓╤Л ╨╜╨░╤З╨░╨╗╨╕ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡? ╨и╨╕╤А╨╕╨╜╨░ ╤А╨╡╨║╨╕ тАУ 9 ╨╝, ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╤В╨╡╤З╨╡╨╜╨╕╤П ╤А╨╡╨║╨╕ тАУ 0,2 ╨╝/╤Б. ╨Т╤Л ╤Б╨┐╨╛╤Б╨╛╨▒╨╜╤Л ╨┐╨╗╤Л╤В╤М ╤Б╨╛ ╤Б╨║╨╛╤А╨╛╤Б╤В╤М╤О 0,5 ╨╝/╤Б.",
+    "correct_answer": 3.6,
+    "answer_unit": "╨╝",
+    "answer_tolerance": 5.0,
+    "correct_answer_text": "",
+    "difficulty": 4,
+    "solution_summary": "t = d/v_╨┐╨╗ = 9/0,5 = 18 ╤Б; ╤Б╨╜╨╛╤Б = v_╤В┬╖t = 0,2┬╖18 = 3,6 ╨╝",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 4,
+  "fields": {
+    "ks": 1,
+    "order": 4,
+    "title": "╨б╨╕╨│╨╜╨░╨╗ ╤Б ╨Р╨╗╤М╤Д╨░ ╨ж╨╡╨╜╤В╨░╨▓╤А╨░",
+    "text": "╨з╨╡╤А╨╡╨╖ ╤Б╨║╨╛╨╗╤М╨║╨╛ ╨▓╤А╨╡╨╝╨╡╨╜╨╕ ╨┤╨╛ ╨Ч╨╡╨╝╨╗╨╕ ╨┤╨╛╨╣╨┤╤С╤В ╤А╨░╨┤╨╕╨╛╤Б╨╕╨│╨╜╨░╨╗, ╨┐╨╛╤Б╨╗╨░╨╜╨╜╤Л╨╣ ┬л╨▒╤А╨░╤В╤М╤П╨╝╨╕ ╨┐╨╛ ╤А╨░╨╖╤Г╨╝╤Г┬╗ ╤Б ╨Р╨╗╤М╤Д╨░ ╨ж╨╡╨╜╤В╨░╨▓╤А╨░, ╨║╨╛╤В╨╛╤А╨░╤П ╨╜╨░╤Е╨╛╨┤╨╕╤В╤Б╤П ╨╜╨░ ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╕ 39 000 000 000 000 ╨║╨╝? ╨Я╤А╨╕ ╤А╨░╤Б╤З╤С╤В╨░╤Е ╨┐╤А╨╕╨╝╨╕╤В╨╡ 1 ╨│╨╛╨┤ ╤А╨░╨▓╨╜╤Л╨╝ 30 000 000 ╤Б. ╨б╨║╨╛╤А╨╛╤Б╤В╤М ╤А╨░╨┤╨╕╨╛╤Б╨╕╨│╨╜╨░╨╗╨░ ╤Б╨╛╤Б╤В╨░╨▓╨╗╤П╨╡╤В 300 000 ╨║╨╝/╤Б.",
+    "correct_answer": 4.33,
+    "answer_unit": "╨╗╨╡╤В",
+    "answer_tolerance": 5.0,
+    "correct_answer_text": "",
+    "difficulty": 3,
+    "solution_summary": "",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 5,
+  "fields": {
+    "ks": 1,
+    "order": 5,
+    "title": "╨Ъ╨╛╤Б╨╝╨╕╤З╨╡╤Б╨║╨░╤П ╤Б╤В╨░╨╜╤Ж╨╕╤П",
+    "text": "╨п╨▓╨╗╤П╨╡╤В╤Б╤П ╨║╨╛╤Б╨╝╨╕╤З╨╡╤Б╨║╨░╤П ╤Б╤В╨░╨╜╤Ж╨╕╤П ╨╕╤Б╨║╤Г╤Б╤Б╤В╨▓╨╡╨╜╨╜╤Л╨╝ ╤Б╨┐╤Г╤В╨╜╨╕╨║╨╛╨╝ ╨Ч╨╡╨╝╨╗╨╕, ╨╕╨╗╨╕ ╨╛╨╜╨░ ╨╜╨░╨┐╤А╨░╨▓╨╗╤П╨╡╤В╤Б╤П ╨║ ╨┤╤А╤Г╨│╨╕╨╝ ╨┐╨╗╨░╨╜╨╡╤В╨░╨╝, ╨╡╤Б╨╗╨╕ ╨╖╨░ ╨╛╨┤╨╜╤Г ╨╝╨╕╨╜╤Г╤В╤Г ╨╛╨╜╨░ ╨┐╤А╨╛╨╗╨╡╤В╨░╨╡╤В 480 ╨║╨╝? ╨Ф╨╗╤П ╨┐╨╛╨╗╤С╤В╨╛╨▓ ╨║ ╨┤╤А╤Г╨│╨╕╨╝ ╨┐╨╗╨░╨╜╨╡╤В╨░╨╝ ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╨┤╨╛╨╗╨╢╨╜╨░ ╨▒╤Л╤В╤М ╨╜╨╡ ╨╝╨╡╨╜╨╡╨╡ 11,9 ╨║╨╝/╤Б (╨▓╤В╨╛╤А╨░╤П ╨║╨╛╤Б╨╝╨╕╤З╨╡╤Б╨║╨░╤П ╤Б╨║╨╛╤А╨╛╤Б╤В╤М).",
+    "correct_answer": 8.0,
+    "answer_unit": "╨║╨╝/╤Б",
+    "answer_tolerance": 5.0,
+    "correct_answer_text": "╤Б╨┐╤Г╤В╨╜╨╕╨║ ╨Ч╨╡╨╝╨╗╨╕",
+    "difficulty": 2,
+    "solution_summary": "",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 6,
+  "fields": {
+    "ks": 1,
+    "order": 6,
+    "title": "╨Я╨╛╨│╤А╤Г╨╖╨║╨░ ╤Б╨▓╤С╨║╨╗╤Л",
+    "text": "╨Э╨░╨╣╨┤╨╕╤В╨╡ ╨▓╤А╨╡╨╝╤П ╨┐╨╛╨│╤А╤Г╨╖╨║╨╕ ╤Б╨▓╤С╨║╨╗╤Л ╤Б ╨┐╨╛╨╝╨╛╤Й╤М╤О ╤В╤А╨░╨╜╤Б╨┐╨╛╤А╤В╤С╤А╨░ ╨▓ ╨░╨▓╤В╨╛╨╝╨░╤И╨╕╨╜╤Г ╨│╤А╤Г╨╖╨╛╨┐╨╛╨┤╤К╤С╨╝╨╜╨╛╤Б╤В╤М╤О 3 ╤В. ╨б╨║╨╛╤А╨╛╤Б╤В╤М ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П ╤В╤А╨░╨╜╤Б╨┐╨╛╤А╤В╤С╤А╨░ 0,5 ╨╝/╤Б. ╨б╤А╨╡╨┤╨╜╤П╤П ╨╝╨░╤Б╤Б╨░ ╨║╨╛╤А╨╜╨╡╨┐╨╗╨╛╨┤╨╛╨▓ тАУ 2 ╨║╨│, ╨░ ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╡ ╨╝╨╡╨╢╨┤╤Г ╨╜╨╕╨╝╨╕ ╨╜╨░ ╨╗╨╡╨╜╤В╨╡ ╤В╤А╨░╨╜╤Б╨┐╨╛╤А╤В╤С╤А╨░ 0,1 ╨╝.",
+    "correct_answer": 300.0,
+    "answer_unit": "╤Б",
+    "answer_tolerance": 5.0,
+    "correct_answer_text": "",
+    "difficulty": 4,
+    "solution_summary": "",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 7,
+  "fields": {
+    "ks": 1,
+    "order": 7,
+    "title": "╨Я╤Г╨╗╤П ╨▓ ╨▓╨░╨│╨╛╨╜╨╡",
+    "text": "╨Т╨░╨│╨╛╨╜ ╨┐╨╛╨╡╨╖╨┤╨░, ╨┤╨▓╨╕╨╢╤Г╤Й╨╡╨│╨╛╤Б╤П ╤Б╨╛ ╤Б╨║╨╛╤А╨╛╤Б╤В╤М╤О 36 ╨║╨╝/╤З, ╨▒╤Л╨╗ ╨┐╤А╨╛╨▒╨╕╤В ╨┐╤Г╨╗╨╡╨╣, ╨╗╨╡╤В╨╡╨▓╤И╨╡╨╣ ╨┐╨╡╤А╨┐╨╡╨╜╨┤╨╕╨║╤Г╨╗╤П╤А╨╜╨╛ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤О ╨▓╨░╨│╨╛╨╜╨░. ╨Ю╤В╨▓╨╡╤А╤Б╤В╨╕╤П ╨▓ ╤Б╤В╨╡╨╜╨║╨░╤Е ╤Б╨╝╨╡╤Й╨╡╨╜╤Л ╨╜╨░ 3 ╤Б╨╝ ╨┤╤А╤Г╨│ ╨╛╤В╨╜╨╛╤Б╨╕╤В╨╡╨╗╤М╨╜╨╛ ╨┤╤А╤Г╨│╨░, ╤И╨╕╤А╨╕╨╜╨░ ╨▓╨░╨│╨╛╨╜╨░ тАУ 2,7 ╨╝. ╨Ю╨┐╤А╨╡╨┤╨╡╨╗╨╕╤В╨╡ ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╨┐╤Г╨╗╨╕.",
+    "correct_answer": 900.0,
+    "answer_unit": "╨╝/╤Б",
+    "answer_tolerance": 5.0,
+    "correct_answer_text": "",
+    "difficulty": 4,
+    "solution_summary": "",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 8,
+  "fields": {
+    "ks": 1,
+    "order": 8,
+    "title": "╨С╨╕╨║╤Д╨╛╤А╨┤╨╛╨▓ ╤И╨╜╤Г╤А",
+    "text": "╨Ъ╨░╨║╨╛╨╣ ╨┤╨╗╨╕╨╜╤Л ╨▒╨╕╨║╤Д╨╛╤А╨┤╨╛╨▓ ╤И╨╜╤Г╤А ╨╜╤Г╨╢╨╜╨╛ ╨▓╨╖╤П╤В╤М, ╤З╤В╨╛╨▒╤Л ╨┐╤А╨╕ ╨▓╨╖╤А╤Л╨▓╨╡ ╤Г╤Б╨┐╨╡╤В╤М ╨╛╤В╨▒╨╡╨╢╨░╤В╤М ╨╜╨░ ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╡ 300 ╨╝ ╨┐╨╛╤Б╨╗╨╡ ╤В╨╛╨│╨╛, ╨║╨░╨║ ╨╛╨╜ ╨▒╤Г╨┤╨╡╤В ╨╖╨░╨╢╨╢╤С╨╜? ╨б╨║╨╛╤А╨╛╤Б╤В╤М ╨▒╨╡╨│╨░ тАУ 5 ╨╝/╤Б, ╨┐╨╗╨░╨╝╤П ╤А╨░╤Б╨┐╤А╨╛╤Б╤В╤А╨░╨╜╤П╨╡╤В╤Б╤П ╨┐╨╛ ╤И╨╜╤Г╤А╤Г ╤Б╨╛ ╤Б╨║╨╛╤А╨╛╤Б╤В╤М╤О 0,8 ╤Б╨╝/╤Б.",
+    "correct_answer": 48.0,
+    "answer_unit": "╤Б╨╝",
+    "answer_tolerance": 5.0,
+    "correct_answer_text": "",
+    "difficulty": 3,
+    "solution_summary": "",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 9,
+  "fields": {
+    "ks": 1,
+    "order": 9,
+    "title": "╨Я╨╡╤А╨╡╨╗╤С╤В ╤Б╨░╨╝╨╛╨╗╤С╤В╨░",
+    "text": "╨б╨░╨╝╨╛╨╗╤С╤В ╨┐╤А╨╛╨╗╨╡╤В╨░╨╡╤В 2200 ╨║╨╝ ╤Б╨╛ ╤Б╨║╨╛╤А╨╛╤Б╤В╤М╤О 1000 ╨║╨╝/╤З. ╨Ч╨░╤В╨╡╨╝ ╨╕╨╖-╨╖╨░ ╨▓╤Б╤В╤А╨╡╤З╨╜╨╛╨│╨╛ ╨▓╨╡╤В╤А╨░ ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╤Б╨░╨╝╨╛╨╗╤С╤В╨░ ╤Г╨╝╨╡╨╜╤М╤И╨░╨╡╤В╤Б╤П, ╨╕ ╤Б╨╗╨╡╨┤╤Г╤О╤Й╨╕╨╡ 1700 ╨║╨╝ ╨╛╨╜ ╨┐╤А╨╛╨╗╨╡╤В╨░╨╡╤В ╤Г╨╢╨╡ ╤Б╨╛ ╤Б╨║╨╛╤А╨╛╤Б╤В╤М╤О 850 ╨║╨╝/╤З. ╨Ъ╨░╨║╨╛╨▓╨░ ╤Б╤А╨╡╨┤╨╜╤П╤П ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╤Б╨░╨╝╨╛╨╗╤С╤В╨░ ╨╖╨░ ╤В╨░╨║╨╛╨╣ ╨┐╨╡╤А╨╡╨╗╤С╤В?",
+    "correct_answer": 928.57,
+    "answer_unit": "╨║╨╝/╤З",
+    "answer_tolerance": 2.0,
+    "correct_answer_text": "",
+    "difficulty": 3,
+    "solution_summary": "",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.task",
+  "pk": 10,
+  "fields": {
+    "ks": 1,
+    "order": 10,
+    "title": "╨Т╨╡╨╗╨╛╤Б╨╕╨┐╨╡╨┤╨╕╤Б╤В ╨╜╨░ ╨│╨╛╤А╨║╨╡",
+    "text": "╨Ъ╨░╤В╨░╤П╤Б╤М ╨╜╨░ ╨▓╨╡╨╗╨╛╤Б╨╕╨┐╨╡╨┤╨╡, ╨▓╤Л ╨┐╨╛╤В╤А╤Г╨┤╨╕╨╗╨╕╤Б╤М ╨╜╨░ ╨┐╨╛╨┤╤К╤С╨╝╨╡, ╤А╨░╨╖╨▓╨╕╨▓╨░╤П ╤Б╨║╨╛╤А╨╛╤Б╤В╤М 6 ╨║╨╝/╤З, ╨░ ╨╛╨▒╤А╨░╤В╨╜╨╛ ╨┐╤А╨╛╨║╨░╤В╨╕╨╗╨╕╤Б╤М ┬л╤Б ╨▓╨╡╤В╨╡╤А╨║╨╛╨╝┬╗, ╤А╨░╨╖╨╛╨│╨╜╨░╨▓╤И╨╕╤Б╤М ╨┤╨╛ ╤Б╨║╨╛╤А╨╛╤Б╤В╨╕ 8 ╨╝/╤Б. ╨Ъ╨░╨║╨╛╨▓╨░ ╤Б╤А╨╡╨┤╨╜╤П╤П ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╨▓╨░╤И╨╡╨│╨╛ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П?",
+    "correct_answer": 2.82,
+    "answer_unit": "╨╝/╤Б",
+    "answer_tolerance": 5.0,
+    "correct_answer_text": "",
+    "difficulty": 3,
+    "solution_summary": "",
+    "solution_detailed": "",
+    "solution_image": ""
+  }
+},
+{
+  "model": "learning.typicaltaskoption",
+  "pk": 1,
+  "fields": {
+    "ks": 1,
+    "text": "╨Ю╨┐╨╕╤Б╨░╤В╤М ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╨╕ ╨╜╨░╨╣╤В╨╕ ╨▓╨╡╨╗╨╕╤З╨╕╨╜╤Л, ╤Е╨░╤А╨░╨║╤В╨╡╤А╨╕╨╖╤Г╤О╤Й╨╕╨╡ ╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨╕╨╗╨╕ ╨╜╨╡╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╨║╨╛╨╜╨║╤А╨╡╤В╨╜╤Л╤Е ╤В╨╡╨╗.",
+    "is_correct": true,
+    "order": 1,
+    "explanation": "╨Т╨╡╤А╨╜╨╛! ╨б╨╕╤Б╤В╨╡╨╝╨░ ╨╖╨╜╨░╨╜╨╕╨╣ ╨╛╨┐╨╕╤Б╤Л╨▓╨░╨╡╤В ╨╝╨╛╨┤╨╡╨╗╨╕ ╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨│╨╛ ╨╕ ╨╜╨╡╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨│╨╛ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П. ╨в╨╕╨┐╨╛╨▓╨░╤П ╨╖╨░╨┤╨░╤З╨░ тАФ ╨┐╤А╨╕╨╝╨╡╨╜╨╕╤В╤М ╤Н╤В╨╕ ╨╝╨╛╨┤╨╡╨╗╨╕ ╨║ ╨║╨╛╨╜╨║╤А╨╡╤В╨╜╨╛╨╣ ╤Б╨╕╤В╤Г╨░╤Ж╨╕╨╕: ╨╛╨┐╨╕╤Б╨░╤В╤М, ╨║╨░╨║ ╨┤╨▓╨╕╨╢╨╡╤В╤Б╤П ╤В╨╡╨╗╨╛, ╨╕ ╤А╨░╤Б╤Б╤З╨╕╤В╨░╤В╤М ╤Е╨░╤А╨░╨║╤В╨╡╤А╨╕╤Б╤В╨╕╨║╨╕ ╤Н╤В╨╛╨│╨╛ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П (╨┐╤Г╤В╤М, ╤Б╨║╨╛╤А╨╛╤Б╤В╤М, ╨▓╤А╨╡╨╝╤П)."
+  }
+},
+{
+  "model": "learning.typicaltaskoption",
+  "pk": 2,
+  "fields": {
+    "ks": 1,
+    "text": "╨Ю╨┐╤А╨╡╨┤╨╡╨╗╨╕╤В╤М ╨▓╨╕╨┤ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П ╤В╨╡╨╗╨░ ╨┐╨╛ ╨╕╨╖╨▓╨╡╤Б╤В╨╜╤Л╨╝ ╨╖╨╜╨░╤З╨╡╨╜╨╕╤П╨╝ ╨┐╤Г╤В╨╕, ╤Б╨║╨╛╤А╨╛╤Б╤В╨╕ ╨╕ ╨▓╤А╨╡╨╝╨╡╨╜╨╕.",
+    "is_correct": false,
+    "order": 2,
+    "explanation": "╨Э╨╡ ╤Б╨╛╨▓╤Б╨╡╨╝. ╨Ю╨┐╤А╨╡╨┤╨╡╨╗╨╕╤В╤М ╨▓╨╕╨┤ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П тАФ ╤Н╤В╨╛ ╨╗╨╕╤И╤М ╤З╨░╤Б╤В╤М ╨╖╨░╨┤╨░╤З╨╕. ╨в╨╕╨┐╨╛╨▓╨░╤П ╨╖╨░╨┤╨░╤З╨░ ╤В╤А╨╡╨▒╤Г╨╡╤В ╨╜╨╡ ╤В╨╛╨╗╤М╨║╨╛ ╨║╨╗╨░╤Б╤Б╨╕╤Д╨╕╤Ж╨╕╤А╨╛╨▓╨░╤В╤М ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡, ╨╜╨╛ ╨╕ ╨╛╨┐╨╕╤Б╨░╤В╤М ╨╡╨│╨╛, ╨╜╨░╨╣╤В╨╕ ╨╜╨╡╨╕╨╖╨▓╨╡╤Б╤В╨╜╤Л╨╡ ╨▓╨╡╨╗╨╕╤З╨╕╨╜╤Л."
+  }
+},
+{
+  "model": "learning.typicaltaskoption",
+  "pk": 3,
+  "fields": {
+    "ks": 1,
+    "text": "╨Я╨╛╤Б╤В╤А╨╛╨╕╤В╤М ╨│╤А╨░╤Д╨╕╨║╨╕ ╨╖╨░╨▓╨╕╤Б╨╕╨╝╨╛╤Б╤В╨╕ ╨┐╤Г╤В╨╕ ╨╛╤В ╨▓╤А╨╡╨╝╨╡╨╜╨╕ ╨╕ ╤Б╨║╨╛╤А╨╛╤Б╤В╨╕ ╨╛╤В ╨▓╤А╨╡╨╝╨╡╨╜╨╕ ╨┤╨╗╤П ╨┤╨▓╨╕╨╢╤Г╤Й╨╡╨│╨╛╤Б╤П ╤В╨╡╨╗╨░.",
+    "is_correct": false,
+    "order": 3,
+    "explanation": "╨Я╨╛╤Б╤В╤А╨╛╨╡╨╜╨╕╨╡ ╨│╤А╨░╤Д╨╕╨║╨╛╨▓ тАФ ╤Н╤В╨╛ ╨╛╨┤╨╕╨╜ ╨╕╨╖ ╨╕╨╜╤Б╤В╤А╤Г╨╝╨╡╨╜╤В╨╛╨▓ ╨╛╨┐╨╕╤Б╨░╨╜╨╕╤П ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П, ╨╜╨╛ ╨╜╨╡ ╤Ж╨╡╨╗╤М ╤В╨╕╨┐╨╛╨▓╨╛╨╣ ╨╖╨░╨┤╨░╤З╨╕. ╨Ч╨░╨┤╨░╤З╨░ ╤И╨╕╤А╨╡: ╨╜╤Г╨╢╨╜╨╛ ╨╛╨┐╨╕╤Б╨░╤В╤М ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╨▓ ╤Ж╨╡╨╗╨╛╨╝ ╨╕ ╨╜╨░╨╣╤В╨╕ ╤З╨╕╤Б╨╗╨╛╨▓╤Л╨╡ ╤Е╨░╤А╨░╨║╤В╨╡╤А╨╕╤Б╤В╨╕╨║╨╕."
+  }
+},
+{
+  "model": "learning.typicaltaskoption",
+  "pk": 4,
+  "fields": {
+    "ks": 1,
+    "text": "╨б╤А╨░╨▓╨╜╨╕╤В╤М ╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨╕ ╨╜╨╡╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╤В╨╡╨╗ ╨╕ ╨╛╨▒╤К╤П╤Б╨╜╨╕╤В╤М ╨┐╤А╨╕╤З╨╕╨╜╤Л ╤А╨░╨╖╨╗╨╕╤З╨╕╨╣ ╨╝╨╡╨╢╨┤╤Г ╨╜╨╕╨╝╨╕.",
+    "is_correct": false,
+    "order": 4,
+    "explanation": "╨б╤А╨░╨▓╨╜╨╡╨╜╨╕╨╡ ╨▓╨╕╨┤╨╛╨▓ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П тАФ ╤Н╤В╨╛ ╤В╨╡╨╛╤А╨╡╤В╨╕╤З╨╡╤Б╨║╨╕╨╣ ╨▓╨╛╨┐╤А╨╛╤Б. ╨в╨╕╨┐╨╛╨▓╨░╤П ╨╖╨░╨┤╨░╤З╨░ тАФ ╤Н╤В╨╛ ╨┐╤А╨░╨║╤В╨╕╤З╨╡╤Б╨║╨░╤П ╨╖╨░╨┤╨░╤З╨░: ╨┐╤А╨╕╨╝╨╡╨╜╨╕╤В╤М ╤Б╨╕╤Б╤В╨╡╨╝╤Г ╨╖╨╜╨░╨╜╨╕╨╣ ╨║ ╨║╨╛╨╜╨║╤А╨╡╤В╨╜╨╛╨╣ ╤Б╨╕╤В╤Г╨░╤Ж╨╕╨╕ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П ╨╕ ╨╜╨░╨╣╤В╨╕ ╨║╨╛╨╗╨╕╤З╨╡╤Б╤В╨▓╨╡╨╜╨╜╤Л╨╡ ╤Е╨░╤А╨░╨║╤В╨╡╤А╨╕╤Б╤В╨╕╨║╨╕."
+  }
+},
+{
+  "model": "learning.typicaltaskoption",
+  "pk": 5,
+  "fields": {
+    "ks": 1,
+    "text": "╨Ч╨░╨┐╨╕╤Б╨░╤В╤М ╤Г╤А╨░╨▓╨╜╨╡╨╜╨╕╤П ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П ╨┤╨╗╤П ╤В╨╡╨╗╨░ ╨╕ ╨╛╨┐╤А╨╡╨┤╨╡╨╗╨╕╤В╤М ╨╡╨│╨╛ ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В╤Г ╨▓ ╨╖╨░╨┤╨░╨╜╨╜╤Л╨╣ ╨╝╨╛╨╝╨╡╨╜╤В ╨▓╤А╨╡╨╝╨╡╨╜╨╕.",
+    "is_correct": false,
+    "order": 5,
+    "explanation": "╨Ч╨░╨┐╨╕╤Б╤М ╤Г╤А╨░╨▓╨╜╨╡╨╜╨╕╨╣ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П ╨╕ ╨╜╨░╤Е╨╛╨╢╨┤╨╡╨╜╨╕╨╡ ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В╤Л тАФ ╤Н╤В╨╛ ╤З╨░╤Б╤В╨╜╤Л╨╣ ╤Б╨╗╤Г╤З╨░╨╣. ╨в╨╕╨┐╨╛╨▓╨░╤П ╨╖╨░╨┤╨░╤З╨░ ╤Д╨╛╤А╨╝╤Г╨╗╨╕╤А╤Г╨╡╤В╤Б╤П ╤И╨╕╤А╨╡: ╨╛╨┐╨╕╤Б╨░╤В╤М ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╨╕ ╨╜╨░╨╣╤В╨╕ ╨╗╤О╨▒╤Л╨╡ ╤Е╨░╤А╨░╨║╤В╨╡╤А╨╕╨╖╤Г╤О╤Й╨╕╨╡ ╨╡╨│╨╛ ╨▓╨╡╨╗╨╕╤З╨╕╨╜╤Л, ╨╜╨╡ ╤В╨╛╨╗╤М╨║╨╛ ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В╤Г."
+  }
+},
+{
+  "model": "learning.typicaltaskoption",
+  "pk": 6,
+  "fields": {
+    "ks": 1,
+    "text": "╨г╤Б╤В╨░╨╜╨╛╨▓╨╕╤В╤М ╨╖╨░╨▓╨╕╤Б╨╕╨╝╨╛╤Б╤В╤М ╨╝╨╡╨╢╨┤╤Г ╨┐╤Г╤В╤С╨╝, ╤Б╨║╨╛╤А╨╛╤Б╤В╤М╤О ╨╕ ╨▓╤А╨╡╨╝╨╡╨╜╨╡╨╝ ╨╕ ╨▓╤Л╨▓╨╡╤Б╤В╨╕ ╤Д╨╛╤А╨╝╤Г╨╗╤Л ╨┤╨╗╤П ╨╕╤Е ╤А╨░╤Б╤З╤С╤В╨░.",
+    "is_correct": false,
+    "order": 6,
+    "explanation": "╨Т╤Л╨▓╨╛╨┤ ╤Д╨╛╤А╨╝╤Г╨╗ тАФ ╤Н╤В╨╛ ╤А╨░╨▒╨╛╤В╨░ ╤Б ╤В╨╡╨╛╤А╨╕╨╡╨╣, ╨░ ╨╜╨╡ ╤А╨╡╤И╨╡╨╜╨╕╨╡ ╨╖╨░╨┤╨░╤З╨╕. ╨в╨╕╨┐╨╛╨▓╨░╤П ╨╖╨░╨┤╨░╤З╨░ ╨┐╤А╨╡╨┤╨┐╨╛╨╗╨░╨│╨░╨╡╤В ╨┐╤А╨╕╨╝╨╡╨╜╨╡╨╜╨╕╨╡ ╤Г╨╢╨╡ ╨╕╨╖╨▓╨╡╤Б╤В╨╜╤Л╤Е ╤Д╨╛╤А╨╝╤Г╨╗ ╨╕ ╨╝╨╛╨┤╨╡╨╗╨╡╨╣ ╨║ ╨║╨╛╨╜╨║╤А╨╡╤В╨╜╤Л╨╝ ╤Б╨╕╤В╤Г╨░╤Ж╨╕╤П╨╝ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П ╤В╨╡╨╗."
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 1,
+  "fields": {
+    "task": 1,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "╨┤╨╡╤В╨╡╨║╤В╨╕╨▓ ╨┐╤А╨╡╤Б╤В╤Г╨┐╨╜╨╕╨║╨░",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 2,
+  "fields": {
+    "task": 1,
+    "step": 2,
+    "step_type": "schema",
+    "content": "",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "el_1769094861206_gvblj115k",
+          "type": "text",
+          "x": 250,
+          "y": 275,
+          "color": "#1a1a2e",
+          "fontSize": 16,
+          "text": "╨Р"
+        },
+        {
+          "id": "el_1769095116838_29hvtr95j",
+          "type": "body-circle",
+          "x": 250,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 6,
+          "label": "A"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 3,
+  "fields": {
+    "task": 1,
+    "step": 3,
+    "step_type": "schema",
+    "content": "",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "el_1769094861206_gvblj115k",
+          "type": "text",
+          "x": 250,
+          "y": 275,
+          "color": "#1a1a2e",
+          "fontSize": 16,
+          "text": "╨Р"
+        },
+        {
+          "id": "el_1769095116838_29hvtr95j",
+          "type": "body-circle",
+          "x": 250,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 6,
+          "label": "A"
+        },
+        {
+          "id": "el_1769095138334_65z01cymt",
+          "type": "line",
+          "x": 257.2785971087376,
+          "y": 251.0000000610352,
+          "color": "#1a1a2e",
+          "strokeWidth": 2,
+          "length": 192.44280578252446,
+          "rotation": 0
+        },
+        {
+          "id": "el_1769095148758_vvfsev1pq",
+          "type": "body-circle",
+          "x": 450,
+          "y": 250,
+          "color": "#ef4444",
+          "radius": 6,
+          "label": "B"
+        },
+        {
+          "id": "el_1769095184671_8z0gu5zok",
+          "type": "text",
+          "x": 450,
+          "y": 275,
+          "color": "#1a1a2e",
+          "fontSize": 16,
+          "text": "B"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 4,
+  "fields": {
+    "task": 1,
+    "step": 4,
+    "step_type": "schema",
+    "content": "",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "el_1769094861206_gvblj115k",
+          "type": "text",
+          "x": 250,
+          "y": 275,
+          "color": "#1a1a2e",
+          "fontSize": 16,
+          "text": "╨Р"
+        },
+        {
+          "id": "el_1769095116838_29hvtr95j",
+          "type": "body-circle",
+          "x": 250,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 6,
+          "label": "A"
+        },
+        {
+          "id": "el_1769095138334_65z01cymt",
+          "type": "line",
+          "x": 257.2785971087376,
+          "y": 251.0000000610352,
+          "color": "#1a1a2e",
+          "strokeWidth": 2,
+          "length": 192.44280578252446,
+          "rotation": 0
+        },
+        {
+          "id": "el_1769095148758_vvfsev1pq",
+          "type": "body-circle",
+          "x": 450,
+          "y": 250,
+          "color": "#ef4444",
+          "radius": 6,
+          "label": "B"
+        },
+        {
+          "id": "el_1769095184671_8z0gu5zok",
+          "type": "text",
+          "x": 450,
+          "y": 275,
+          "color": "#1a1a2e",
+          "fontSize": 16,
+          "text": "B"
+        },
+        {
+          "id": "el_1769095236111_fiwvkzasf",
+          "type": "label",
+          "x": 350,
+          "y": 275,
+          "color": "#1a1a2e",
+          "fontSize": 18,
+          "symbol": "S",
+          "subscript": ""
+        },
+        {
+          "id": "el_1769095274255_qgsky7cco",
+          "type": "vector",
+          "x": 250,
+          "y": 200,
+          "color": "#000000",
+          "strokeWidth": 1,
+          "length": 22.498916654629614,
+          "label": "v",
+          "rotation": 0
+        },
+        {
+          "id": "el_1769095290550_wxhlz78e0",
+          "type": "label",
+          "x": 250,
+          "y": 200,
+          "color": "#1a1a2e",
+          "fontSize": 18,
+          "symbol": "v",
+          "subscript": ""
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 5,
+  "fields": {
+    "task": 1,
+    "step": 5,
+    "step_type": "text",
+    "content": "S = v*t",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 6,
+  "fields": {
+    "task": 1,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "╨Ф╨░╨╜╨╛:\r\nt=20 ╨╝╨╕╨╜.\r\nV= 60 ╨║╨╝/╤З",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "20 ╨╝╨╕╨╜",
+          "symbol": "t",
+          "isTarget": false
+        },
+        {
+          "fragment": "60 ╨║╨╝/╤З",
+          "symbol": "v",
+          "isTarget": false
+        },
+        {
+          "fragment": "╨Э╨░ ╨║╨░╨║╨╛╨╝ ╨╝╨░╨║╤Б╨╕╨╝╨░╨╗╤М╨╜╨╛╨╝ ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╕",
+          "symbol": "S",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 7,
+  "fields": {
+    "task": 1,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 8,
+  "fields": {
+    "task": 1,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 9,
+  "fields": {
+    "task": 1,
+    "step": 9,
+    "step_type": "solution",
+    "content": "S = 16,67┬╖1200 = 20000╨╝ = 20 ╨║╨╝",
+    "schema_data": {
+      "formula": "S = v├Чt",
+      "si": "t = 20 ╨╝╨╕╨╜ = 1200c\nv = 60 ╨║╨╝тБД╤З = 16,67 ╨╝тБД╤Б",
+      "calc": "S = 16,67┬╖1200 = 20000╨╝ = 20 ╨║╨╝",
+      "reasoning": "╨Ф╨░, ╤А╨╡╨╖╤Г╨╗╤М╤В╨░╤В ╨░╨┤╨╡╨║╨▓╨░╤В╨╜╤Л╨╣ ╨┤╨╗╤П ╨░╨▓╤В╨╛╨╝╨╛╨▒╨╕╨╗╤П "
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 10,
+  "fields": {
+    "task": 1,
+    "step": 10,
+    "step_type": "text",
+    "content": "╨Я╤А╨╡╤Б╤В╤Г╨┐╨╜╨╕╨║ ╨╝╨╛╨╢╨╡╤В ╨╜╨░╤Е╨╛╨┤╨╕╤В╤М╤Б╤П ╨╜╨░ ╨╝╨░╨║╤Б╨╕╨╝╨░╨╗╤М╨╜╨╛╨╝ ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╕ - 20╨║╨╝",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 11,
+  "fields": {
+    "task": 2,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "╨╝╤Г╤Е╨░ ╤Б╨║╨▓╨╛╤А╨╡╤Ж",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 12,
+  "fields": {
+    "task": 2,
+    "step": 2,
+    "step_type": "schema",
+    "content": "╨Ь╤Г╤Е╨░ ╨╕ ╤Б╨║╨▓╨╛╤А╨╡╤Ж ╨╜╨░╤Е╨╛╨┤╤П╤В╤Б╤П ╨╜╨░ ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╕ 5 ╨╝ ╨┤╤А╤Г╨│ ╨╛╤В ╨┤╤А╤Г╨│╨░",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t2s2_p1",
+          "type": "body-circle",
+          "x": 200,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 8
+        },
+        {
+          "id": "t2s2_l1",
+          "type": "text",
+          "x": 185,
+          "y": 270,
+          "text": "╨б╨║╨▓╨╛╤А╨╡╤Ж",
+          "fontSize": 13,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s2_la",
+          "type": "label",
+          "x": 195,
+          "y": 225,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s2_p2",
+          "type": "body-circle",
+          "x": 400,
+          "y": 250,
+          "color": "#ef4444",
+          "radius": 6
+        },
+        {
+          "id": "t2s2_l2",
+          "type": "text",
+          "x": 390,
+          "y": 270,
+          "text": "╨Ь╤Г╤Е╨░",
+          "fontSize": 13,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s2_lb",
+          "type": "label",
+          "x": 395,
+          "y": 225,
+          "symbol": "B",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s2_dim",
+          "type": "line",
+          "x": 200,
+          "y": 300,
+          "length": 200,
+          "rotation": 0,
+          "color": "#64748b",
+          "strokeWidth": 1,
+          "dashed": true
+        },
+        {
+          "id": "t2s2_dt",
+          "type": "text",
+          "x": 275,
+          "y": 310,
+          "text": "5 ╨╝",
+          "fontSize": 14,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 13,
+  "fields": {
+    "task": 2,
+    "step": 3,
+    "step_type": "schema",
+    "content": "╨б╨║╨▓╨╛╤А╨╡╤Ж ╨┤╨╛╨│╨╛╨╜╤П╨╡╤В ╨╝╤Г╤Е╤Г ╨▓ ╨╜╨╡╨║╨╛╤В╨╛╤А╨╛╨╣ ╤В╨╛╤З╨║╨╡",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t2s3_p1",
+          "type": "body-circle",
+          "x": 200,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 8
+        },
+        {
+          "id": "t2s3_la",
+          "type": "label",
+          "x": 195,
+          "y": 225,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s3_p2",
+          "type": "body-circle",
+          "x": 400,
+          "y": 250,
+          "color": "#ef4444",
+          "radius": 6
+        },
+        {
+          "id": "t2s3_lb",
+          "type": "label",
+          "x": 395,
+          "y": 225,
+          "symbol": "B",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s3_meet",
+          "type": "body-circle",
+          "x": 467,
+          "y": 250,
+          "color": "#8b5cf6",
+          "radius": 8
+        },
+        {
+          "id": "t2s3_lc",
+          "type": "label",
+          "x": 462,
+          "y": 225,
+          "symbol": "C",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s3_lm",
+          "type": "text",
+          "x": 445,
+          "y": 270,
+          "text": "╨Т╤Б╤В╤А╨╡╤З╨░",
+          "fontSize": 12,
+          "color": "#8b5cf6"
+        },
+        {
+          "id": "t2s3_v1",
+          "type": "vector",
+          "x": 210,
+          "y": 210,
+          "length": 80,
+          "rotation": 0,
+          "color": "#22c55e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t2s3_v1l",
+          "type": "label",
+          "x": 235,
+          "y": 190,
+          "symbol": "v",
+          "subscript": "2",
+          "fontSize": 14,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t2s3_v2",
+          "type": "vector",
+          "x": 410,
+          "y": 210,
+          "length": 40,
+          "rotation": 0,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t2s3_v2l",
+          "type": "label",
+          "x": 420,
+          "y": 190,
+          "symbol": "v",
+          "subscript": "1",
+          "fontSize": 14,
+          "color": "#ef4444"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 14,
+  "fields": {
+    "task": 2,
+    "step": 4,
+    "step_type": "schema",
+    "content": "╨Ю╨┤╨╕╨╜ ╤Г╤З╨░╤Б╤В╨╛╨║: ╨╝╤Г╤Е╨░ ╨╗╨╡╤В╨╕╤В ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╡ SтВБ, ╤Б╨║╨▓╨╛╤А╨╡╤Ж тАФ SтВВ = SтВБ + 5 ╨╝",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t2s4_p1",
+          "type": "body-circle",
+          "x": 200,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 6
+        },
+        {
+          "id": "t2s4_la",
+          "type": "label",
+          "x": 195,
+          "y": 270,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s4_p2",
+          "type": "body-circle",
+          "x": 400,
+          "y": 250,
+          "color": "#ef4444",
+          "radius": 6
+        },
+        {
+          "id": "t2s4_lb",
+          "type": "label",
+          "x": 395,
+          "y": 270,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s4_pc",
+          "type": "body-circle",
+          "x": 467,
+          "y": 250,
+          "color": "#8b5cf6",
+          "radius": 6
+        },
+        {
+          "id": "t2s4_lc",
+          "type": "label",
+          "x": 462,
+          "y": 270,
+          "symbol": "C",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t2s4_line1",
+          "type": "line",
+          "x": 200,
+          "y": 250,
+          "length": 267,
+          "rotation": 0,
+          "color": "#22c55e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t2s4_s2",
+          "type": "text",
+          "x": 300,
+          "y": 215,
+          "text": "SтВВ = vтВВ┬╖t",
+          "fontSize": 13,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t2s4_line2",
+          "type": "line",
+          "x": 400,
+          "y": 250,
+          "length": 67,
+          "rotation": 0,
+          "color": "#ef4444",
+          "strokeWidth": 2,
+          "dashed": true
+        },
+        {
+          "id": "t2s4_s1",
+          "type": "text",
+          "x": 410,
+          "y": 215,
+          "text": "SтВБ = vтВБ┬╖t",
+          "fontSize": 13,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t2s4_d5",
+          "type": "text",
+          "x": 275,
+          "y": 295,
+          "text": "╬Фs = 5 ╨╝",
+          "fontSize": 13,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 15,
+  "fields": {
+    "task": 2,
+    "step": 5,
+    "step_type": "text",
+    "content": "SтВБ = vтВБ┬╖t (╨╝╤Г╤Е╨░)\nSтВВ = vтВВ┬╖t (╤Б╨║╨▓╨╛╤А╨╡╤Ж)\nSтВВ = SтВБ + 5",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 16,
+  "fields": {
+    "task": 2,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "╨Ф╨░╨╜╨╛:\nvтВБ = 5 ╨╝/╤Б (╨╝╤Г╤Е╨░)\nvтВВ = 20 ╨╝/╤Б (╤Б╨║╨▓╨╛╤А╨╡╤Ж)\n╬ФS = 5 ╨╝\n╨Э╨░╨╣╤В╨╕: SтВБ",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "5 ╨╝/c",
+          "symbol": "vтВБ",
+          "isTarget": false
+        },
+        {
+          "fragment": "20 ╨╝/╤Б",
+          "symbol": "vтВВ",
+          "isTarget": false
+        },
+        {
+          "fragment": "╨╜╨░ ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╕ 5 ╨╝",
+          "symbol": "╬ФS",
+          "isTarget": false
+        },
+        {
+          "fragment": "╨Ъ╨░╨║╨╛╨╡ ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╡ ╤Г╤Б╨┐╨╡╨╡╤В ╨┐╤А╨╛╨╗╨╡╤В╨╡╤В╤М ╨╝╤Г╤Е╨░",
+          "symbol": "SтВБ",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 17,
+  "fields": {
+    "task": 2,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 18,
+  "fields": {
+    "task": 2,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 19,
+  "fields": {
+    "task": 2,
+    "step": 9,
+    "step_type": "solution",
+    "content": "vтВВ┬╖t = vтВБ┬╖t + 5\nt = 5/(vтВВ тИТ vтВБ) = 5/(20 тИТ 5) = 1/3 ╤Б\nSтВБ = vтВБ┬╖t = 5┬╖(1/3) тЙИ 1,67 ╨╝",
+    "schema_data": {
+      "formula": "SтВБ = vтВБ ┬╖ ╬ФS / (vтВВ тИТ vтВБ)",
+      "si": "vтВБ = 5 ╨╝/╤Б\nvтВВ = 20 ╨╝/╤Б\n╬ФS = 5 ╨╝",
+      "calc": "t = 5/(20тИТ5) = 1/3 ╤Б тЙИ 0,33 ╤Б\nSтВБ = 5 ┬╖ 1/3 тЙИ 1,67 ╨╝",
+      "reasoning": "╨Ь╤Г╤Е╨░ ╨╖╨░ 0,33 ╤Б ╨┐╤А╨╛╨╗╨╡╤В╨╕╤В ~1,67 ╨╝ тАФ ╤А╨╡╨░╨╗╨╕╤Б╤В╨╕╤З╨╜╨╛"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 20,
+  "fields": {
+    "task": 2,
+    "step": 10,
+    "step_type": "text",
+    "content": "╨Ь╤Г╤Е╨░ ╤Г╤Б╨┐╨╡╨╡╤В ╨┐╤А╨╛╨╗╨╡╤В╨╡╤В╤М ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╡ ╨┐╤А╨╕╨╝╨╡╤А╨╜╨╛ 1,67 ╨╝, ╨┐╤А╨╡╨╢╨┤╨╡ ╤З╨╡╨╝ ╨╡╤С ╨┤╨╛╨│╨╛╨╜╨╕╤В ╤Б╨║╨▓╨╛╤А╨╡╤Ж",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 21,
+  "fields": {
+    "task": 3,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "╨Т╤Л",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 22,
+  "fields": {
+    "task": 3,
+    "step": 2,
+    "step_type": "schema",
+    "content": "╨Я╨╗╨╛╨▓╨╡╤Ж ╨╜╨░ ╨╛╨┤╨╜╨╛╨╝ ╨▒╨╡╤А╨╡╨│╤Г ╤А╨╡╨║╨╕ ╤И╨╕╤А╨╕╨╜╨╛╨╣ 9 ╨╝",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t3s2_bank1",
+          "type": "line",
+          "x": 150,
+          "y": 100,
+          "length": 350,
+          "rotation": 90,
+          "color": "#94a3b8",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t3s2_bank2",
+          "type": "line",
+          "x": 510,
+          "y": 100,
+          "length": 350,
+          "rotation": 90,
+          "color": "#94a3b8",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t3s2_bl",
+          "type": "text",
+          "x": 120,
+          "y": 90,
+          "text": "╨С╨╡╤А╨╡╨│ 1",
+          "fontSize": 12,
+          "color": "#64748b"
+        },
+        {
+          "id": "t3s2_br",
+          "type": "text",
+          "x": 490,
+          "y": 90,
+          "text": "╨С╨╡╤А╨╡╨│ 2",
+          "fontSize": 12,
+          "color": "#64748b"
+        },
+        {
+          "id": "t3s2_swimmer",
+          "type": "body-circle",
+          "x": 160,
+          "y": 300,
+          "color": "#3b82f6",
+          "radius": 8
+        },
+        {
+          "id": "t3s2_la",
+          "type": "label",
+          "x": 140,
+          "y": 310,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t3s2_d",
+          "type": "text",
+          "x": 310,
+          "y": 80,
+          "text": "d = 9 ╨╝",
+          "fontSize": 14,
+          "color": "#64748b"
+        },
+        {
+          "id": "t3s2_flow",
+          "type": "vector",
+          "x": 300,
+          "y": 420,
+          "length": 70,
+          "rotation": 90,
+          "color": "#06b6d4",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t3s2_flowl",
+          "type": "text",
+          "x": 320,
+          "y": 440,
+          "text": "╤В╨╡╤З╨╡╨╜╨╕╨╡",
+          "fontSize": 12,
+          "color": "#06b6d4"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 23,
+  "fields": {
+    "task": 3,
+    "step": 3,
+    "step_type": "schema",
+    "content": "╨Я╨╗╨╛╨▓╨╡╤Ж ╨┐╨╡╤А╨╡╨┐╨╗╤Л╨▓╨░╨╡╤В ╨╜╨░ ╨┤╤А╤Г╨│╨╛╨╣ ╨▒╨╡╤А╨╡╨│; ╤В╨╡╤З╨╡╨╜╨╕╨╡ ╤Б╨╜╨╛╤Б╨╕╤В ╨╡╨│╨╛ ╨▓╨╜╨╕╨╖",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t3s3_bank1",
+          "type": "line",
+          "x": 150,
+          "y": 100,
+          "length": 350,
+          "rotation": 90,
+          "color": "#94a3b8",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t3s3_bank2",
+          "type": "line",
+          "x": 510,
+          "y": 100,
+          "length": 350,
+          "rotation": 90,
+          "color": "#94a3b8",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t3s3_swimmer",
+          "type": "body-circle",
+          "x": 160,
+          "y": 300,
+          "color": "#3b82f6",
+          "radius": 8
+        },
+        {
+          "id": "t3s3_la",
+          "type": "label",
+          "x": 140,
+          "y": 310,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t3s3_target",
+          "type": "point",
+          "x": 500,
+          "y": 300,
+          "color": "#22c55e",
+          "radius": 6
+        },
+        {
+          "id": "t3s3_lbt",
+          "type": "text",
+          "x": 510,
+          "y": 295,
+          "text": "╨ж╨╡╨╗╤М (B')",
+          "fontSize": 12,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t3s3_drift",
+          "type": "body-circle",
+          "x": 500,
+          "y": 400,
+          "color": "#ef4444",
+          "radius": 6
+        },
+        {
+          "id": "t3s3_lbd",
+          "type": "text",
+          "x": 510,
+          "y": 395,
+          "text": "B (╤Б╨╜╨╛╤Б)",
+          "fontSize": 12,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t3s3_swim",
+          "type": "vector",
+          "x": 160,
+          "y": 300,
+          "length": 340,
+          "rotation": 0,
+          "color": "#3b82f6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t3s3_vp",
+          "type": "label",
+          "x": 300,
+          "y": 275,
+          "symbol": "v",
+          "subscript": "╨┐",
+          "fontSize": 14,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t3s3_driftv",
+          "type": "vector",
+          "x": 500,
+          "y": 300,
+          "length": 100,
+          "rotation": 90,
+          "color": "#06b6d4",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t3s3_vt",
+          "type": "label",
+          "x": 510,
+          "y": 340,
+          "symbol": "v",
+          "subscript": "╤В",
+          "fontSize": 14,
+          "color": "#06b6d4"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 24,
+  "fields": {
+    "task": 3,
+    "step": 4,
+    "step_type": "schema",
+    "content": "╨Ф╨▓╨░ ╤Г╤З╨░╤Б╤В╨║╨░: ╨┐╨╡╤А╨╡╨┐╤А╨░╨▓╨░ (╨┐╨╡╤А╨┐╨╡╨╜╨┤╨╕╨║╤Г╨╗╤П╤А╨╜╨╛) ╨╕ ╤Б╨╜╨╛╤Б ╤В╨╡╤З╨╡╨╜╨╕╨╡╨╝",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t3s4_bank1",
+          "type": "line",
+          "x": 150,
+          "y": 100,
+          "length": 350,
+          "rotation": 90,
+          "color": "#94a3b8",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t3s4_bank2",
+          "type": "line",
+          "x": 510,
+          "y": 100,
+          "length": 350,
+          "rotation": 90,
+          "color": "#94a3b8",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t3s4_a",
+          "type": "body-circle",
+          "x": 160,
+          "y": 300,
+          "color": "#3b82f6",
+          "radius": 6
+        },
+        {
+          "id": "t3s4_la",
+          "type": "label",
+          "x": 140,
+          "y": 310,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t3s4_b",
+          "type": "body-circle",
+          "x": 500,
+          "y": 400,
+          "color": "#ef4444",
+          "radius": 6
+        },
+        {
+          "id": "t3s4_lb",
+          "type": "label",
+          "x": 510,
+          "y": 395,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t3s4_swim_line",
+          "type": "line",
+          "x": 160,
+          "y": 300,
+          "length": 340,
+          "rotation": 0,
+          "color": "#3b82f6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t3s4_d",
+          "type": "text",
+          "x": 310,
+          "y": 275,
+          "text": "d = 9 ╨╝",
+          "fontSize": 13,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t3s4_drift_line",
+          "type": "line",
+          "x": 500,
+          "y": 300,
+          "length": 100,
+          "rotation": 90,
+          "color": "#ef4444",
+          "strokeWidth": 2,
+          "dashed": true
+        },
+        {
+          "id": "t3s4_s",
+          "type": "text",
+          "x": 510,
+          "y": 340,
+          "text": "S = ?",
+          "fontSize": 13,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t3s4_t1",
+          "type": "text",
+          "x": 250,
+          "y": 250,
+          "text": "t = d / v_╨┐╨╗╨░╨▓",
+          "fontSize": 12,
+          "color": "#64748b"
+        },
+        {
+          "id": "t3s4_t2",
+          "type": "text",
+          "x": 510,
+          "y": 360,
+          "text": "S = v_╤В╨╡╤З ┬╖ t",
+          "fontSize": 12,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 25,
+  "fields": {
+    "task": 3,
+    "step": 5,
+    "step_type": "text",
+    "content": "t = d / v_╨┐╨╗╨░╨▓╨░╨╜╨╕╤П\nS_╤Б╨╜╨╛╤Б╨░ = v_╤В╨╡╤З╨╡╨╜╨╕╤П ┬╖ t",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 26,
+  "fields": {
+    "task": 3,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "╨Ф╨░╨╜╨╛:\nd = 9 ╨╝\nv_╤В╨╡╤З╨╡╨╜╨╕╤П = 0,2 ╨╝/╤Б\nv_╨┐╨╗╨░╨▓╨░╨╜╨╕╤П = 0,5 ╨╝/╤Б\n╨Э╨░╨╣╤В╨╕: S_╤Б╨╜╨╛╤Б╨░",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "9 ╨╝",
+          "symbol": "d",
+          "isTarget": false
+        },
+        {
+          "fragment": "0,2 ╨╝/╤Б",
+          "symbol": "v_╤В╨╡╤З",
+          "isTarget": false
+        },
+        {
+          "fragment": "0,5 ╨╝/╤Б",
+          "symbol": "v_╨┐╨╗╨░╨▓",
+          "isTarget": false
+        },
+        {
+          "fragment": "╨Ъ╨░╨║╨╛╨╡ ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╡ ╨▓╨░╨╝ ╨┐╤А╨╕╨┤╤С╤В╤Б╤П ╨┐╤А╨╛╨╣╤В╨╕",
+          "symbol": "S",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 27,
+  "fields": {
+    "task": 3,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 28,
+  "fields": {
+    "task": 3,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 29,
+  "fields": {
+    "task": 3,
+    "step": 9,
+    "step_type": "solution",
+    "content": "t = d / v_╨┐╨╗╨░╨▓╨░╨╜╨╕╤П = 9 / 0,5 = 18 ╤Б\nS_╤Б╨╜╨╛╤Б╨░ = v_╤В╨╡╤З╨╡╨╜╨╕╤П ┬╖ t = 0,2 ┬╖ 18 = 3,6 ╨╝",
+    "schema_data": {
+      "formula": "S = v_╤В╨╡╤З ┬╖ d / v_╨┐╨╗╨░╨▓",
+      "si": "d = 9 ╨╝\nv_╤В╨╡╤З = 0,2 ╨╝/╤Б\nv_╨┐╨╗╨░╨▓ = 0,5 ╨╝/╤Б",
+      "calc": "t = 9/0,5 = 18 ╤Б\nS = 0,2 ┬╖ 18 = 3,6 ╨╝",
+      "reasoning": "╨б╨╜╨╛╤Б ╨╜╨░ 3,6 ╨╝ ╨┐╤А╨╕ ╤И╨╕╤А╨╕╨╜╨╡ ╤А╨╡╨║╨╕ 9 ╨╝ тАФ ╤А╨╡╨░╨╗╨╕╤Б╤В╨╕╤З╨╜╨╛"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 30,
+  "fields": {
+    "task": 3,
+    "step": 10,
+    "step_type": "text",
+    "content": "╨Т╨░╨╝ ╨┐╤А╨╕╨┤╤С╤В╤Б╤П ╨┐╤А╨╛╨╣╤В╨╕ ╨▓╨▓╨╡╤А╤Е ╨┐╨╛ ╤В╨╡╤З╨╡╨╜╨╕╤О 3,6 ╨╝, ╤З╤В╨╛╨▒╤Л ╨▓╨╡╤А╨╜╤Г╤В╤М╤Б╤П ╨╜╨░ ╤Г╤А╨╛╨▓╨╡╨╜╤М ╤В╨╛╤З╨║╨╕ ╤Б╤В╨░╤А╤В╨░",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 31,
+  "fields": {
+    "task": 4,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "╤А╨░╨┤╨╕╨╛╤Б╨╕╨│╨╜╨░╨╗",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 32,
+  "fields": {
+    "task": 4,
+    "step": 2,
+    "step_type": "schema",
+    "content": "╨Р╨╗╤М╤Д╨░ ╨ж╨╡╨╜╤В╨░╨▓╤А╨░ тАФ ╨╕╤Б╤В╨╛╤З╨╜╨╕╨║ ╤Б╨╕╨│╨╜╨░╨╗╨░; ╨Ч╨╡╨╝╨╗╤П тАФ ╨┐╤А╨╕╤С╨╝╨╜╨╕╨║",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t4s2_star",
+          "type": "body-circle",
+          "x": 150,
+          "y": 250,
+          "color": "#f59e0b",
+          "radius": 15
+        },
+        {
+          "id": "t4s2_ls",
+          "type": "text",
+          "x": 110,
+          "y": 280,
+          "text": "╨Р╨╗╤М╤Д╨░ ╨ж╨╡╨╜╤В╨░╨▓╤А╨░",
+          "fontSize": 12,
+          "color": "#f59e0b"
+        },
+        {
+          "id": "t4s2_la",
+          "type": "label",
+          "x": 145,
+          "y": 220,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 33,
+  "fields": {
+    "task": 4,
+    "step": 3,
+    "step_type": "schema",
+    "content": "╨б╨╕╨│╨╜╨░╨╗ ╨┤╨╛╤Б╤В╨╕╨│╨░╨╡╤В ╨Ч╨╡╨╝╨╗╨╕",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t4s3_star",
+          "type": "body-circle",
+          "x": 150,
+          "y": 250,
+          "color": "#f59e0b",
+          "radius": 15
+        },
+        {
+          "id": "t4s3_la",
+          "type": "label",
+          "x": 145,
+          "y": 220,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t4s3_earth",
+          "type": "body-circle",
+          "x": 600,
+          "y": 250,
+          "color": "#3b82f6",
+          "radius": 15
+        },
+        {
+          "id": "t4s3_le",
+          "type": "text",
+          "x": 580,
+          "y": 280,
+          "text": "╨Ч╨╡╨╝╨╗╤П",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t4s3_lb",
+          "type": "label",
+          "x": 595,
+          "y": 220,
+          "symbol": "B",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t4s3_signal",
+          "type": "vector",
+          "x": 170,
+          "y": 250,
+          "length": 410,
+          "rotation": 0,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t4s3_vs",
+          "type": "text",
+          "x": 340,
+          "y": 225,
+          "text": "╨а╨░╨┤╨╕╨╛╤Б╨╕╨│╨╜╨░╨╗",
+          "fontSize": 12,
+          "color": "#ef4444"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 34,
+  "fields": {
+    "task": 4,
+    "step": 4,
+    "step_type": "schema",
+    "content": "╨Ю╨┤╨╕╨╜ ╤Г╤З╨░╤Б╤В╨╛╨║: ╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╤Б╨╕╨│╨╜╨░╨╗╨░ ╨╛╤В ╨╖╨▓╨╡╨╖╨┤╤Л ╨┤╨╛ ╨Ч╨╡╨╝╨╗╨╕",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t4s4_star",
+          "type": "body-circle",
+          "x": 150,
+          "y": 250,
+          "color": "#f59e0b",
+          "radius": 12
+        },
+        {
+          "id": "t4s4_la",
+          "type": "label",
+          "x": 145,
+          "y": 275,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t4s4_earth",
+          "type": "body-circle",
+          "x": 600,
+          "y": 250,
+          "color": "#3b82f6",
+          "radius": 12
+        },
+        {
+          "id": "t4s4_lb",
+          "type": "label",
+          "x": 595,
+          "y": 275,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t4s4_line",
+          "type": "line",
+          "x": 165,
+          "y": 250,
+          "length": 420,
+          "rotation": 0,
+          "color": "#1a1a2e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t4s4_s",
+          "type": "text",
+          "x": 330,
+          "y": 215,
+          "text": "S = 3,9┬╖10┬╣┬│ ╨║╨╝",
+          "fontSize": 13,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t4s4_v",
+          "type": "text",
+          "x": 330,
+          "y": 295,
+          "text": "v = 3┬╖10тБ╡ ╨║╨╝/╤Б",
+          "fontSize": 13,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t4s4_t",
+          "type": "text",
+          "x": 330,
+          "y": 320,
+          "text": "t = S / v = ?",
+          "fontSize": 13,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 35,
+  "fields": {
+    "task": 4,
+    "step": 5,
+    "step_type": "text",
+    "content": "S = v ┬╖ t",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 36,
+  "fields": {
+    "task": 4,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "╨Ф╨░╨╜╨╛:\nS = 39 000 000 000 000 ╨║╨╝ = 3,9┬╖10┬╣┬│ ╨║╨╝\nv = 300 000 ╨║╨╝/╤Б = 3┬╖10тБ╡ ╨║╨╝/╤Б\n1 ╨│╨╛╨┤ = 30 000 000 ╤Б = 3┬╖10тБ╖ ╤Б\n╨Э╨░╨╣╤В╨╕: t (╨▓ ╨│╨╛╨┤╨░╤Е)",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "39 000 000 000 000 ╨║╨╝",
+          "symbol": "S",
+          "isTarget": false
+        },
+        {
+          "fragment": "300 000 ╨║╨╝/╤Б",
+          "symbol": "v",
+          "isTarget": false
+        },
+        {
+          "fragment": "╨з╨╡╤А╨╡╨╖ ╤Б╨║╨╛╨╗╤М╨║╨╛ ╨▓╤А╨╡╨╝╨╡╨╜╨╕",
+          "symbol": "t",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 37,
+  "fields": {
+    "task": 4,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 38,
+  "fields": {
+    "task": 4,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 39,
+  "fields": {
+    "task": 4,
+    "step": 9,
+    "step_type": "solution",
+    "content": "t = S / v = 3,9┬╖10┬╣┬│ / 3┬╖10тБ╡ = 1,3┬╖10тБ╕ ╤Б\nt = 1,3┬╖10тБ╕ / 3┬╖10тБ╖ тЙИ 4,33 ╨│╨╛╨┤╨░",
+    "schema_data": {
+      "formula": "t = S / v",
+      "si": "S = 3,9┬╖10┬╣┬│ ╨║╨╝\nv = 3┬╖10тБ╡ ╨║╨╝/╤Б",
+      "calc": "t = 3,9┬╖10┬╣┬│ / 3┬╖10тБ╡ = 1,3┬╖10тБ╕ ╤Б = 130 000 000 / 30 000 000 тЙИ 4,33 ╨│╨╛╨┤╨░",
+      "reasoning": "4,33 ╨│╨╛╨┤╨░ тАФ ╨╕╨╖╨▓╨╡╤Б╤В╨╜╨╛╨╡ ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╡ ╨┤╨╛ ╨▒╨╗╨╕╨╢╨░╨╣╤И╨╡╨╣ ╨╖╨▓╨╡╨╖╨┤╤Л, ╤А╨╡╨╖╤Г╨╗╤М╤В╨░╤В ╨░╨┤╨╡╨║╨▓╨░╤В╨╜╤Л╨╣"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 40,
+  "fields": {
+    "task": 4,
+    "step": 10,
+    "step_type": "text",
+    "content": "╨а╨░╨┤╨╕╨╛╤Б╨╕╨│╨╜╨░╨╗ ╨╛╤В ╨Р╨╗╤М╤Д╨░ ╨ж╨╡╨╜╤В╨░╨▓╤А╨░ ╨┤╨╛╨╣╨┤╤С╤В ╨┤╨╛ ╨Ч╨╡╨╝╨╗╨╕ ╨┐╤А╨╕╨╝╨╡╤А╨╜╨╛ ╨╖╨░ 4,33 ╨│╨╛╨┤╨░",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 41,
+  "fields": {
+    "task": 5,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "╨║╨╛╤Б╨╝╨╕╤З╨╡╤Б╨║╨░╤П ╤Б╤В╨░╨╜╤Ж╨╕╤П",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 42,
+  "fields": {
+    "task": 5,
+    "step": 2,
+    "step_type": "schema",
+    "content": "╨Ъ╨╛╤Б╨╝╨╕╤З╨╡╤Б╨║╨░╤П ╤Б╤В╨░╨╜╤Ж╨╕╤П ╨╜╨░ ╨╛╤А╨▒╨╕╤В╨╡ ╨▓╨╛╨║╤А╤Г╨│ ╨Ч╨╡╨╝╨╗╨╕",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t5s2_earth",
+          "type": "body-circle",
+          "x": 400,
+          "y": 300,
+          "color": "#3b82f6",
+          "radius": 30
+        },
+        {
+          "id": "t5s2_le",
+          "type": "text",
+          "x": 380,
+          "y": 295,
+          "text": "╨Ч╨╡╨╝╨╗╤П",
+          "fontSize": 12,
+          "color": "white"
+        },
+        {
+          "id": "t5s2_station",
+          "type": "body-circle",
+          "x": 400,
+          "y": 170,
+          "color": "#f59e0b",
+          "radius": 8
+        },
+        {
+          "id": "t5s2_ls",
+          "type": "text",
+          "x": 420,
+          "y": 165,
+          "text": "╨б╤В╨░╨╜╤Ж╨╕╤П",
+          "fontSize": 12,
+          "color": "#f59e0b"
+        },
+        {
+          "id": "t5s2_la",
+          "type": "label",
+          "x": 395,
+          "y": 145,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 43,
+  "fields": {
+    "task": 5,
+    "step": 3,
+    "step_type": "schema",
+    "content": "╨б╤В╨░╨╜╤Ж╨╕╤П ╨┐╨╡╤А╨╡╨╝╨╡╤Й╨░╨╡╤В╤Б╤П ╨┐╨╛ ╨╛╤А╨▒╨╕╤В╨╡ ╨╖╨░ ╨╛╨┤╨╜╤Г ╨╝╨╕╨╜╤Г╤В╤Г ╨╜╨░ 480 ╨║╨╝",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t5s3_earth",
+          "type": "body-circle",
+          "x": 400,
+          "y": 300,
+          "color": "#3b82f6",
+          "radius": 30
+        },
+        {
+          "id": "t5s3_le",
+          "type": "text",
+          "x": 380,
+          "y": 295,
+          "text": "╨Ч╨╡╨╝╨╗╤П",
+          "fontSize": 12,
+          "color": "white"
+        },
+        {
+          "id": "t5s3_a",
+          "type": "body-circle",
+          "x": 400,
+          "y": 170,
+          "color": "#f59e0b",
+          "radius": 6
+        },
+        {
+          "id": "t5s3_la",
+          "type": "label",
+          "x": 395,
+          "y": 148,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t5s3_b",
+          "type": "body-circle",
+          "x": 530,
+          "y": 200,
+          "color": "#22c55e",
+          "radius": 6
+        },
+        {
+          "id": "t5s3_lb",
+          "type": "label",
+          "x": 540,
+          "y": 195,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t5s3_v",
+          "type": "vector",
+          "x": 410,
+          "y": 170,
+          "length": 80,
+          "rotation": 15,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t5s3_vl",
+          "type": "label",
+          "x": 440,
+          "y": 145,
+          "symbol": "v",
+          "fontSize": 14,
+          "color": "#ef4444"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 44,
+  "fields": {
+    "task": 5,
+    "step": 4,
+    "step_type": "schema",
+    "content": "╨Ю╨┤╨╕╨╜ ╤Г╤З╨░╤Б╤В╨╛╨║: ╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╤Б╤В╨░╨╜╤Ж╨╕╨╕",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t5s4_a",
+          "type": "body-circle",
+          "x": 250,
+          "y": 250,
+          "color": "#f59e0b",
+          "radius": 6
+        },
+        {
+          "id": "t5s4_la",
+          "type": "label",
+          "x": 245,
+          "y": 270,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t5s4_b",
+          "type": "body-circle",
+          "x": 550,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 6
+        },
+        {
+          "id": "t5s4_lb",
+          "type": "label",
+          "x": 545,
+          "y": 270,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t5s4_line",
+          "type": "line",
+          "x": 250,
+          "y": 250,
+          "length": 300,
+          "rotation": 0,
+          "color": "#1a1a2e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t5s4_s",
+          "type": "text",
+          "x": 360,
+          "y": 220,
+          "text": "S = 480 ╨║╨╝",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t5s4_t",
+          "type": "text",
+          "x": 360,
+          "y": 290,
+          "text": "t = 1 ╨╝╨╕╨╜ = 60 ╤Б",
+          "fontSize": 13,
+          "color": "#64748b"
+        },
+        {
+          "id": "t5s4_vq",
+          "type": "text",
+          "x": 360,
+          "y": 315,
+          "text": "v = S/t = ?",
+          "fontSize": 13,
+          "color": "#ef4444"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 45,
+  "fields": {
+    "task": 5,
+    "step": 5,
+    "step_type": "text",
+    "content": "S = v ┬╖ t тЖТ v = S / t",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 46,
+  "fields": {
+    "task": 5,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "╨Ф╨░╨╜╨╛:\nS = 480 ╨║╨╝\nt = 1 ╨╝╨╕╨╜ = 60 ╤Б\nvтВВ = 11,9 ╨║╨╝/╤Б (╨▓╤В╨╛╤А╨░╤П ╨║╨╛╤Б╨╝╨╕╤З╨╡╤Б╨║╨░╤П)\n╨Э╨░╨╣╤В╨╕: v",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "480 ╨║╨╝",
+          "symbol": "S",
+          "isTarget": false
+        },
+        {
+          "fragment": "╨╛╨┤╨╜╤Г ╨╝╨╕╨╜╤Г╤В╤Г",
+          "symbol": "t",
+          "isTarget": false
+        },
+        {
+          "fragment": "11,9 ╨║╨╝/╤Б",
+          "symbol": "vтВВ",
+          "isTarget": false
+        },
+        {
+          "fragment": "╨п╨▓╨╗╤П╨╡╤В╤Б╤П ╨║╨╛╤Б╨╝╨╕╤З╨╡╤Б╨║╨░╤П ╤Б╤В╨░╨╜╤Ж╨╕╤П ╨╕╤Б╨║╤Г╤Б╤Б╤В╨▓╨╡╨╜╨╜╤Л╨╝ ╤Б╨┐╤Г╤В╨╜╨╕╨║╨╛╨╝",
+          "symbol": "v",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 47,
+  "fields": {
+    "task": 5,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 48,
+  "fields": {
+    "task": 5,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 49,
+  "fields": {
+    "task": 5,
+    "step": 9,
+    "step_type": "solution",
+    "content": "v = S / t = 480 / 60 = 8 ╨║╨╝/╤Б\n8 ╨║╨╝/╤Б < 11,9 ╨║╨╝/╤Б тЖТ ╤Б╤В╨░╨╜╤Ж╨╕╤П тАФ ╤Б╨┐╤Г╤В╨╜╨╕╨║ ╨Ч╨╡╨╝╨╗╨╕",
+    "schema_data": {
+      "formula": "v = S / t",
+      "si": "S = 480 ╨║╨╝\nt = 1 ╨╝╨╕╨╜ = 60 ╤Б",
+      "calc": "v = 480 / 60 = 8 ╨║╨╝/╤Б\n╨б╤А╨░╨▓╨╜╨╡╨╜╨╕╨╡: 8 < 11,9 тЖТ ╤Б╨┐╤Г╤В╨╜╨╕╨║",
+      "reasoning": "8 ╨║╨╝/╤Б тАФ ╤В╨╕╨┐╨╕╤З╨╜╨░╤П ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╨╛╤А╨▒╨╕╤В╨░╨╗╤М╨╜╨╛╨╣ ╤Б╤В╨░╨╜╤Ж╨╕╨╕ (╨Ь╨Ъ╨б ~7,66 ╨║╨╝/╤Б), ╤А╨╡╨╖╤Г╨╗╤М╤В╨░╤В ╨░╨┤╨╡╨║╨▓╨░╤В╨╜╤Л╨╣"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 50,
+  "fields": {
+    "task": 5,
+    "step": 10,
+    "step_type": "text",
+    "content": "╨б╨║╨╛╤А╨╛╤Б╤В╤М ╤Б╤В╨░╨╜╤Ж╨╕╨╕ тАФ 8 ╨║╨╝/╤Б, ╤З╤В╨╛ ╨╝╨╡╨╜╤М╤И╨╡ ╨▓╤В╨╛╤А╨╛╨╣ ╨║╨╛╤Б╨╝╨╕╤З╨╡╤Б╨║╨╛╨╣ ╤Б╨║╨╛╤А╨╛╤Б╤В╨╕ (11,9 ╨║╨╝/╤Б), ╨╖╨╜╨░╤З╨╕╤В, ╤Б╤В╨░╨╜╤Ж╨╕╤П ╤П╨▓╨╗╤П╨╡╤В╤Б╤П ╨╕╤Б╨║╤Г╤Б╤Б╤В╨▓╨╡╨╜╨╜╤Л╨╝ ╤Б╨┐╤Г╤В╨╜╨╕╨║╨╛╨╝ ╨Ч╨╡╨╝╨╗╨╕",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 51,
+  "fields": {
+    "task": 6,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "╨║╨╛╤А╨╜╨╡╨┐╨╗╨╛╨┤╤Л ╤Б╨▓╤С╨║╨╗╨░ ╤В╤А╨░╨╜╤Б╨┐╨╛╤А╤В╤С╤А",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 52,
+  "fields": {
+    "task": 6,
+    "step": 2,
+    "step_type": "schema",
+    "content": "╨в╤А╨░╨╜╤Б╨┐╨╛╤А╤В╤С╤А ╤Б ╨║╨╛╤А╨╜╨╡╨┐╨╗╨╛╨┤╨░╨╝╨╕, ╤А╨░╤Б╨┐╨╛╨╗╨╛╨╢╨╡╨╜╨╜╤Л╨╝╨╕ ╤З╨╡╤А╨╡╨╖ 0,1 ╨╝ ╨┤╤А╤Г╨│ ╨╛╤В ╨┤╤А╤Г╨│╨░",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t6s2_belt",
+          "type": "line",
+          "x": 150,
+          "y": 280,
+          "length": 400,
+          "rotation": 0,
+          "color": "#64748b",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t6s2_blt",
+          "type": "text",
+          "x": 300,
+          "y": 295,
+          "text": "╨Ы╨╡╨╜╤В╨░ ╤В╤А╨░╨╜╤Б╨┐╨╛╤А╤В╤С╤А╨░",
+          "fontSize": 12,
+          "color": "#64748b"
+        },
+        {
+          "id": "t6s2_b1",
+          "type": "body-circle",
+          "x": 200,
+          "y": 260,
+          "color": "#ef4444",
+          "radius": 8
+        },
+        {
+          "id": "t6s2_b2",
+          "type": "body-circle",
+          "x": 250,
+          "y": 260,
+          "color": "#ef4444",
+          "radius": 8
+        },
+        {
+          "id": "t6s2_b3",
+          "type": "body-circle",
+          "x": 300,
+          "y": 260,
+          "color": "#ef4444",
+          "radius": 8
+        },
+        {
+          "id": "t6s2_b4",
+          "type": "body-circle",
+          "x": 350,
+          "y": 260,
+          "color": "#ef4444",
+          "radius": 8
+        },
+        {
+          "id": "t6s2_dots",
+          "type": "text",
+          "x": 380,
+          "y": 255,
+          "text": "...",
+          "fontSize": 18,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t6s2_lb",
+          "type": "text",
+          "x": 240,
+          "y": 235,
+          "text": "╨Ъ╨╛╤А╨╜╨╡╨┐╨╗╨╛╨┤╤Л (m = 2 ╨║╨│)",
+          "fontSize": 12,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t6s2_truck",
+          "type": "body-rect",
+          "x": 600,
+          "y": 250,
+          "width": 60,
+          "height": 40,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t6s2_lt",
+          "type": "text",
+          "x": 575,
+          "y": 300,
+          "text": "╨Р╨▓╤В╨╛╨╝╨░╤И╨╕╨╜╨░ (3 ╤В)",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t6s2_la",
+          "type": "label",
+          "x": 145,
+          "y": 260,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 53,
+  "fields": {
+    "task": 6,
+    "step": 3,
+    "step_type": "schema",
+    "content": "╨Т╤Б╨╡ ╨║╨╛╤А╨╜╨╡╨┐╨╗╨╛╨┤╤Л ╨╖╨░╨│╤А╤Г╨╢╨╡╨╜╤Л ╨▓ ╨░╨▓╤В╨╛╨╝╨░╤И╨╕╨╜╤Г",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t6s3_belt",
+          "type": "line",
+          "x": 150,
+          "y": 280,
+          "length": 400,
+          "rotation": 0,
+          "color": "#64748b",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t6s3_truck",
+          "type": "body-rect",
+          "x": 600,
+          "y": 250,
+          "width": 60,
+          "height": 40,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t6s3_lt",
+          "type": "text",
+          "x": 565,
+          "y": 300,
+          "text": "╨Ч╨░╨│╤А╤Г╨╢╨╡╨╜╨░ (3 ╤В)",
+          "fontSize": 12,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t6s3_v",
+          "type": "vector",
+          "x": 200,
+          "y": 310,
+          "length": 120,
+          "rotation": 0,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t6s3_vl",
+          "type": "text",
+          "x": 230,
+          "y": 325,
+          "text": "v = 0,5 ╨╝/╤Б",
+          "fontSize": 12,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t6s3_d",
+          "type": "text",
+          "x": 250,
+          "y": 250,
+          "text": "d = 0,1 ╨╝ ╨╝╨╡╨╢╨┤╤Г ╨║╨╛╤А╨╜╨╡╨┐╨╗╨╛╨┤╨░╨╝╨╕",
+          "fontSize": 12,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 54,
+  "fields": {
+    "task": 6,
+    "step": 4,
+    "step_type": "schema",
+    "content": "╨Ю╨┤╨╕╨╜ ╤Г╤З╨░╤Б╤В╨╛╨║: ╤А╨░╨▓╨╜╨╛╨╝╨╡╤А╨╜╨╛╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╨╡ ╨╗╨╡╨╜╤В╤Л ╤В╤А╨░╨╜╤Б╨┐╨╛╤А╤В╤С╤А╨░",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t6s4_a",
+          "type": "point",
+          "x": 150,
+          "y": 250,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t6s4_b",
+          "type": "point",
+          "x": 550,
+          "y": 250,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t6s4_line",
+          "type": "line",
+          "x": 150,
+          "y": 250,
+          "length": 400,
+          "rotation": 0,
+          "color": "#1a1a2e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t6s4_la",
+          "type": "label",
+          "x": 145,
+          "y": 265,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t6s4_lb",
+          "type": "label",
+          "x": 545,
+          "y": 265,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t6s4_n",
+          "type": "text",
+          "x": 250,
+          "y": 210,
+          "text": "N = M/m = 1500 ╤И╤В.",
+          "fontSize": 13,
+          "color": "#64748b"
+        },
+        {
+          "id": "t6s4_l",
+          "type": "text",
+          "x": 300,
+          "y": 230,
+          "text": "L = N┬╖d = 150 ╨╝",
+          "fontSize": 13,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t6s4_v",
+          "type": "text",
+          "x": 300,
+          "y": 290,
+          "text": "v = 0,5 ╨╝/╤Б",
+          "fontSize": 13,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t6s4_t",
+          "type": "text",
+          "x": 300,
+          "y": 315,
+          "text": "t = L/v = ?",
+          "fontSize": 13,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 55,
+  "fields": {
+    "task": 6,
+    "step": 5,
+    "step_type": "text",
+    "content": "N = M / m (╨║╨╛╨╗╨╕╤З╨╡╤Б╤В╨▓╨╛ ╨║╨╛╤А╨╜╨╡╨┐╨╗╨╛╨┤╨╛╨▓)\nL = N ┬╖ d (╨┤╨╗╨╕╨╜╨░ ╨╗╨╡╨╜╤В╤Л)\nt = L / v",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 56,
+  "fields": {
+    "task": 6,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "╨Ф╨░╨╜╨╛:\nM = 3 ╤В = 3000 ╨║╨│\nm = 2 ╨║╨│\nd = 0,1 ╨╝\nv = 0,5 ╨╝/╤Б\n╨Э╨░╨╣╤В╨╕: t",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "3 ╤В",
+          "symbol": "M",
+          "isTarget": false
+        },
+        {
+          "fragment": "2 ╨║╨│",
+          "symbol": "m",
+          "isTarget": false
+        },
+        {
+          "fragment": "0,1 ╨╝",
+          "symbol": "d",
+          "isTarget": false
+        },
+        {
+          "fragment": "0,5 ╨╝/╤Б",
+          "symbol": "v",
+          "isTarget": false
+        },
+        {
+          "fragment": "╨Э╨░╨╣╨┤╨╕╤В╨╡ ╨▓╤А╨╡╨╝╤П ╨┐╨╛╨│╤А╤Г╨╖╨║╨╕",
+          "symbol": "t",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 57,
+  "fields": {
+    "task": 6,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 58,
+  "fields": {
+    "task": 6,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 59,
+  "fields": {
+    "task": 6,
+    "step": 9,
+    "step_type": "solution",
+    "content": "N = M/m = 3000/2 = 1500 ╤И╤В.\nL = N┬╖d = 1500┬╖0,1 = 150 ╨╝\nt = L/v = 150/0,5 = 300 ╤Б",
+    "schema_data": {
+      "formula": "t = (M ┬╖ d) / (m ┬╖ v)",
+      "si": "M = 3 ╤В = 3000 ╨║╨│\nm = 2 ╨║╨│\nd = 0,1 ╨╝\nv = 0,5 ╨╝/╤Б",
+      "calc": "N = 3000/2 = 1500\nL = 1500┬╖0,1 = 150 ╨╝\nt = 150/0,5 = 300 ╤Б = 5 ╨╝╨╕╨╜",
+      "reasoning": "5 ╨╝╨╕╨╜╤Г╤В ╨╜╨░ ╨╖╨░╨│╤А╤Г╨╖╨║╤Г 3 ╤В╨╛╨╜╨╜ ╤Б╨▓╤С╨║╨╗╤Л ╤В╤А╨░╨╜╤Б╨┐╨╛╤А╤В╤С╤А╨╛╨╝ тАФ ╤А╨╡╨░╨╗╨╕╤Б╤В╨╕╤З╨╜╤Л╨╣ ╤А╨╡╨╖╤Г╨╗╤М╤В╨░╤В"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 60,
+  "fields": {
+    "task": 6,
+    "step": 10,
+    "step_type": "text",
+    "content": "╨Т╤А╨╡╨╝╤П ╨┐╨╛╨│╤А╤Г╨╖╨║╨╕ ╤Б╨▓╤С╨║╨╗╤Л ╨▓ ╨░╨▓╤В╨╛╨╝╨░╤И╨╕╨╜╤Г ╤Б╨╛╤Б╤В╨░╨▓╨╗╤П╨╡╤В 300 ╤Б (5 ╨╝╨╕╨╜╤Г╤В)",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 61,
+  "fields": {
+    "task": 7,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "╨▓╨░╨│╨╛╨╜ ╨┐╤Г╨╗╤П",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 62,
+  "fields": {
+    "task": 7,
+    "step": 2,
+    "step_type": "schema",
+    "content": "╨Т╨░╨│╨╛╨╜ ╨┤╨▓╨╕╨╢╨╡╤В╤Б╤П ╨│╨╛╤А╨╕╨╖╨╛╨╜╤В╨░╨╗╤М╨╜╨╛; ╨┐╤Г╨╗╤П ╨╗╨╡╤В╨╕╤В ╨┐╨╡╤А╨┐╨╡╨╜╨┤╨╕╨║╤Г╨╗╤П╤А╨╜╨╛",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t7s2_wagon",
+          "type": "body-rect",
+          "x": 400,
+          "y": 250,
+          "width": 120,
+          "height": 60,
+          "color": "#94a3b8"
+        },
+        {
+          "id": "t7s2_lw",
+          "type": "text",
+          "x": 370,
+          "y": 250,
+          "text": "╨Т╨░╨│╨╛╨╜",
+          "fontSize": 13,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t7s2_v",
+          "type": "vector",
+          "x": 420,
+          "y": 200,
+          "length": 80,
+          "rotation": 0,
+          "color": "#3b82f6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t7s2_vl",
+          "type": "text",
+          "x": 440,
+          "y": 180,
+          "text": "v_╨▓╨░╨│ = 36 ╨║╨╝/╤З",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t7s2_bullet",
+          "type": "body-circle",
+          "x": 400,
+          "y": 150,
+          "color": "#ef4444",
+          "radius": 5
+        },
+        {
+          "id": "t7s2_bl",
+          "type": "text",
+          "x": 370,
+          "y": 135,
+          "text": "╨Я╤Г╨╗╤П",
+          "fontSize": 12,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t7s2_bv",
+          "type": "vector",
+          "x": 400,
+          "y": 155,
+          "length": 60,
+          "rotation": 90,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 63,
+  "fields": {
+    "task": 7,
+    "step": 3,
+    "step_type": "schema",
+    "content": "╨Я╤Г╨╗╤П ╨┐╤А╨╛╨▒╨╕╨▓╨░╨╡╤В ╨╛╨▒╨╡ ╤Б╤В╨╡╨╜╨║╨╕; ╨╛╤В╨▓╨╡╤А╤Б╤В╨╕╤П ╤Б╨╝╨╡╤Й╨╡╨╜╤Л ╨╜╨░ 3 ╤Б╨╝",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t7s3_wagon",
+          "type": "body-rect",
+          "x": 400,
+          "y": 250,
+          "width": 120,
+          "height": 60,
+          "color": "#94a3b8"
+        },
+        {
+          "id": "t7s3_w1",
+          "type": "line",
+          "x": 340,
+          "y": 220,
+          "length": 60,
+          "rotation": 90,
+          "color": "#1a1a2e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t7s3_w2",
+          "type": "line",
+          "x": 460,
+          "y": 220,
+          "length": 60,
+          "rotation": 90,
+          "color": "#1a1a2e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t7s3_h1",
+          "type": "point",
+          "x": 340,
+          "y": 240,
+          "color": "#ef4444",
+          "radius": 5
+        },
+        {
+          "id": "t7s3_h2",
+          "type": "point",
+          "x": 463,
+          "y": 252,
+          "color": "#ef4444",
+          "radius": 5
+        },
+        {
+          "id": "t7s3_lh1",
+          "type": "text",
+          "x": 320,
+          "y": 225,
+          "text": "╨Т╤Е╨╛╨┤",
+          "fontSize": 11,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t7s3_lh2",
+          "type": "text",
+          "x": 470,
+          "y": 240,
+          "text": "╨Т╤Л╤Е╨╛╨┤",
+          "fontSize": 11,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t7s3_d",
+          "type": "text",
+          "x": 365,
+          "y": 310,
+          "text": "d = 2,7 ╨╝",
+          "fontSize": 13,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t7s3_delta",
+          "type": "text",
+          "x": 470,
+          "y": 265,
+          "text": "╬Ф = 3 ╤Б╨╝",
+          "fontSize": 12,
+          "color": "#8b5cf6"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 64,
+  "fields": {
+    "task": 7,
+    "step": 4,
+    "step_type": "schema",
+    "content": "╨Ф╨▓╨░ ╨╛╨┤╨╜╨╛╨▓╤А╨╡╨╝╨╡╨╜╨╜╤Л╤Е ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П: ╨▓╨░╨│╨╛╨╜ (╨│╨╛╤А╨╕╨╖╨╛╨╜╤В╨░╨╗╤М╨╜╨╛) ╨╕ ╨┐╤Г╨╗╤П (╨┐╨╡╤А╨┐╨╡╨╜╨┤╨╕╨║╤Г╨╗╤П╤А╨╜╨╛)",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t7s4_w1",
+          "type": "line",
+          "x": 300,
+          "y": 180,
+          "length": 140,
+          "rotation": 90,
+          "color": "#94a3b8",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t7s4_w2",
+          "type": "line",
+          "x": 500,
+          "y": 180,
+          "length": 140,
+          "rotation": 90,
+          "color": "#94a3b8",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t7s4_d",
+          "type": "line",
+          "x": 300,
+          "y": 330,
+          "length": 200,
+          "rotation": 0,
+          "color": "#1a1a2e",
+          "strokeWidth": 1,
+          "dashed": true
+        },
+        {
+          "id": "t7s4_dl",
+          "type": "text",
+          "x": 370,
+          "y": 340,
+          "text": "d = 2,7 ╨╝",
+          "fontSize": 13,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t7s4_bullet",
+          "type": "vector",
+          "x": 300,
+          "y": 230,
+          "length": 200,
+          "rotation": 84,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t7s4_bl",
+          "type": "text",
+          "x": 395,
+          "y": 200,
+          "text": "╨Я╤Г╨╗╤П: v_╨┐ = ?",
+          "fontSize": 12,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t7s4_delta_l",
+          "type": "line",
+          "x": 500,
+          "y": 230,
+          "length": 15,
+          "rotation": 90,
+          "color": "#8b5cf6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t7s4_del",
+          "type": "text",
+          "x": 510,
+          "y": 235,
+          "text": "╬Ф = 3 ╤Б╨╝",
+          "fontSize": 12,
+          "color": "#8b5cf6"
+        },
+        {
+          "id": "t7s4_vw",
+          "type": "vector",
+          "x": 300,
+          "y": 180,
+          "length": 60,
+          "rotation": 0,
+          "color": "#3b82f6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t7s4_vwl",
+          "type": "text",
+          "x": 310,
+          "y": 160,
+          "text": "v_╨▓╨░╨│",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 65,
+  "fields": {
+    "task": 7,
+    "step": 5,
+    "step_type": "text",
+    "content": "╬Ф = v_╨▓╨░╨│ ┬╖ t (╤Б╨╝╨╡╤Й╨╡╨╜╨╕╨╡ ╨╛╤В╨▓╨╡╤А╤Б╤В╨╕╨╣)\nd = v_╨┐╤Г╨╗╨╕ ┬╖ t (╤И╨╕╤А╨╕╨╜╨░ ╨▓╨░╨│╨╛╨╜╨░)",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 66,
+  "fields": {
+    "task": 7,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "╨Ф╨░╨╜╨╛:\nv_╨▓╨░╨│ = 36 ╨║╨╝/╤З\n╬Ф = 3 ╤Б╨╝ = 0,03 ╨╝\nd = 2,7 ╨╝\n╨Э╨░╨╣╤В╨╕: v_╨┐╤Г╨╗╨╕",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "36 ╨║╨╝/╤З",
+          "symbol": "v_╨▓╨░╨│",
+          "isTarget": false
+        },
+        {
+          "fragment": "3 ╤Б╨╝",
+          "symbol": "╬Ф",
+          "isTarget": false
+        },
+        {
+          "fragment": "2,7 ╨╝",
+          "symbol": "d",
+          "isTarget": false
+        },
+        {
+          "fragment": "╨Ю╨┐╤А╨╡╨┤╨╡╨╗╨╕╤В╨╡ ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╨┐╤Г╨╗╨╕",
+          "symbol": "v_╨┐",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 67,
+  "fields": {
+    "task": 7,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 68,
+  "fields": {
+    "task": 7,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 69,
+  "fields": {
+    "task": 7,
+    "step": 9,
+    "step_type": "solution",
+    "content": "v_╨▓╨░╨│ = 36 ╨║╨╝/╤З = 10 ╨╝/╤Б\nt = ╬Ф / v_╨▓╨░╨│ = 0,03 / 10 = 0,003 ╤Б\nv_╨┐╤Г╨╗╨╕ = d / t = 2,7 / 0,003 = 900 ╨╝/╤Б",
+    "schema_data": {
+      "formula": "v_╨┐ = d ┬╖ v_╨▓╨░╨│ / ╬Ф",
+      "si": "v_╨▓╨░╨│ = 36 ╨║╨╝/╤З = 10 ╨╝/╤Б\n╬Ф = 3 ╤Б╨╝ = 0,03 ╨╝\nd = 2,7 ╨╝",
+      "calc": "t = 0,03/10 = 0,003 ╤Б\nv_╨┐ = 2,7/0,003 = 900 ╨╝/╤Б",
+      "reasoning": "900 ╨╝/╤Б тАФ ╤В╨╕╨┐╨╕╤З╨╜╨░╤П ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╨┐╤Г╨╗╨╕ ╨╕╨╖ ╨▓╨╕╨╜╤В╨╛╨▓╨║╨╕, ╤А╨╡╨╖╤Г╨╗╤М╤В╨░╤В ╨░╨┤╨╡╨║╨▓╨░╤В╨╜╤Л╨╣"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 70,
+  "fields": {
+    "task": 7,
+    "step": 10,
+    "step_type": "text",
+    "content": "╨б╨║╨╛╤А╨╛╤Б╤В╤М ╨┐╤Г╨╗╨╕ ╤Б╨╛╤Б╤В╨░╨▓╨╗╤П╨╡╤В 900 ╨╝/╤Б",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 71,
+  "fields": {
+    "task": 8,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "╤З╨╡╨╗╨╛╨▓╨╡╨║ ╨┐╨╗╨░╨╝╤П",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 72,
+  "fields": {
+    "task": 8,
+    "step": 2,
+    "step_type": "schema",
+    "content": "╨з╨╡╨╗╨╛╨▓╨╡╨║ ╤Г ╤И╨╜╤Г╤А╨░, ╤И╨╜╤Г╤А ╨┐╨╛╨┤╨╛╨╢╨╢╤С╨╜",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t8s2_person",
+          "type": "body-circle",
+          "x": 250,
+          "y": 250,
+          "color": "#3b82f6",
+          "radius": 10
+        },
+        {
+          "id": "t8s2_lp",
+          "type": "text",
+          "x": 230,
+          "y": 270,
+          "text": "╨з╨╡╨╗╨╛╨▓╨╡╨║",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t8s2_la",
+          "type": "label",
+          "x": 245,
+          "y": 225,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t8s2_fuse",
+          "type": "line",
+          "x": 250,
+          "y": 310,
+          "length": 80,
+          "rotation": 0,
+          "color": "#f59e0b",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t8s2_lf",
+          "type": "text",
+          "x": 255,
+          "y": 325,
+          "text": "╨и╨╜╤Г╤А (L = ?)",
+          "fontSize": 12,
+          "color": "#f59e0b"
+        },
+        {
+          "id": "t8s2_flame",
+          "type": "point",
+          "x": 250,
+          "y": 310,
+          "color": "#ef4444",
+          "radius": 5
+        },
+        {
+          "id": "t8s2_lfl",
+          "type": "text",
+          "x": 225,
+          "y": 335,
+          "text": "╨Я╨╗╨░╨╝╤П",
+          "fontSize": 11,
+          "color": "#ef4444"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 73,
+  "fields": {
+    "task": 8,
+    "step": 3,
+    "step_type": "schema",
+    "content": "╨з╨╡╨╗╨╛╨▓╨╡╨║ ╨╛╤В╨▒╨╡╨╢╨░╨╗ ╨╜╨░ 300 ╨╝; ╨┐╨╗╨░╨╝╤П ╨┤╨╛╤И╨╗╨╛ ╨┤╨╛ ╨║╨╛╨╜╤Ж╨░ ╤И╨╜╤Г╤А╨░",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t8s3_a",
+          "type": "body-circle",
+          "x": 200,
+          "y": 250,
+          "color": "#3b82f6",
+          "radius": 8
+        },
+        {
+          "id": "t8s3_la",
+          "type": "label",
+          "x": 195,
+          "y": 225,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t8s3_b",
+          "type": "body-circle",
+          "x": 600,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 8
+        },
+        {
+          "id": "t8s3_lb",
+          "type": "label",
+          "x": 595,
+          "y": 225,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t8s3_lbt",
+          "type": "text",
+          "x": 575,
+          "y": 270,
+          "text": "╨С╨╡╨╖╨╛╨┐╨░╤Б╨╜╨╛",
+          "fontSize": 11,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t8s3_run",
+          "type": "vector",
+          "x": 210,
+          "y": 250,
+          "length": 380,
+          "rotation": 0,
+          "color": "#3b82f6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t8s3_vr",
+          "type": "text",
+          "x": 370,
+          "y": 225,
+          "text": "╨С╨╡╨│: v = 5 ╨╝/╤Б",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t8s3_fuse",
+          "type": "line",
+          "x": 200,
+          "y": 310,
+          "length": 80,
+          "rotation": 0,
+          "color": "#f59e0b",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t8s3_flame",
+          "type": "vector",
+          "x": 200,
+          "y": 310,
+          "length": 80,
+          "rotation": 0,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t8s3_vf",
+          "type": "text",
+          "x": 210,
+          "y": 325,
+          "text": "╨У╨╛╤А╨╡╨╜╨╕╨╡: 0,8 ╤Б╨╝/╤Б",
+          "fontSize": 12,
+          "color": "#ef4444"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 74,
+  "fields": {
+    "task": 8,
+    "step": 4,
+    "step_type": "schema",
+    "content": "╨Ф╨▓╨░ ╨╛╨┤╨╜╨╛╨▓╤А╨╡╨╝╨╡╨╜╨╜╤Л╤Е ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П: ╤З╨╡╨╗╨╛╨▓╨╡╨║ ╨▒╨╡╨╢╨╕╤В ╨╕ ╨┐╨╗╨░╨╝╤П ╨│╨╛╤А╨╕╤В ╨┐╨╛ ╤И╨╜╤Г╤А╤Г",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t8s4_a",
+          "type": "point",
+          "x": 200,
+          "y": 250,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t8s4_la",
+          "type": "label",
+          "x": 195,
+          "y": 270,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t8s4_b",
+          "type": "point",
+          "x": 600,
+          "y": 250,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t8s4_lb",
+          "type": "label",
+          "x": 595,
+          "y": 270,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t8s4_run_line",
+          "type": "line",
+          "x": 200,
+          "y": 250,
+          "length": 400,
+          "rotation": 0,
+          "color": "#3b82f6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t8s4_s",
+          "type": "text",
+          "x": 360,
+          "y": 220,
+          "text": "S = 300 ╨╝, v = 5 ╨╝/╤Б",
+          "fontSize": 13,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t8s4_fuse",
+          "type": "line",
+          "x": 200,
+          "y": 310,
+          "length": 80,
+          "rotation": 0,
+          "color": "#f59e0b",
+          "strokeWidth": 3
+        },
+        {
+          "id": "t8s4_fl",
+          "type": "text",
+          "x": 210,
+          "y": 330,
+          "text": "L = ?, v_╨┐╨╗ = 0,8 ╤Б╨╝/╤Б",
+          "fontSize": 13,
+          "color": "#f59e0b"
+        },
+        {
+          "id": "t8s4_eq",
+          "type": "text",
+          "x": 300,
+          "y": 370,
+          "text": "t_╨▒╨╡╨│ = t_╨│╨╛╤А╨╡╨╜╨╕╤П",
+          "fontSize": 14,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 75,
+  "fields": {
+    "task": 8,
+    "step": 5,
+    "step_type": "text",
+    "content": "S_╨▒╨╡╨│ = v_╨▒╨╡╨│ ┬╖ t\nL_╤И╨╜╤Г╤А = v_╨┐╨╗╨░╨╝╤П ┬╖ t",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 76,
+  "fields": {
+    "task": 8,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "╨Ф╨░╨╜╨╛:\nS = 300 ╨╝\nv_╨▒╨╡╨│ = 5 ╨╝/╤Б\nv_╨┐╨╗╨░╨╝╤П = 0,8 ╤Б╨╝/╤Б\n╨Э╨░╨╣╤В╨╕: L (╨┤╨╗╨╕╨╜╨░ ╤И╨╜╤Г╤А╨░)",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "300 ╨╝",
+          "symbol": "S",
+          "isTarget": false
+        },
+        {
+          "fragment": "5 ╨╝/╤Б",
+          "symbol": "v_╨▒╨╡╨│",
+          "isTarget": false
+        },
+        {
+          "fragment": "0,8 ╤Б╨╝/╤Б",
+          "symbol": "v_╨┐╨╗",
+          "isTarget": false
+        },
+        {
+          "fragment": "╨Ъ╨░╨║╨╛╨╣ ╨┤╨╗╨╕╨╜╤Л ╨▒╨╕╨║╤Д╨╛╤А╨┤╨╛╨▓ ╤И╨╜╤Г╤А",
+          "symbol": "L",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 77,
+  "fields": {
+    "task": 8,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 78,
+  "fields": {
+    "task": 8,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 79,
+  "fields": {
+    "task": 8,
+    "step": 9,
+    "step_type": "solution",
+    "content": "t = S / v_╨▒╨╡╨│ = 300 / 5 = 60 ╤Б\nL = v_╨┐╨╗╨░╨╝╤П ┬╖ t = 0,8 ┬╖ 60 = 48 ╤Б╨╝",
+    "schema_data": {
+      "formula": "L = v_╨┐╨╗ ┬╖ S / v_╨▒╨╡╨│",
+      "si": "S = 300 ╨╝\nv_╨▒╨╡╨│ = 5 ╨╝/╤Б\nv_╨┐╨╗ = 0,8 ╤Б╨╝/╤Б",
+      "calc": "t = 300/5 = 60 ╤Б\nL = 0,8 ┬╖ 60 = 48 ╤Б╨╝",
+      "reasoning": "48 ╤Б╨╝ ╤И╨╜╤Г╤А╨░ тАФ ╤А╨╡╨░╨╗╨╕╤Б╤В╨╕╤З╨╜╨╛ ╨┤╨╗╤П ╨▒╨╡╨╖╨╛╨┐╨░╤Б╨╜╨╛╨│╨╛ ╨╛╤В╨▒╨╡╨│╨░╨╜╨╕╤П"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 80,
+  "fields": {
+    "task": 8,
+    "step": 10,
+    "step_type": "text",
+    "content": "╨Э╨╡╨╛╨▒╤Е╨╛╨┤╨╕╨╝ ╨▒╨╕╨║╤Д╨╛╤А╨┤╨╛╨▓ ╤И╨╜╤Г╤А ╨┤╨╗╨╕╨╜╨╛╨╣ 48 ╤Б╨╝",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 81,
+  "fields": {
+    "task": 9,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "╤Б╨░╨╝╨╛╨╗╤С╤В",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 82,
+  "fields": {
+    "task": 9,
+    "step": 2,
+    "step_type": "schema",
+    "content": "╨б╨░╨╝╨╛╨╗╤С╤В ╨▓ ╤В╨╛╤З╨║╨╡ ╨▓╤Л╨╗╨╡╤В╨░",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t9s2_plane",
+          "type": "body-circle",
+          "x": 150,
+          "y": 250,
+          "color": "#3b82f6",
+          "radius": 10
+        },
+        {
+          "id": "t9s2_la",
+          "type": "label",
+          "x": 145,
+          "y": 225,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t9s2_lp",
+          "type": "text",
+          "x": 125,
+          "y": 270,
+          "text": "╨Т╤Л╨╗╨╡╤В",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 83,
+  "fields": {
+    "task": 9,
+    "step": 3,
+    "step_type": "schema",
+    "content": "╨б╨░╨╝╨╛╨╗╤С╤В ╨▓ ╤В╨╛╤З╨║╨╡ ╨┐╤А╨╕╨╗╤С╤В╨░, ╨┐╤А╨╛╨╗╨╡╤В╨╡╨▓ ╨┤╨▓╨░ ╤Г╤З╨░╤Б╤В╨║╨░",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t9s3_a",
+          "type": "body-circle",
+          "x": 150,
+          "y": 250,
+          "color": "#3b82f6",
+          "radius": 8
+        },
+        {
+          "id": "t9s3_la",
+          "type": "label",
+          "x": 145,
+          "y": 225,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t9s3_m",
+          "type": "point",
+          "x": 400,
+          "y": 250,
+          "color": "#f59e0b",
+          "radius": 6
+        },
+        {
+          "id": "t9s3_lm",
+          "type": "label",
+          "x": 395,
+          "y": 225,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t9s3_c",
+          "type": "body-circle",
+          "x": 650,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 8
+        },
+        {
+          "id": "t9s3_lc",
+          "type": "label",
+          "x": 645,
+          "y": 225,
+          "symbol": "C",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t9s3_lct",
+          "type": "text",
+          "x": 625,
+          "y": 270,
+          "text": "╨Я╤А╨╕╨╗╤С╤В",
+          "fontSize": 12,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t9s3_v1",
+          "type": "vector",
+          "x": 160,
+          "y": 210,
+          "length": 100,
+          "rotation": 0,
+          "color": "#3b82f6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t9s3_v1l",
+          "type": "text",
+          "x": 180,
+          "y": 190,
+          "text": "vтВБ = 1000 ╨║╨╝/╤З",
+          "fontSize": 11,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t9s3_v2",
+          "type": "vector",
+          "x": 410,
+          "y": 210,
+          "length": 80,
+          "rotation": 0,
+          "color": "#f59e0b",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t9s3_v2l",
+          "type": "text",
+          "x": 420,
+          "y": 190,
+          "text": "vтВВ = 850 ╨║╨╝/╤З",
+          "fontSize": 11,
+          "color": "#f59e0b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 84,
+  "fields": {
+    "task": 9,
+    "step": 4,
+    "step_type": "schema",
+    "content": "╨г╤З╨░╤Б╤В╨╛╨║ 1: SтВБ = 2200 ╨║╨╝, vтВБ = 1000 ╨║╨╝/╤З\n╨г╤З╨░╤Б╤В╨╛╨║ 2: SтВВ = 1700 ╨║╨╝, vтВВ = 850 ╨║╨╝/╤З",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t9s4_a",
+          "type": "point",
+          "x": 150,
+          "y": 250,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t9s4_la",
+          "type": "label",
+          "x": 145,
+          "y": 270,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t9s4_m",
+          "type": "point",
+          "x": 400,
+          "y": 250,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t9s4_lm",
+          "type": "label",
+          "x": 395,
+          "y": 270,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t9s4_c",
+          "type": "point",
+          "x": 600,
+          "y": 250,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t9s4_lc",
+          "type": "label",
+          "x": 595,
+          "y": 270,
+          "symbol": "C",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t9s4_l1",
+          "type": "line",
+          "x": 150,
+          "y": 250,
+          "length": 250,
+          "rotation": 0,
+          "color": "#3b82f6",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t9s4_s1",
+          "type": "text",
+          "x": 225,
+          "y": 215,
+          "text": "SтВБ = 2200 ╨║╨╝, vтВБ = 1000 ╨║╨╝/╤З",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t9s4_l2",
+          "type": "line",
+          "x": 400,
+          "y": 250,
+          "length": 200,
+          "rotation": 0,
+          "color": "#f59e0b",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t9s4_s2",
+          "type": "text",
+          "x": 440,
+          "y": 215,
+          "text": "SтВВ = 1700 ╨║╨╝, vтВВ = 850 ╨║╨╝/╤З",
+          "fontSize": 12,
+          "color": "#f59e0b"
+        },
+        {
+          "id": "t9s4_vsr",
+          "type": "text",
+          "x": 300,
+          "y": 310,
+          "text": "v_╤Б╤А = (SтВБ+SтВВ) / (tтВБ+tтВВ) = ?",
+          "fontSize": 13,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 85,
+  "fields": {
+    "task": 9,
+    "step": 5,
+    "step_type": "text",
+    "content": "SтВБ = vтВБ ┬╖ tтВБ\nSтВВ = vтВВ ┬╖ tтВВ\nv_╤Б╤А = (SтВБ + SтВВ) / (tтВБ + tтВВ)",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 86,
+  "fields": {
+    "task": 9,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "╨Ф╨░╨╜╨╛:\nSтВБ = 2200 ╨║╨╝\nvтВБ = 1000 ╨║╨╝/╤З\nSтВВ = 1700 ╨║╨╝\nvтВВ = 850 ╨║╨╝/╤З\n╨Э╨░╨╣╤В╨╕: v_╤Б╤А",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "2200 ╨║╨╝",
+          "symbol": "SтВБ",
+          "isTarget": false
+        },
+        {
+          "fragment": "1000 ╨║╨╝/╤З",
+          "symbol": "vтВБ",
+          "isTarget": false
+        },
+        {
+          "fragment": "1700 ╨║╨╝",
+          "symbol": "SтВВ",
+          "isTarget": false
+        },
+        {
+          "fragment": "850 ╨║╨╝/╤З",
+          "symbol": "vтВВ",
+          "isTarget": false
+        },
+        {
+          "fragment": "╤Б╤А╨╡╨┤╨╜╤П╤П ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╤Б╨░╨╝╨╛╨╗╤С╤В╨░",
+          "symbol": "v_╤Б╤А",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 87,
+  "fields": {
+    "task": 9,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 88,
+  "fields": {
+    "task": 9,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 89,
+  "fields": {
+    "task": 9,
+    "step": 9,
+    "step_type": "solution",
+    "content": "tтВБ = SтВБ/vтВБ = 2200/1000 = 2,2 ╤З\ntтВВ = SтВВ/vтВВ = 1700/850 = 2 ╤З\nv_╤Б╤А = (2200+1700)/(2,2+2) = 3900/4,2 тЙИ 928,57 ╨║╨╝/╤З",
+    "schema_data": {
+      "formula": "v_╤Б╤А = (SтВБ + SтВВ) / (SтВБ/vтВБ + SтВВ/vтВВ)",
+      "si": "SтВБ = 2200 ╨║╨╝, vтВБ = 1000 ╨║╨╝/╤З\nSтВВ = 1700 ╨║╨╝, vтВВ = 850 ╨║╨╝/╤З",
+      "calc": "tтВБ = 2200/1000 = 2,2 ╤З\ntтВВ = 1700/850 = 2 ╤З\nv_╤Б╤А = 3900/4,2 тЙИ 928,57 ╨║╨╝/╤З",
+      "reasoning": "╨б╤А╨╡╨┤╨╜╤П╤П ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╨╝╨╡╨╢╨┤╤Г 850 ╨╕ 1000 тАФ ╨░╨┤╨╡╨║╨▓╨░╤В╨╜╤Л╨╣ ╤А╨╡╨╖╤Г╨╗╤М╤В╨░╤В"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 90,
+  "fields": {
+    "task": 9,
+    "step": 10,
+    "step_type": "text",
+    "content": "╨б╤А╨╡╨┤╨╜╤П╤П ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╤Б╨░╨╝╨╛╨╗╤С╤В╨░ ╨╖╨░ ╨▓╨╡╤Б╤М ╨┐╨╡╤А╨╡╨╗╤С╤В ╤Б╨╛╤Б╤В╨░╨▓╨╗╤П╨╡╤В ╨┐╤А╨╕╨╝╨╡╤А╨╜╨╛ 928,57 ╨║╨╝/╤З",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 91,
+  "fields": {
+    "task": 10,
+    "step": 1,
+    "step_type": "text_pick",
+    "content": "╨▓╤Л ╨▓╨╡╨╗╨╛╤Б╨╕╨┐╨╡╨┤╨╕╤Б╤В",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 92,
+  "fields": {
+    "task": 10,
+    "step": 2,
+    "step_type": "schema",
+    "content": "╨Т╨╡╨╗╨╛╤Б╨╕╨┐╨╡╨┤╨╕╤Б╤В ╨▓╨╜╨╕╨╖╤Г ╨┐╨╛╨┤╤К╤С╨╝╨░",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t10s2_cyclist",
+          "type": "body-circle",
+          "x": 200,
+          "y": 300,
+          "color": "#3b82f6",
+          "radius": 10
+        },
+        {
+          "id": "t10s2_la",
+          "type": "label",
+          "x": 195,
+          "y": 275,
+          "symbol": "A",
+          "fontSize": 16,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t10s2_lp",
+          "type": "text",
+          "x": 175,
+          "y": 320,
+          "text": "╨б╤В╨░╤А╤В (╨╜╨╕╨╖)",
+          "fontSize": 12,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "t10s2_hill",
+          "type": "line",
+          "x": 200,
+          "y": 300,
+          "length": 250,
+          "rotation": -30,
+          "color": "#94a3b8",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t10s2_lh",
+          "type": "text",
+          "x": 350,
+          "y": 200,
+          "text": "╨Я╨╛╨┤╤К╤С╨╝",
+          "fontSize": 12,
+          "color": "#94a3b8"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 93,
+  "fields": {
+    "task": 10,
+    "step": 3,
+    "step_type": "schema",
+    "content": "╨Т╨╡╨╗╨╛╤Б╨╕╨┐╨╡╨┤╨╕╤Б╤В ╨▓╨╡╤А╨╜╤Г╨╗╤Б╤П ╨▓ ╨╜╨░╤З╨░╨╗╤М╨╜╤Г╤О ╤В╨╛╤З╨║╤Г ╨┐╨╛╤Б╨╗╨╡ ╤Б╨┐╤Г╤Б╨║╨░",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t10s3_a",
+          "type": "body-circle",
+          "x": 200,
+          "y": 300,
+          "color": "#3b82f6",
+          "radius": 6
+        },
+        {
+          "id": "t10s3_la",
+          "type": "label",
+          "x": 195,
+          "y": 275,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t10s3_b",
+          "type": "body-circle",
+          "x": 450,
+          "y": 170,
+          "color": "#f59e0b",
+          "radius": 6
+        },
+        {
+          "id": "t10s3_lb",
+          "type": "label",
+          "x": 445,
+          "y": 148,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t10s3_lbt",
+          "type": "text",
+          "x": 455,
+          "y": 170,
+          "text": "╨Т╨╡╤А╤И╨╕╨╜╨░",
+          "fontSize": 12,
+          "color": "#f59e0b"
+        },
+        {
+          "id": "t10s3_up",
+          "type": "line",
+          "x": 200,
+          "y": 300,
+          "length": 280,
+          "rotation": -28,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t10s3_v1",
+          "type": "text",
+          "x": 280,
+          "y": 210,
+          "text": "vтВБ = 6 ╨║╨╝/╤З",
+          "fontSize": 12,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t10s3_down",
+          "type": "line",
+          "x": 450,
+          "y": 170,
+          "length": 280,
+          "rotation": 28,
+          "color": "#22c55e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t10s3_v2",
+          "type": "text",
+          "x": 530,
+          "y": 210,
+          "text": "vтВВ = 8 ╨╝/╤Б",
+          "fontSize": 12,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t10s3_a2",
+          "type": "body-circle",
+          "x": 700,
+          "y": 300,
+          "color": "#3b82f6",
+          "radius": 6
+        },
+        {
+          "id": "t10s3_la2",
+          "type": "label",
+          "x": 695,
+          "y": 275,
+          "symbol": "A'",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 94,
+  "fields": {
+    "task": 10,
+    "step": 4,
+    "step_type": "schema",
+    "content": "╨г╤З╨░╤Б╤В╨╛╨║ 1 (╨┐╨╛╨┤╤К╤С╨╝): vтВБ = 6 ╨║╨╝/╤З\n╨г╤З╨░╤Б╤В╨╛╨║ 2 (╤Б╨┐╤Г╤Б╨║): vтВВ = 8 ╨╝/╤Б\n╨а╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╡ ╨╛╨┤╨╕╨╜╨░╨║╨╛╨▓╨╛╨╡",
+    "schema_data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "t10s4_a",
+          "type": "point",
+          "x": 150,
+          "y": 300,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t10s4_la",
+          "type": "label",
+          "x": 145,
+          "y": 315,
+          "symbol": "A",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t10s4_b",
+          "type": "point",
+          "x": 400,
+          "y": 170,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t10s4_lb",
+          "type": "label",
+          "x": 395,
+          "y": 150,
+          "symbol": "B",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t10s4_c",
+          "type": "point",
+          "x": 650,
+          "y": 300,
+          "color": "#1a1a2e",
+          "radius": 5
+        },
+        {
+          "id": "t10s4_lc",
+          "type": "label",
+          "x": 645,
+          "y": 315,
+          "symbol": "A'",
+          "fontSize": 14,
+          "color": "#1a1a2e"
+        },
+        {
+          "id": "t10s4_up",
+          "type": "line",
+          "x": 150,
+          "y": 300,
+          "length": 280,
+          "rotation": -28,
+          "color": "#ef4444",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t10s4_s1",
+          "type": "text",
+          "x": 220,
+          "y": 210,
+          "text": "S, vтВБ = 6 ╨║╨╝/╤З тЙИ 1,67 ╨╝/╤Б",
+          "fontSize": 12,
+          "color": "#ef4444"
+        },
+        {
+          "id": "t10s4_down",
+          "type": "line",
+          "x": 400,
+          "y": 170,
+          "length": 280,
+          "rotation": 28,
+          "color": "#22c55e",
+          "strokeWidth": 2
+        },
+        {
+          "id": "t10s4_s2",
+          "type": "text",
+          "x": 470,
+          "y": 210,
+          "text": "S, vтВВ = 8 ╨╝/╤Б",
+          "fontSize": 12,
+          "color": "#22c55e"
+        },
+        {
+          "id": "t10s4_eq",
+          "type": "text",
+          "x": 280,
+          "y": 360,
+          "text": "SтВБ = SтВВ = S тЖТ v_╤Б╤А = 2vтВБvтВВ/(vтВБ+vтВВ)",
+          "fontSize": 13,
+          "color": "#64748b"
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 95,
+  "fields": {
+    "task": 10,
+    "step": 5,
+    "step_type": "text",
+    "content": "S = vтВБ ┬╖ tтВБ = vтВВ ┬╖ tтВВ\nv_╤Б╤А = 2S / (tтВБ + tтВВ) = 2vтВБvтВВ / (vтВБ + vтВВ)",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 96,
+  "fields": {
+    "task": 10,
+    "step": 6,
+    "step_type": "symbol",
+    "content": "╨Ф╨░╨╜╨╛:\nvтВБ = 6 ╨║╨╝/╤З тЙИ 1,67 ╨╝/╤Б\nvтВВ = 8 ╨╝/╤Б\nSтВБ = SтВВ = S\n╨Э╨░╨╣╤В╨╕: v_╤Б╤А",
+    "schema_data": {
+      "items": [
+        {
+          "fragment": "6 ╨║╨╝/╤З",
+          "symbol": "vтВБ",
+          "isTarget": false
+        },
+        {
+          "fragment": "8 ╨╝/╤Б",
+          "symbol": "vтВВ",
+          "isTarget": false
+        },
+        {
+          "fragment": "╤Б╤А╨╡╨┤╨╜╤П╤П ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╨▓╨░╤И╨╡╨│╨╛ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П",
+          "symbol": "v_╤Б╤А",
+          "isTarget": true
+        }
+      ]
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 97,
+  "fields": {
+    "task": 10,
+    "step": 7,
+    "step_type": "boolean",
+    "content": "no",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 98,
+  "fields": {
+    "task": 10,
+    "step": 8,
+    "step_type": "boolean",
+    "content": "yes",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 99,
+  "fields": {
+    "task": 10,
+    "step": 9,
+    "step_type": "solution",
+    "content": "vтВБ = 6 ╨║╨╝/╤З = 6/3,6 тЙИ 1,67 ╨╝/╤Б\nv_╤Б╤А = 2┬╖vтВБ┬╖vтВВ/(vтВБ+vтВВ) = 2┬╖1,67┬╖8/(1,67+8) = 26,72/9,67 тЙИ 2,76 ╨╝/╤Б",
+    "schema_data": {
+      "formula": "v_╤Б╤А = 2vтВБvтВВ / (vтВБ + vтВВ)",
+      "si": "vтВБ = 6 ╨║╨╝/╤З = 1,67 ╨╝/╤Б\nvтВВ = 8 ╨╝/╤Б",
+      "calc": "v_╤Б╤А = 2┬╖1,67┬╖8 / (1,67+8) = 26,72 / 9,67 тЙИ 2,76 ╨╝/╤Б",
+      "reasoning": "╨б╤А╨╡╨┤╨╜╤П╤П ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╨▒╨╗╨╕╨╢╨╡ ╨║ ╨╝╨╡╨╜╤М╤И╨╡╨╣ ╨╕╨╖ ╨┤╨▓╤Г╤Е тАФ ╨░╨┤╨╡╨║╨▓╨░╤В╨╜╨╛ ╨┤╨╗╤П ╨▓╨╡╨╗╨╛╤Б╨╕╨┐╨╡╨┤╨░"
+    },
+    "image": ""
+  }
+},
+{
+  "model": "learning.tasksolutionstep",
+  "pk": 100,
+  "fields": {
+    "task": 10,
+    "step": 10,
+    "step_type": "text",
+    "content": "╨б╤А╨╡╨┤╨╜╤П╤П ╤Б╨║╨╛╤А╨╛╤Б╤В╤М ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П ╨▓╨╡╨╗╨╛╤Б╨╕╨┐╨╡╨┤╨╕╤Б╤В╨░ ╤Б╨╛╤Б╤В╨░╨▓╨╗╤П╨╡╤В ╨┐╤А╨╕╨╝╨╡╤А╨╜╨╛ 2,76 ╨╝/╤Б",
+    "schema_data": {},
+    "image": ""
+  }
+},
+{
+  "model": "learning.schemaelementcategory",
+  "pk": 1,
+  "fields": {
+    "name": "╨в╨╛╤З╨║╨╕ ╨╕ ╤В╨╡╨╗╨░",
+    "slug": "points",
+    "description": "",
+    "icon": "тЧП",
+    "order": 1,
+    "is_system": true
+  }
+},
+{
+  "model": "learning.schemaelementcategory",
+  "pk": 2,
+  "fields": {
+    "name": "╨Т╨╡╨║╤В╨╛╤А╤Л",
+    "slug": "vectors",
+    "description": "",
+    "icon": "тЖТ",
+    "order": 2,
+    "is_system": true
+  }
+},
+{
+  "model": "learning.schemaelementcategory",
+  "pk": 3,
+  "fields": {
+    "name": "╨Ы╨╕╨╜╨╕╨╕ ╨╕ ╤В╤А╨░╨╡╨║╤В╨╛╤А╨╕╨╕",
+    "slug": "lines",
+    "description": "",
+    "icon": "тАФ",
+    "order": 3,
+    "is_system": true
+  }
+},
+{
+  "model": "learning.schemaelementcategory",
+  "pk": 4,
+  "fields": {
+    "name": "╨Ю╤Б╨╕ ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В",
+    "slug": "axes",
+    "description": "",
+    "icon": "тКе",
+    "order": 4,
+    "is_system": true
+  }
+},
+{
+  "model": "learning.schemaelementcategory",
+  "pk": 5,
+  "fields": {
+    "name": "╨Э╨░╨┤╨┐╨╕╤Б╨╕",
+    "slug": "labels",
+    "description": "",
+    "icon": "T",
+    "order": 5,
+    "is_system": true
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 1,
+  "fields": {
+    "category": 1,
+    "name": "╨в╨╛╤З╨║╨░",
+    "description": "╨Ю╨▒╨╛╨╖╨╜╨░╤З╨╡╨╜╨╕╨╡ ╨┐╨╛╨╗╨╛╨╢╨╡╨╜╨╕╤П ╤В╨╡╨╗╨░ (╨╝╨░╤В╨╡╤А╨╕╨░╨╗╤М╨╜╨░╤П ╤В╨╛╤З╨║╨░)",
+    "svg_icon": "<circle cx=\"12\" cy=\"12\" r=\"6\" fill=\"currentColor\"/>",
+    "svg_template": "<circle cx=\"0\" cy=\"0\" r=\"{radius}\" fill=\"{color}\"/>",
+    "default_props": {
+      "color": "#1a1a2e",
+      "radius": 6
+    },
+    "editable_props": [
+      "color",
+      "radius",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.082Z",
+    "tags": "╤В╨╛╤З╨║╨░, ╨┐╨╛╨╗╨╛╨╢╨╡╨╜╨╕╨╡, ╨╜╨░╤З╨░╨╗╨╛, ╨║╨╛╨╜╨╡╤Ж",
+    "order": 1
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 2,
+  "fields": {
+    "category": 1,
+    "name": "╨Э╨░╤З╨░╨╗╤М╨╜╨╛╨╡ ╨┐╨╛╨╗╨╛╨╢╨╡╨╜╨╕╨╡",
+    "description": "╨в╨╛╤З╨║╨░ ╨╜╨░╤З╨░╨╗╤М╨╜╨╛╨│╨╛ ╨┐╨╛╨╗╨╛╨╢╨╡╨╜╨╕╤П ╤В╨╡╨╗╨░ (A ╨╕╨╗╨╕ ╤Б ╨╕╨╜╨┤╨╡╨║╤Б╨╛╨╝ 0)",
+    "svg_icon": "<circle cx=\"12\" cy=\"12\" r=\"5\" fill=\"#22c55e\" stroke=\"#15803d\" stroke-width=\"2\"/>",
+    "svg_template": "<circle cx=\"0\" cy=\"0\" r=\"{radius}\" fill=\"{color}\" stroke=\"#15803d\" stroke-width=\"2\"/>",
+    "default_props": {
+      "color": "#22c55e",
+      "radius": 6,
+      "label": "A"
+    },
+    "editable_props": [
+      "color",
+      "radius",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.090Z",
+    "tags": "╨╜╨░╤З╨░╨╗╨╛, ╤Б╤В╨░╤А╤В, ╨╕╤Б╤Е╨╛╨┤╨╜╨╛╨╡ ╨┐╨╛╨╗╨╛╨╢╨╡╨╜╨╕╨╡",
+    "order": 2
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 3,
+  "fields": {
+    "category": 1,
+    "name": "╨Ъ╨╛╨╜╨╡╤З╨╜╨╛╨╡ ╨┐╨╛╨╗╨╛╨╢╨╡╨╜╨╕╨╡",
+    "description": "╨в╨╛╤З╨║╨░ ╨║╨╛╨╜╨╡╤З╨╜╨╛╨│╨╛ ╨┐╨╛╨╗╨╛╨╢╨╡╨╜╨╕╤П ╤В╨╡╨╗╨░ (B ╨╕╨╗╨╕ ╤Б ╨╕╨╜╨┤╨╡╨║╤Б╨╛╨╝)",
+    "svg_icon": "<circle cx=\"12\" cy=\"12\" r=\"5\" fill=\"#ef4444\" stroke=\"#b91c1c\" stroke-width=\"2\"/>",
+    "svg_template": "<circle cx=\"0\" cy=\"0\" r=\"{radius}\" fill=\"{color}\" stroke=\"#b91c1c\" stroke-width=\"2\"/>",
+    "default_props": {
+      "color": "#ef4444",
+      "radius": 6,
+      "label": "B"
+    },
+    "editable_props": [
+      "color",
+      "radius",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.106Z",
+    "tags": "╨║╨╛╨╜╨╡╤Ж, ╤Д╨╕╨╜╨╕╤И, ╨║╨╛╨╜╨╡╤З╨╜╨╛╨╡ ╨┐╨╛╨╗╨╛╨╢╨╡╨╜╨╕╨╡",
+    "order": 3
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 4,
+  "fields": {
+    "category": 1,
+    "name": "╨в╨╡╨╗╨╛ (╨║╤А╤Г╨│)",
+    "description": "╨Ш╨╖╨╛╨▒╤А╨░╨╢╨╡╨╜╨╕╨╡ ╤В╨╡╨╗╨░ ╨▓ ╨▓╨╕╨┤╨╡ ╨║╤А╤Г╨│╨░",
+    "svg_icon": "<circle cx=\"12\" cy=\"12\" r=\"8\" fill=\"#3b82f6\" stroke=\"#1d4ed8\" stroke-width=\"2\"/>",
+    "svg_template": "<circle cx=\"0\" cy=\"0\" r=\"{radius}\" fill=\"{color}\" stroke=\"{strokeColor}\" stroke-width=\"2\"/>",
+    "default_props": {
+      "color": "#3b82f6",
+      "strokeColor": "#1d4ed8",
+      "radius": 15
+    },
+    "editable_props": [
+      "color",
+      "radius",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.122Z",
+    "tags": "╤В╨╡╨╗╨╛, ╨╛╨▒╤К╨╡╨║╤В, ╨╝╨░╤В╨╡╤А╨╕╨░╨╗╤М╨╜╨░╤П ╤В╨╛╤З╨║╨░",
+    "order": 4
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 5,
+  "fields": {
+    "category": 1,
+    "name": "╨в╨╡╨╗╨╛ (╨┐╤А╤П╨╝╨╛╤Г╨│╨╛╨╗╤М╨╜╨╕╨║)",
+    "description": "╨Ш╨╖╨╛╨▒╤А╨░╨╢╨╡╨╜╨╕╨╡ ╤В╨╡╨╗╨░ ╨▓ ╨▓╨╕╨┤╨╡ ╨┐╤А╤П╨╝╨╛╤Г╨│╨╛╨╗╤М╨╜╨╕╨║╨░ (╨░╨▓╤В╨╛╨╝╨╛╨▒╨╕╨╗╤М, ╨▓╨░╨│╨╛╨╜)",
+    "svg_icon": "<rect x=\"4\" y=\"8\" width=\"16\" height=\"8\" fill=\"#f59e0b\" stroke=\"#d97706\" stroke-width=\"2\"/>",
+    "svg_template": "<rect x=\"{-width/2}\" y=\"{-height/2}\" width=\"{width}\" height=\"{height}\" fill=\"{color}\" stroke=\"{strokeColor}\" stroke-width=\"2\"/>",
+    "default_props": {
+      "color": "#f59e0b",
+      "strokeColor": "#d97706",
+      "width": 40,
+      "height": 20
+    },
+    "editable_props": [
+      "color",
+      "width",
+      "height",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.136Z",
+    "tags": "╤В╨╡╨╗╨╛, ╨╝╨░╤И╨╕╨╜╨░, ╨▓╨░╨│╨╛╨╜, ╨╛╨▒╤К╨╡╨║╤В",
+    "order": 5
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 6,
+  "fields": {
+    "category": 2,
+    "name": "╨Т╨╡╨║╤В╨╛╤А ╤Б╨║╨╛╤А╨╛╤Б╤В╨╕",
+    "description": "╨Т╨╡╨║╤В╨╛╤А ╨╝╨│╨╜╨╛╨▓╨╡╨╜╨╜╨╛╨╣ ╤Б╨║╨╛╤А╨╛╤Б╤В╨╕ (v)",
+    "svg_icon": "<path d=\"M4 12 H18 M18 12 L14 8 M18 12 L14 16\" stroke=\"#ef4444\" stroke-width=\"2\" fill=\"none\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"{length}\" y2=\"0\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\"/><polygon points=\"{length},0 {length-10},-5 {length-10},5\" fill=\"{color}\"/>",
+    "default_props": {
+      "color": "#ef4444",
+      "strokeWidth": 2,
+      "length": 60,
+      "label": "v"
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "label",
+      "strokeWidth"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.147Z",
+    "tags": "╤Б╨║╨╛╤А╨╛╤Б╤В╤М, ╨▓╨╡╨║╤В╨╛╤А, v, ╨╜╨░╨┐╤А╨░╨▓╨╗╨╡╨╜╨╕╨╡ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П",
+    "order": 1
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 7,
+  "fields": {
+    "category": 2,
+    "name": "╨Т╨╡╨║╤В╨╛╤А ╨┐╨╡╤А╨╡╨╝╨╡╤Й╨╡╨╜╨╕╤П",
+    "description": "╨Т╨╡╨║╤В╨╛╤А ╨┐╨╡╤А╨╡╨╝╨╡╤Й╨╡╨╜╨╕╤П (s ╨╕╨╗╨╕ r)",
+    "svg_icon": "<path d=\"M4 12 H18 M18 12 L14 8 M18 12 L14 16\" stroke=\"#3b82f6\" stroke-width=\"2\" fill=\"none\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"{length}\" y2=\"0\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\"/><polygon points=\"{length},0 {length-10},-5 {length-10},5\" fill=\"{color}\"/>",
+    "default_props": {
+      "color": "#3b82f6",
+      "strokeWidth": 2,
+      "length": 80,
+      "label": "s"
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "label",
+      "strokeWidth"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.157Z",
+    "tags": "╨┐╨╡╤А╨╡╨╝╨╡╤Й╨╡╨╜╨╕╨╡, ╨▓╨╡╨║╤В╨╛╤А, s, ╨┐╤Г╤В╤М",
+    "order": 2
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 8,
+  "fields": {
+    "category": 2,
+    "name": "╨Т╨╡╨║╤В╨╛╤А ╤Г╤Б╨║╨╛╤А╨╡╨╜╨╕╤П",
+    "description": "╨Т╨╡╨║╤В╨╛╤А ╤Г╤Б╨║╨╛╤А╨╡╨╜╨╕╤П (a)",
+    "svg_icon": "<path d=\"M4 12 H18 M18 12 L14 8 M18 12 L14 16\" stroke=\"#8b5cf6\" stroke-width=\"2\" fill=\"none\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"{length}\" y2=\"0\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\"/><polygon points=\"{length},0 {length-10},-5 {length-10},5\" fill=\"{color}\"/>",
+    "default_props": {
+      "color": "#8b5cf6",
+      "strokeWidth": 2,
+      "length": 50,
+      "label": "a"
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "label",
+      "strokeWidth"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.171Z",
+    "tags": "╤Г╤Б╨║╨╛╤А╨╡╨╜╨╕╨╡, ╨▓╨╡╨║╤В╨╛╤А, a",
+    "order": 3
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 9,
+  "fields": {
+    "category": 2,
+    "name": "╨Т╨╡╨║╤В╨╛╤А ╤Б╨╕╨╗╤Л",
+    "description": "╨Т╨╡╨║╤В╨╛╤А ╤Б╨╕╨╗╤Л (F)",
+    "svg_icon": "<path d=\"M4 12 H18 M18 12 L14 8 M18 12 L14 16\" stroke=\"#22c55e\" stroke-width=\"3\" fill=\"none\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"{length}\" y2=\"0\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\"/><polygon points=\"{length},0 {length-12},-6 {length-12},6\" fill=\"{color}\"/>",
+    "default_props": {
+      "color": "#22c55e",
+      "strokeWidth": 3,
+      "length": 70,
+      "label": "F"
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "label",
+      "strokeWidth"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.188Z",
+    "tags": "╤Б╨╕╨╗╨░, ╨▓╨╡╨║╤В╨╛╤А, F",
+    "order": 4
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 10,
+  "fields": {
+    "category": 3,
+    "name": "╨Ы╨╕╨╜╨╕╤П",
+    "description": "╨Я╤А╤П╨╝╨░╤П ╨╗╨╕╨╜╨╕╤П",
+    "svg_icon": "<line x1=\"4\" y1=\"12\" x2=\"20\" y2=\"12\" stroke=\"currentColor\" stroke-width=\"2\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"{length}\" y2=\"0\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\"/>",
+    "default_props": {
+      "color": "#1a1a2e",
+      "strokeWidth": 2,
+      "length": 100
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "strokeWidth"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.199Z",
+    "tags": "╨╗╨╕╨╜╨╕╤П, ╨┐╤А╤П╨╝╨░╤П, ╨╛╤В╤А╨╡╨╖╨╛╨║",
+    "order": 1
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 11,
+  "fields": {
+    "category": 3,
+    "name": "╨Я╤Г╨╜╨║╤В╨╕╤А╨╜╨░╤П ╨╗╨╕╨╜╨╕╤П",
+    "description": "╨Я╤Г╨╜╨║╤В╨╕╤А╨╜╨░╤П ╨╗╨╕╨╜╨╕╤П ╨┤╨╗╤П ╨▓╤Б╨┐╨╛╨╝╨╛╨│╨░╤В╨╡╨╗╤М╨╜╤Л╤Е ╨┐╨╛╤Б╤В╤А╨╛╨╡╨╜╨╕╨╣",
+    "svg_icon": "<line x1=\"4\" y1=\"12\" x2=\"20\" y2=\"12\" stroke=\"currentColor\" stroke-width=\"2\" stroke-dasharray=\"4 2\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"{length}\" y2=\"0\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\" stroke-dasharray=\"8 4\"/>",
+    "default_props": {
+      "color": "#6b7280",
+      "strokeWidth": 1,
+      "length": 100
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "strokeWidth"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.209Z",
+    "tags": "╨┐╤Г╨╜╨║╤В╨╕╤А, ╨▓╤Б╨┐╨╛╨╝╨╛╨│╨░╤В╨╡╨╗╤М╨╜╨░╤П, ╨┐╤А╨╛╨╡╨║╤Ж╨╕╤П",
+    "order": 2
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 12,
+  "fields": {
+    "category": 3,
+    "name": "╨в╤А╨░╨╡╨║╤В╨╛╤А╨╕╤П",
+    "description": "╨Ы╨╕╨╜╨╕╤П ╤В╤А╨░╨╡╨║╤В╨╛╤А╨╕╨╕ ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П",
+    "svg_icon": "<path d=\"M4 16 Q10 4 16 12 T22 8\" stroke=\"#3b82f6\" stroke-width=\"2\" fill=\"none\"/>",
+    "svg_template": "<path d=\"{path}\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\" fill=\"none\"/>",
+    "default_props": {
+      "color": "#3b82f6",
+      "strokeWidth": 2,
+      "path": "M0,0 Q50,-30 100,0"
+    },
+    "editable_props": [
+      "color",
+      "strokeWidth"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.223Z",
+    "tags": "╤В╤А╨░╨╡╨║╤В╨╛╤А╨╕╤П, ╨┐╤Г╤В╤М ╨┤╨▓╨╕╨╢╨╡╨╜╨╕╤П",
+    "order": 3
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 13,
+  "fields": {
+    "category": 3,
+    "name": "╨Ф╤Г╨│╨░ ╤Г╨│╨╗╨░",
+    "description": "╨Ф╤Г╨│╨░ ╨┤╨╗╤П ╨╛╨▒╨╛╨╖╨╜╨░╤З╨╡╨╜╨╕╤П ╤Г╨│╨╗╨░",
+    "svg_icon": "<path d=\"M16 12 A4 4 0 0 0 12 8\" stroke=\"#8b5cf6\" stroke-width=\"2\" fill=\"none\"/>",
+    "svg_template": "<path d=\"M{radius},0 A{radius},{radius} 0 0 1 {endX},{endY}\" stroke=\"{color}\" stroke-width=\"{strokeWidth}\" fill=\"none\"/>",
+    "default_props": {
+      "color": "#8b5cf6",
+      "strokeWidth": 2,
+      "radius": 20,
+      "angle": 45
+    },
+    "editable_props": [
+      "color",
+      "radius",
+      "angle",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.234Z",
+    "tags": "╤Г╨│╨╛╨╗, ╨┤╤Г╨│╨░, ╨│╤А╨░╨┤╤Г╤Б",
+    "order": 4
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 14,
+  "fields": {
+    "category": 4,
+    "name": "╨Ю╤Б╤М X",
+    "description": "╨У╨╛╤А╨╕╨╖╨╛╨╜╤В╨░╨╗╤М╨╜╨░╤П ╨╛╤Б╤М ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В",
+    "svg_icon": "<path d=\"M2 12 H20 M20 12 L16 9 M20 12 L16 15\" stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"{length}\" y2=\"0\" stroke=\"{color}\" stroke-width=\"2\"/><polygon points=\"{length},0 {length-8},-4 {length-8},4\" fill=\"{color}\"/><text x=\"{length+5}\" y=\"4\" font-size=\"14\" fill=\"{color}\">{label}</text>",
+    "default_props": {
+      "color": "#1a1a2e",
+      "length": 150,
+      "label": "x"
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.245Z",
+    "tags": "╨╛╤Б╤М, x, ╨│╨╛╤А╨╕╨╖╨╛╨╜╤В╨░╨╗╤М, ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В╤Л",
+    "order": 1
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 15,
+  "fields": {
+    "category": 4,
+    "name": "╨Ю╤Б╤М Y",
+    "description": "╨Т╨╡╤А╤В╨╕╨║╨░╨╗╤М╨╜╨░╤П ╨╛╤Б╤М ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В",
+    "svg_icon": "<path d=\"M12 22 V4 M12 4 L9 8 M12 4 L15 8\" stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"-{length}\" stroke=\"{color}\" stroke-width=\"2\"/><polygon points=\"0,-{length} -4,-{length-8} 4,-{length-8}\" fill=\"{color}\"/><text x=\"5\" y=\"-{length}\" font-size=\"14\" fill=\"{color}\">{label}</text>",
+    "default_props": {
+      "color": "#1a1a2e",
+      "length": 150,
+      "label": "y"
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.254Z",
+    "tags": "╨╛╤Б╤М, y, ╨▓╨╡╤А╤В╨╕╨║╨░╨╗╤М, ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В╤Л",
+    "order": 2
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 16,
+  "fields": {
+    "category": 4,
+    "name": "╨Э╨░╤З╨░╨╗╨╛ ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В",
+    "description": "╨в╨╛╤З╨║╨░ ╨╜╨░╤З╨░╨╗╨░ ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В (O)",
+    "svg_icon": "<circle cx=\"12\" cy=\"12\" r=\"3\" fill=\"currentColor\"/><text x=\"14\" y=\"22\" font-size=\"10\">O</text>",
+    "svg_template": "<circle cx=\"0\" cy=\"0\" r=\"4\" fill=\"{color}\"/><text x=\"6\" y=\"14\" font-size=\"12\" fill=\"{color}\">O</text>",
+    "default_props": {
+      "color": "#1a1a2e"
+    },
+    "editable_props": [
+      "color"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.270Z",
+    "tags": "╨╜╨░╤З╨░╨╗╨╛ ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В, O, ╤Ж╨╡╨╜╤В╤А",
+    "order": 3
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 17,
+  "fields": {
+    "category": 5,
+    "name": "╨в╨╡╨║╤Б╤В",
+    "description": "╨Я╤А╨╛╨╕╨╖╨▓╨╛╨╗╤М╨╜╨░╤П ╨╜╨░╨┤╨┐╨╕╤Б╤М",
+    "svg_icon": "<text x=\"6\" y=\"16\" font-size=\"14\" font-weight=\"bold\">T</text>",
+    "svg_template": "<text x=\"0\" y=\"0\" font-size=\"{fontSize}\" fill=\"{color}\" font-family=\"serif\">{text}</text>",
+    "default_props": {
+      "color": "#1a1a2e",
+      "fontSize": 16,
+      "text": "╨в╨╡╨║╤Б╤В"
+    },
+    "editable_props": [
+      "color",
+      "fontSize",
+      "text"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.280Z",
+    "tags": "╤В╨╡╨║╤Б╤В, ╨╜╨░╨┤╨┐╨╕╤Б╤М, ╨┐╨╛╨┤╨┐╨╕╤Б╤М",
+    "order": 1
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 18,
+  "fields": {
+    "category": 5,
+    "name": "╨Ш╨╜╨┤╨╡╨║╤Б ╨▓╨╡╨╗╨╕╤З╨╕╨╜╤Л",
+    "description": "╨Ю╨▒╨╛╨╖╨╜╨░╤З╨╡╨╜╨╕╨╡ ╤Д╨╕╨╖╨╕╤З╨╡╤Б╨║╨╛╨╣ ╨▓╨╡╨╗╨╕╤З╨╕╨╜╤Л ╤Б ╨╕╨╜╨┤╨╡╨║╤Б╨╛╨╝ (vтВБ, sтВВ)",
+    "svg_icon": "<text x=\"4\" y=\"14\" font-size=\"14\" font-style=\"italic\">v<tspan baseline-shift=\"sub\" font-size=\"10\">1</tspan></text>",
+    "svg_template": "<text x=\"0\" y=\"0\" font-size=\"{fontSize}\" fill=\"{color}\" font-family=\"serif\" font-style=\"italic\">{symbol}<tspan baseline-shift=\"sub\" font-size=\"{fontSize*0.7}\">{subscript}</tspan></text>",
+    "default_props": {
+      "color": "#1a1a2e",
+      "fontSize": 18,
+      "symbol": "v",
+      "subscript": "1"
+    },
+    "editable_props": [
+      "color",
+      "fontSize",
+      "symbol",
+      "subscript"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.290Z",
+    "tags": "╨╕╨╜╨┤╨╡╨║╤Б, ╨┐╨╛╨┤╤Б╤В╤А╨╛╤З╨╜╤Л╨╣, ╨▓╨╡╨╗╨╕╤З╨╕╨╜╨░",
+    "order": 2
+  }
+},
+{
+  "model": "learning.schemaelement",
+  "pk": 19,
+  "fields": {
+    "category": 5,
+    "name": "╨а╨░╨╖╨╝╨╡╤А╨╜╨░╤П ╨╗╨╕╨╜╨╕╤П",
+    "description": "╨Ы╨╕╨╜╨╕╤П ╤Б ╤А╨░╨╖╨╝╨╡╤А╨╛╨╝ (╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╡, ╨┐╤Г╤В╤М)",
+    "svg_icon": "<line x1=\"4\" y1=\"12\" x2=\"20\" y2=\"12\" stroke=\"currentColor\" stroke-width=\"1\"/><line x1=\"4\" y1=\"8\" x2=\"4\" y2=\"16\" stroke=\"currentColor\" stroke-width=\"1\"/><line x1=\"20\" y1=\"8\" x2=\"20\" y2=\"16\" stroke=\"currentColor\" stroke-width=\"1\"/>",
+    "svg_template": "<line x1=\"0\" y1=\"0\" x2=\"{length}\" y2=\"0\" stroke=\"{color}\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"{color}\" stroke-width=\"1\"/><line x1=\"{length}\" y1=\"-5\" x2=\"{length}\" y2=\"5\" stroke=\"{color}\" stroke-width=\"1\"/><text x=\"{length/2}\" y=\"-8\" font-size=\"12\" fill=\"{color}\" text-anchor=\"middle\">{label}</text>",
+    "default_props": {
+      "color": "#1a1a2e",
+      "length": 80,
+      "label": "s"
+    },
+    "editable_props": [
+      "color",
+      "length",
+      "label"
+    ],
+    "is_system": true,
+    "created_by": null,
+    "created_at": "2026-01-08T12:39:57.296Z",
+    "tags": "╤А╨░╨╖╨╝╨╡╤А, ╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╡, ╨┐╤Г╤В╤М, s",
+    "order": 3
+  }
+},
+{
+  "model": "learning.schematemplate",
+  "pk": 1,
+  "fields": {
+    "task": 1,
+    "name": "╨н╤В╨░╨╗╨╛╨╜╨╜╨░╤П ╤Б╤Е╨╡╨╝╨░: ╨Ч╨░╨┤╨░╤З╨░ ╨┤╨╡╤В╨╡╨║╤В╨╕╨▓╨░",
+    "template_type": "reference",
+    "data": {
+      "width": 800,
+      "height": 500,
+      "elements": [
+        {
+          "id": "el_1768246730213_s1bzx38m3",
+          "type": "body-circle",
+          "x": 250,
+          "y": 250,
+          "color": "#22c55e",
+          "radius": 6,
+          "label": "A"
+        },
+        {
+          "id": "el_1768246731157_1v6nm36z8",
+          "type": "body-circle",
+          "x": 400,
+          "y": 250,
+          "color": "#ef4444",
+          "radius": 6,
+          "label": "B"
+        },
+        {
+          "id": "el_1768246738956_7da2102ki",
+          "type": "line",
+          "x": 250,
+          "y": 250,
+          "color": "#1a1a2e",
+          "strokeWidth": 2,
+          "length": 134.65545868403115,
+          "rotation": 0
+        },
+        {
+          "id": "el_1768246786413_bt7tdtr5s",
+          "type": "text",
+          "x": 325,
+          "y": 250,
+          "color": "#1a1a2e",
+          "fontSize": 16,
+          "text": "r"
+        },
+        {
+          "id": "el_1768246815669_rgi7qqn5d",
+          "type": "vector",
+          "x": 250,
+          "y": 200,
+          "color": "#ef4444",
+          "strokeWidth": 2,
+          "length": 24.7619047619048,
+          "label": "v",
+          "rotation": 0
+        },
+        {
+          "id": "el_1768246828769_u6nn9qlmy",
+          "type": "label",
+          "x": 250,
+          "y": 200,
+          "color": "#1a1a2e",
+          "fontSize": 18,
+          "symbol": "v",
+          "subscript": ""
+        },
+        {
+          "id": "el_1768246862588_cd6295qsg",
+          "type": "label",
+          "x": 250,
+          "y": 250,
+          "color": "#1a1a2e",
+          "fontSize": 18,
+          "symbol": "A",
+          "subscript": "1"
+        },
+        {
+          "id": "el_1768246869877_q6pnr8w1y",
+          "type": "label",
+          "x": 400,
+          "y": 275,
+          "color": "#1a1a2e",
+          "fontSize": 18,
+          "symbol": "A",
+          "subscript": "2"
+        }
+      ]
+    },
+    "preview_image": "",
+    "created_at": "2026-01-08T16:30:53.673Z",
+    "updated_at": "2026-01-12T19:41:21.191Z"
+  }
+}
+]

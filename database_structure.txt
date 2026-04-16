@@ -1,0 +1,260 @@
+СТРУКТУРА БАЗЫ ДАННЫХ ЭОР
+==========================
+
+1. User (Пользователь)
+   - id (PK)
+   - username
+   - email
+
+2. SchoolClass (Класс)
+   - id (PK)
+   - number
+   - title
+
+3. SubjectSection (Раздел)
+   - id (PK)
+   - school_class_id (FK -> SchoolClass)
+   - title
+   - order
+
+4. Topic (Тема)
+   - id (PK)
+   - section_id (FK -> SubjectSection)
+   - title
+   - order
+
+5. KnowledgeSystem (Система знаний)
+   - id (PK)
+   - topic_id (FK -> Topic)
+   - title
+   - description
+   - image
+   - comprehension_image
+   - comprehension_pass_threshold
+   - typical_task_title
+   - typical_task_description
+   - status
+   - version
+
+6. KSZone (Зона на изображении)
+   - id (PK)
+   - ks_id (FK -> KnowledgeSystem)
+   - x, y, width, height
+   - label
+
+7. KSQuestion (Вопрос для осмысления)
+   - id (PK)
+   - ks_id (FK -> KnowledgeSystem)
+   - type (text, single, multiple, match)
+   - text
+   - options (JSON)
+   - correct_answer_text
+   - fuzzy_match
+   - order
+   - M:N связь с KSZone (через zones, correct_zones)
+
+8. KSCloze (Текст с пропусками)
+   - id (PK)
+   - ks_id (FK -> KnowledgeSystem)
+   - original_text
+   - marked_text
+   - blanks (JSON)
+   - distractors (JSON)
+   - order
+
+9. ComprehensionAttempt (Попытка осмысления)
+   - id (PK)
+   - session_id (FK -> LearningSession)
+   - total_questions
+   - correct_answers
+   - score_percent
+   - passed
+   - started_at, finished_at
+
+10. QuestionAnswer (Ответ на вопрос)
+    - id (PK)
+    - attempt_id (FK -> ComprehensionAttempt)
+    - question_id (FK -> KSQuestion)
+    - answer_text
+    - answer_index
+    - answer_indices (JSON)
+    - answer_zone_ids (JSON)
+    - is_correct
+
+11. ClozeAnswer (Ответ на текст с пропусками)
+    - id (PK)
+    - attempt_id (FK -> ComprehensionAttempt)
+    - cloze_id (FK -> KSCloze)
+    - answers (JSON)
+    - correct_positions (JSON)
+    - wrong_positions (JSON)
+    - score
+    - is_correct
+
+12. SolutionMethod (Метод решения)
+    - id (PK)
+    - ks_id (FK -> KnowledgeSystem, OneToOne)
+
+13. SolutionStep (Шаг метода)
+    - id (PK)
+    - method_id (FK -> SolutionMethod)
+    - order
+    - title
+    - description
+    - hint
+
+14. Task (Задача)
+    - id (PK)
+    - ks_id (FK -> KnowledgeSystem)
+    - order
+    - title
+    - text
+    - correct_answer
+    - answer_unit
+    - answer_tolerance
+    - correct_answer_text
+    - difficulty
+    - solution_summary
+    - solution_detailed
+    - solution_image
+
+15. TaskSolutionStep (Шаг решения задачи)
+    - id (PK)
+    - task_id (FK -> Task)
+    - step_id (FK -> SolutionStep)
+    - content
+    - image
+
+16. SchemaElementCategory (Категория элементов схемы)
+    - id (PK)
+    - name
+    - slug
+    - description
+    - icon
+    - order
+    - is_system
+
+17. SchemaElement (Элемент схемы)
+    - id (PK)
+    - category_id (FK -> SchemaElementCategory)
+    - name
+    - description
+    - svg_icon
+    - svg_template
+    - default_props (JSON)
+    - editable_props (JSON)
+    - is_system
+    - created_by (FK -> User)
+    - tags
+    - order
+
+18. SchemaTemplate (Шаблон схемы)
+    - id (PK)
+    - task_id (FK -> Task)
+    - name
+    - template_type (reference, starter, hint)
+    - data (JSON)
+    - preview_image
+
+19. StudentSchema (Схема ученика)
+    - id (PK)
+    - task_attempt_id (FK -> TaskAttempt)
+    - step_id (FK -> SolutionStep, nullable)
+    - data (JSON)
+    - similarity_score
+    - is_correct
+    - feedback
+
+20. LearningSession (Сессия обучения)
+    - id (PK)
+    - user_id (FK -> User)
+    - ks_id (FK -> KnowledgeSystem)
+    - current_stage
+    - difficulty_choice
+    - comprehension_passed
+    - comprehension_score
+    - tasks_solved_count
+    - tasks_correct_count
+    - wrong_attempts_in_row
+    - score_percent
+    - passed
+    - started_at, finished_at
+
+21. TaskAttempt (Попытка решения задачи)
+    - id (PK)
+    - session_id (FK -> LearningSession)
+    - task_id (FK -> Task)
+    - answer_numeric
+    - answer_text
+    - answer_image
+    - schema_data (JSON)
+    - is_correct
+    - feedback
+    - difficulty_rating
+    - created_at
+    - time_spent_seconds
+
+22. StepAttempt (Попытка выполнения шага)
+    - id (PK)
+    - task_attempt_id (FK -> TaskAttempt)
+    - step_id (FK -> SolutionStep)
+    - student_answer
+    - student_image
+    - chose_system_variant
+
+23. EventLog (Лог событий)
+    - id (PK)
+    - user_id (FK -> User, nullable)
+    - session_id (FK -> LearningSession, nullable)
+    - event
+    - payload (JSON)
+    - ts
+
+ОСНОВНЫЕ СВЯЗИ:
+===============
+
+Иерархия курса:
+SchoolClass (1) -> SubjectSection (N)
+SubjectSection (1) -> Topic (N)
+Topic (1) -> KnowledgeSystem (N)
+
+Осмысление СК:
+KnowledgeSystem (1) -> KSZone (N)
+KnowledgeSystem (1) -> KSQuestion (N)
+KnowledgeSystem (1) -> KSCloze (N)
+KSQuestion (M) <-> KSZone (N) - Many-to-Many
+
+Ответы на осмысление:
+LearningSession (1) -> ComprehensionAttempt (N)
+ComprehensionAttempt (1) -> QuestionAnswer (N)
+ComprehensionAttempt (1) -> ClozeAnswer (N)
+KSQuestion (1) -> QuestionAnswer (N)
+KSCloze (1) -> ClozeAnswer (N)
+
+Метод решения:
+KnowledgeSystem (1) -> SolutionMethod (1) - OneToOne
+SolutionMethod (1) -> SolutionStep (N)
+
+Задачи:
+KnowledgeSystem (1) -> Task (N)
+Task (1) -> TaskSolutionStep (N)
+SolutionStep (1) -> TaskSolutionStep (N)
+Task (1) -> SchemaTemplate (N)
+
+Редактор схем:
+SchemaElementCategory (1) -> SchemaElement (N)
+SchemaElement -> SchemaTemplate (логическая связь через JSON в data)
+TaskAttempt (1) -> StudentSchema (N)
+SolutionStep (1) -> StudentSchema (N, nullable)
+
+Сессии и попытки:
+User (1) -> LearningSession (N)
+KnowledgeSystem (1) -> LearningSession (N)
+LearningSession (1) -> TaskAttempt (N)
+Task (1) -> TaskAttempt (N)
+TaskAttempt (1) -> StepAttempt (N)
+SolutionStep (1) -> StepAttempt (N)
+
+Логирование:
+User (1) -> EventLog (N)
+LearningSession (1) -> EventLog (N)

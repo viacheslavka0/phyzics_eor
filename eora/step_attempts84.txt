@@ -1,0 +1,11 @@
+TaskAttempts for session 84: 0
+TA id=250, session=81, task=6, correct=False
+TA id=249, session=81, task=3, correct=True
+TA id=248, session=81, task=2, correct=True
+TA id=247, session=81, task=2, correct=None
+TA id=246, session=79, task=6, correct=True
+TA id=245, session=79, task=3, correct=True
+TA id=244, session=79, task=3, correct=False
+TA id=243, session=79, task=2, correct=True
+TA id=242, session=79, task=2, correct=False
+TA id=241, session=79, task=2, correct=False

@@ -1,0 +1,436 @@
+@import "tailwindcss";
+
+/* ============================================
+   EORA Learning Platform – Student Theme
+   Цветовая палитра: тёплые оттенки синего/индиго
+   с акцентами зелёного (успех) и янтарного (предупреждения).
+   Увеличенные шрифты и округлости для школьников 7-9 кл.
+   ============================================ */
+
+/* ---------- Theme Configuration ---------- */
+@theme {
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #6366f1;
+  --color-primary-600: #4f46e5;
+  --color-primary-700: #4338ca;
+  --color-primary-800: #3730a3;
+  --color-primary-900: #312e81;
+
+  --font-family-sans: 'Inter', 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --animate-fadeIn: fadeIn 0.4s ease-out;
+  --animate-slideIn: slideIn 0.3s ease-out;
+  --animate-pulse-soft: pulse-soft 2s ease-in-out infinite;
+  --animate-pop: pop 0.45s cubic-bezier(.17,.67,.36,1.35);
+  --animate-confetti: confetti 0.6s ease-out;
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.7; }
+  }
+  @keyframes pop {
+    0%   { transform: scale(0.85); opacity: 0; }
+    60%  { transform: scale(1.08); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+  @keyframes confetti {
+    0%   { background-size: 0% 100%; }
+    100% { background-size: 100% 100%; }
+  }
+}
+
+/* ---------- Base Styles ---------- */
+* { box-sizing: border-box; }
+
+html {
+  font-size: 17px;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  background:
+    radial-gradient(ellipse at 10% 0%, rgba(99,102,241,0.10) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 0%, rgba(16,185,129,0.08) 0%, transparent 45%),
+    linear-gradient(180deg, #f8f9fc 0%, #f1f3f9 50%, #eef1fa 100%);
+  color: #1e1b4b;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Typography ---------- */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.3;
+  color: #1e1b4b;
+}
+h1 { font-size: 2rem; }
+h2 { font-size: 1.55rem; }
+h3 { font-size: 1.3rem; }
+
+/* ---------- Cards ---------- */
+@utility card {
+  background: linear-gradient(180deg, #ffffff 0%, #fafafd 100%);
+  border-radius: 1.25rem;
+  box-shadow:
+    0 1px 3px rgb(0 0 0 / 0.06),
+    0 8px 24px -8px rgb(99 102 241 / 0.08);
+  border: 1px solid rgb(226 232 240 / 0.9);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+@utility card-interactive {
+  background: linear-gradient(180deg, #ffffff 0%, #fafafd 100%);
+  border-radius: 1.25rem;
+  box-shadow:
+    0 1px 3px rgb(0 0 0 / 0.06),
+    0 8px 24px -8px rgb(99 102 241 / 0.08);
+  border: 1.5px solid rgb(226 232 240 / 0.9);
+  cursor: pointer;
+  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+  &:hover {
+    box-shadow:
+      0 2px 6px rgb(0 0 0 / 0.06),
+      0 12px 28px -8px rgb(99 102 241 / 0.14);
+    border-color: #a5b4fc;
+    transform: translateY(-2px);
+  }
+}
+
+/* ---------- Buttons ---------- */
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.1rem;
+  border-radius: 0.85rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  &:focus { outline: none; ring: 2px; ring-offset: 2px; }
+}
+
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.25rem;
+  border-radius: 0.85rem;
+  font-weight: 700;
+  font-size: 1rem;
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 60%, #10b981 100%);
+  color: white;
+  box-shadow:
+    0 4px 14px -4px rgb(79 70 229 / 0.45),
+    0 2px 6px -2px rgb(16 185 129 / 0.25);
+  transition: all 0.25s ease;
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 6px 20px -4px rgb(79 70 229 / 0.55),
+      0 4px 10px -4px rgb(16 185 129 / 0.35);
+  }
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+@utility btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.1rem;
+  border-radius: 0.85rem;
+  font-weight: 600;
+  background-color: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  transition: all 0.25s ease;
+  &:hover { background-color: #e2e8f0; }
+}
+
+@utility btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.1rem;
+  border-radius: 0.85rem;
+  font-weight: 600;
+  border: 1.5px solid #c7d2fe;
+  color: #4338ca;
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(6px);
+  transition: all 0.25s ease;
+  &:hover {
+    border-color: #818cf8;
+    background-color: #eef2ff;
+    color: #3730a3;
+  }
+}
+
+@utility btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.1rem;
+  border-radius: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  background: transparent;
+  transition: all 0.2s ease;
+  &:hover { background-color: #f1f5f9; }
+}
+
+@utility btn-lg {
+  padding: 0.85rem 1.6rem;
+  font-size: 1.1rem;
+}
+
+@utility btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+/* ---------- Inputs ---------- */
+@utility input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 0.85rem;
+  border: 1.5px solid #e2e8f0;
+  background-color: #fff;
+  font-size: 1rem;
+  transition: all 0.25s ease;
+  &:focus {
+    outline: none;
+    border-color: #818cf8;
+    box-shadow: 0 0 0 3px rgb(99 102 241 / 0.12);
+  }
+  &::placeholder { color: #94a3b8; }
+}
+
+@utility input-lg {
+  font-size: 1.15rem;
+  padding: 1rem 1.25rem;
+}
+
+/* Числовой ответ: без стрелок stepper; колёсико не меняет значение (в React — onWheel preventDefault). */
+input[type="number"].no-number-spin {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+input[type="number"].no-number-spin::-webkit-outer-spin-button,
+input[type="number"].no-number-spin::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ---------- Badges ---------- */
+@utility badge {
+  display: inline-flex; align-items: center;
+  padding: 0.2rem 0.7rem; border-radius: 9999px;
+  font-size: 0.8rem; font-weight: 600;
+}
+@utility badge-primary {
+  display: inline-flex; align-items: center;
+  padding: 0.2rem 0.7rem; border-radius: 9999px;
+  font-size: 0.8rem; font-weight: 600;
+  background-color: #e0e7ff; color: #3730a3;
+}
+@utility badge-success {
+  display: inline-flex; align-items: center;
+  padding: 0.2rem 0.7rem; border-radius: 9999px;
+  font-size: 0.8rem; font-weight: 600;
+  background-color: #d1fae5; color: #065f46;
+}
+@utility badge-warning {
+  display: inline-flex; align-items: center;
+  padding: 0.2rem 0.7rem; border-radius: 9999px;
+  font-size: 0.8rem; font-weight: 600;
+  background-color: #fef3c7; color: #92400e;
+}
+@utility badge-secondary {
+  display: inline-flex; align-items: center;
+  padding: 0.2rem 0.7rem; border-radius: 9999px;
+  font-size: 0.8rem; font-weight: 600;
+  background-color: #f1f5f9; color: #475569;
+}
+
+/* ---------- Progress Bar ---------- */
+@utility progress-bar {
+  height: 0.55rem;
+  background-color: #e0e7ff;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+@utility progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #10b981);
+  border-radius: 9999px;
+  transition: width 0.5s ease-out;
+}
+
+/* ---------- Gradients ---------- */
+@utility gradient-primary {
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #06b6d4 100%);
+}
+@utility gradient-success {
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar { width: 7px; height: 7px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #a5b4fc; }
+
+/* ---------- Selection ---------- */
+::selection { background: #c7d2fe; color: #312e81; }
+
+/* ---------- Focus styles ---------- */
+:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; }
+
+/* ---------- Stagger animation ---------- */
+.stagger-children > * { animation: fadeIn 0.4s ease-out both; }
+.stagger-children > *:nth-child(1)  { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2)  { animation-delay: 50ms; }
+.stagger-children > *:nth-child(3)  { animation-delay: 100ms; }
+.stagger-children > *:nth-child(4)  { animation-delay: 150ms; }
+.stagger-children > *:nth-child(5)  { animation-delay: 200ms; }
+.stagger-children > *:nth-child(6)  { animation-delay: 250ms; }
+.stagger-children > *:nth-child(7)  { animation-delay: 300ms; }
+.stagger-children > *:nth-child(8)  { animation-delay: 350ms; }
+.stagger-children > *:nth-child(9)  { animation-delay: 400ms; }
+.stagger-children > *:nth-child(10) { animation-delay: 450ms; }
+
+/* ---------- Animations ---------- */
+.animate-fadeIn  { animation: fadeIn 0.4s ease-out; }
+.animate-slideIn { animation: slideIn 0.3s ease-out; }
+.animate-pop     { animation: pop 0.45s cubic-bezier(.17,.67,.36,1.35); }
+
+/* ---------- Onboarding highlight ---------- */
+.onboarding-highlight {
+  position: relative; z-index: 105; border-radius: 16px;
+  animation: onboarding-pulse 1.5s ease-in-out infinite;
+}
+@keyframes onboarding-pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.45), 0 0 20px rgba(99, 102, 241, 0.15); }
+  50%      { box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.55), 0 0 28px rgba(99, 102, 241, 0.25); }
+}
+
+/* ---------- Photo upload drop-zone ---------- */
+.photo-dropzone {
+  border: 2px dashed #c7d2fe;
+  border-radius: 0.85rem;
+  padding: 1.25rem;
+  text-align: center;
+  cursor: pointer;
+  background: #fafaff;
+  transition: all 0.25s ease;
+}
+.photo-dropzone:hover,
+.photo-dropzone.dragover {
+  border-color: #818cf8;
+  background: #eef2ff;
+}
+.photo-dropzone .icon {
+  font-size: 1.6rem;
+  margin-bottom: 0.35rem;
+}
+
+/* ---------- Success result celebration ---------- */
+.result-success {
+  position: relative;
+  overflow: hidden;
+}
+.result-success::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(16,185,129,0.06) 0px,
+    rgba(16,185,129,0.06) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  animation: confetti 0.6s ease-out;
+}
+
+/* ---------- Task number pill ---------- */
+.task-pill {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.6rem; height: 2.6rem;
+  border-radius: 0.75rem;
+  font-weight: 800; font-size: 1.15rem;
+  background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+  color: #4338ca;
+}
+
+/* ---------- Mobile sidebar ---------- */
+@media (max-width: 768px) {
+  .sidebar-desktop { display: none; }
+  .main-with-sidebar { margin-left: 0 !important; }
+}
+@media (min-width: 769px) {
+  .sidebar-mobile-toggle { display: none; }
+}
+
+/* ---------- ЭОР: единая шапка экрана (заголовок + лид) ---------- */
+.eora-screen-header {
+  margin-bottom: 1.5rem;
+  padding-left: 1rem;
+  border-left: 4px solid #6366f1;
+}
+.eora-screen-header h2:first-child {
+  margin-bottom: 0.35rem;
+}
+.eora-screen-lead {
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.65;
+  max-width: 42rem;
+}
+/* Маркер варианта пути / трудности вместо эмодзи */
+.eora-option-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  flex-shrink: 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border: 1px solid;
+}
+.eora-option-badge--easy {
+  background: #ecfdf5;
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #047857;
+}
+.eora-option-badge--medium {
+  background: #fffbeb;
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #b45309;
+}
+.eora-option-badge--hard {
+  background: #fff1f2;
+  border-color: rgba(244, 63, 94, 0.35);
+  color: #be123c;
+}

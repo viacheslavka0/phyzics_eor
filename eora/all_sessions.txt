@@ -1,0 +1,10 @@
+id=85, stage=typical_task, solved=0, correct=0, target=5, idx=0, diff=, finished=None
+id=84, stage=step_by_step, solved=0, correct=0, target=6, idx=0, diff=hard, finished=2026-04-13 20:28:26.211858+00:00
+id=83, stage=comprehension, solved=0, correct=0, target=5, idx=0, diff=, finished=None
+id=82, stage=comprehension, solved=0, correct=0, target=5, idx=0, diff=, finished=2026-04-13 20:26:08.055873+00:00
+id=81, stage=completed, solved=2, correct=2, target=6, idx=2, diff=hard, finished=2026-04-13 20:25:40.292864+00:00
+id=80, stage=step_by_step, solved=0, correct=0, target=6, idx=0, diff=hard, finished=2026-04-13 20:21:54.156920+00:00
+id=79, stage=completed, solved=3, correct=3, target=6, idx=2, diff=hard, finished=2026-04-13 19:04:49.416709+00:00
+id=78, stage=step_by_step, solved=0, correct=0, target=6, idx=0, diff=hard, finished=2026-04-13 18:55:23.789120+00:00
+id=77, stage=step_by_step, solved=1, correct=1, target=6, idx=1, diff=hard, finished=2026-04-13 18:54:18.708960+00:00
+id=76, stage=comprehension, solved=0, correct=0, target=5, idx=0, diff=, finished=2026-04-12 20:38:37.560264+00:00

@@ -55,7 +55,17 @@ function UnifiedLogin({ onLoggedIn }) {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.detail || "Не удалось войти");
-      await onLoggedIn();
+      const session = await onLoggedIn();
+      if (session && session.ok === false) {
+        const hint =
+          session.status === 403 || session.status === 401
+            ? "Сессия не дошла до API (часто: открыли сайт как localhost, а админку как 127.0.0.1 — это разные сайты для cookie; или http при secure-cookie). "
+            : "";
+        setMsg(
+          `${hint}Вход ответил успешно, но профиль не загрузился (HTTP ${session.status}). ` +
+            `Откройте DevTools → Network → запрос «me» и посмотрите ответ. Фрагмент: ${(session.detail || "").slice(0, 180)}`
+        );
+      }
     } catch (err) {
       setMsg(err.message || String(err));
     } finally {
@@ -70,7 +80,7 @@ function UnifiedLogin({ onLoggedIn }) {
           <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-emerald-500 rounded-xl flex items-center justify-center shadow-md shadow-indigo-200">
             <span className="text-white font-bold text-lg">⚛</span>
           </div>
-          <h2 className="text-xl font-bold text-slate-900 mb-6">Вход в ЭОР</h2>
+          <h2 className="text-xl font-bold text-slate-900 mb-6">Вход</h2>
         </div>
         <form className="space-y-4" onSubmit={submit}>
           <div>
@@ -114,13 +124,14 @@ export default function Portal() {
       const r = await fetch("/api/account/me/", { credentials: "include" });
       if (r.ok) {
         setUser(await r.json());
-        return true;
+        return { ok: true };
       }
       setUser(null);
-      return false;
-    } catch {
+      const raw = await r.text();
+      return { ok: false, status: r.status, detail: raw.slice(0, 500) };
+    } catch (e) {
       setUser(null);
-      return false;
+      return { ok: false, status: 0, detail: String(e) };
     }
   }, []);
 
@@ -144,9 +155,13 @@ export default function Portal() {
     return (
       <UnifiedLogin
         onLoggedIn={async () => {
-          setBooting(true);
-          await refreshUser();
-          setBooting(false);
+          // Не включаем общий booting — иначе размонтируется форма входа до завершения /account/me/
+          let out = await refreshUser();
+          if (!out.ok) {
+            await new Promise((r) => setTimeout(r, 250));
+            out = await refreshUser();
+          }
+          return out;
         }}
       />
     );

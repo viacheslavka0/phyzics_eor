@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 
+from .unit_catalog import convert_unit_value, sanitize_allowed_units
+
 # =============================================================================
 # 1. УЧЕБНАЯ ИЕРАРХИЯ
 # =============================================================================
@@ -123,6 +125,12 @@ class StudyGroupMembership(models.Model):
 
 class UserProfile(models.Model):
     """Расширение учётной записи: принудительная смена пароля при первом входе."""
+    MODE_STUDENT = "student"
+    MODE_PILOT = "pilot"
+    MODE_CHOICES = [
+        (MODE_STUDENT, "Ученик"),
+        (MODE_PILOT, "Апробация"),
+    ]
 
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -132,6 +140,12 @@ class UserProfile(models.Model):
     must_change_password = models.BooleanField(
         default=False,
         help_text="Если True — ученик должен сменить пароль в приложении",
+    )
+    student_mode = models.CharField(
+        max_length=16,
+        choices=MODE_CHOICES,
+        default=MODE_STUDENT,
+        help_text="Режим поведения интерфейса и ограничений для ученика",
     )
 
     class Meta:
@@ -679,6 +693,11 @@ class Task(models.Model):
         max_length=50, blank=True,
         help_text="Единица измерения (м/с, км, с, ...)"
     )
+    allowed_answer_units = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="Допустимые единицы для ввода ответа учеником"
+    )
     answer_tolerance = models.FloatField(
         default=1.0,
         help_text="Допустимая погрешность в процентах"
@@ -717,9 +736,21 @@ class Task(models.Model):
     def __str__(self):
         return f"{self.order}. {self.title}"
 
-    def check_answer(self, student_answer: float) -> bool:
-        """Проверка числового ответа с учётом погрешности"""
+    def save(self, *args, **kwargs):
+        self.allowed_answer_units = sanitize_allowed_units(self.answer_unit, self.allowed_answer_units)
+        super().save(*args, **kwargs)
+
+    def check_answer(self, student_answer: float, student_unit: str | None = None) -> bool:
+        """Проверка числового ответа с учётом погрешности и выбранной единицы."""
         if self.correct_answer is None:
+            return False
+        try:
+            student_answer = convert_unit_value(
+                student_answer,
+                student_unit or self.answer_unit,
+                self.answer_unit,
+            )
+        except ValueError:
             return False
         if self.correct_answer == 0:
             return abs(student_answer) < 0.0001
@@ -1017,8 +1048,8 @@ class LearningSession(models.Model):
         help_text="Индекс текущей задачи в последовательности (0-based)"
     )
     target_tasks_count = models.PositiveIntegerField(
-        default=5,
-        help_text="Целевое количество задач для решения в этой сессии"
+        default=6,
+        help_text="Сколько ситуаций в треке (по умолчанию 6: пять обычных + шестая с фото для учителя)",
     )
     
     # Типовая задача — выбранный вариант

@@ -330,9 +330,9 @@ export default function App() {
       try {
         const r = await fetch("/api/account/me/", { credentials: "include" });
         if (r.ok) setAccountProfile(await r.json());
-        else setAccountProfile({ must_change_password: false });
+        else setAccountProfile({ must_change_password: false, is_pilot_mode: false, student_mode: "student" });
       } catch {
-        setAccountProfile({ must_change_password: false });
+        setAccountProfile({ must_change_password: false, is_pilot_mode: false, student_mode: "student" });
       }
     })();
   }, [loading]);
@@ -436,6 +436,7 @@ export default function App() {
     setSession,
     updateSession,
     handleBackToCatalog,
+    accountProfile,
   };
 
   // Loading state
@@ -686,8 +687,9 @@ function resolveLearningStage(session) {
 }
 
 function LearningView() {
-  const { ksData, session, handleBackToCatalog } = useApp();
+  const { ksData, session, handleBackToCatalog, accountProfile } = useApp();
   const [resetting, setResetting] = useState(false);
+  const isPilotMode = !!accountProfile?.is_pilot_mode;
   const stage = resolveLearningStage(session);
   const [showTeacherReviewNotice, setShowTeacherReviewNotice] = useState(false);
   const latestFinalReview = session?.final_review || null;
@@ -721,6 +723,16 @@ function LearningView() {
     setShowTeacherReviewNotice(false);
   };
 
+  // Poll session every 35s when final task is awaiting teacher review
+  const { updateSession } = useApp();
+  useEffect(() => {
+    if (latestFinalReview?.status !== "pending") return;
+    const id = setInterval(async () => {
+      try { await updateSession(); } catch { /* ignore */ }
+    }, 35000);
+    return () => clearInterval(id);
+  }, [latestFinalReview?.status, updateSession]);
+
   const handleResetProgress = async () => {
     if (!session?.id) return;
     if (!confirm("Сбросить весь прогресс? Вы начнёте с осмысления заново.")) return;
@@ -751,8 +763,25 @@ function LearningView() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
+  const handleLogout = async () => {
+    try {
+      await ensureCSRFCookie();
+      await fetch("/api/auth/logout/", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCSRFCookie(),
+        },
+      });
+    } catch {
+      // ignore
+    }
+    window.location.href = "/app/";
+  };
+
   const solved = session?.tasks_solved_count || 0;
-  const target = Math.max(1, session?.target_tasks_count || 5);
+  const target = effectiveTaskTrackTarget(null, session);
   const progressPct = Math.min(100, Math.round((solved / target) * 100));
 
   return (
@@ -760,7 +789,14 @@ function LearningView() {
       {/* Mobile top bar */}
       <div className="sidebar-mobile-toggle fixed top-0 left-0 right-0 z-[200] bg-slate-900 text-white flex items-center gap-3 px-4 py-3">
         <button onClick={() => setSidebarOpen(true)} className="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center text-lg" aria-label="Меню">☰</button>
-        <span className="font-semibold text-sm truncate">{ksData.title}</span>
+        <span className="font-semibold text-sm truncate flex-1">{ksData.title}</span>
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="px-3 py-1.5 rounded-lg bg-slate-800 text-xs font-medium"
+        >
+          Выйти
+        </button>
       </div>
 
       {/* Sidebar overlay (mobile) */}
@@ -925,12 +961,21 @@ function LearningView() {
                 <div className="text-xs text-slate-400">Всего попыток</div>
               </div>
             </div>
+            {isPilotMode && (
+              <button
+                onClick={handleResetProgress}
+                disabled={resetting}
+                className="w-full px-3 py-2 text-xs text-red-400 border border-red-400/30 rounded-lg hover:bg-red-400/10 transition-colors disabled:opacity-50"
+              >
+                {resetting ? "Сброс..." : "Сбросить прогресс"}
+              </button>
+            )}
             <button
-              onClick={handleResetProgress}
-              disabled={resetting}
-              className="w-full px-3 py-2 text-xs text-red-400 border border-red-400/30 rounded-lg hover:bg-red-400/10 transition-colors disabled:opacity-50"
+              type="button"
+              onClick={handleLogout}
+              className="w-full mt-2 px-3 py-2 text-xs text-slate-200 border border-slate-500/40 rounded-lg hover:bg-slate-700 transition-colors"
             >
-              {resetting ? "Сброс..." : "Сбросить прогресс"}
+              Выйти из аккаунта
             </button>
           </div>
         </div>
@@ -953,7 +998,7 @@ function StageProgress({ currentStage, session, ksData }) {
   
   const solvedTasks = session.tasks_solved_count || 0;
   const correctTasks = session.tasks_correct_count || 0;
-  const targetTasks = Math.max(1, session.target_tasks_count || 5);
+  const targetTasks = effectiveTaskTrackTarget(null, session);
   const remainingTasks = Math.max(0, targetTasks - solvedTasks);
 
   return (
@@ -1097,6 +1142,44 @@ const ONBOARDING_STEPS = [
   },
 ];
 
+const TASK_ONBOARDING_STEPS = [
+  {
+    target: "task-problem-card",
+    title: "Условие задачи",
+    text: "Сначала внимательно прочитайте условие. Здесь описана физическая ситуация, с которой нужно поработать.",
+    position: "right",
+    emoji: "📘",
+  },
+  {
+    target: "task-difficulty-card",
+    title: "Выбор трудности",
+    text: "Если этот блок показан, выберите уровень трудности до отправки ответа — от этого зависит дальнейший маршрут.",
+    position: "top",
+    emoji: "⚖️",
+  },
+  {
+    target: "task-answer-card",
+    title: "Ответ и единицы",
+    text: "Введите числовой ответ, а затем выберите единицы измерения из списка. Можно отвечать в удобных единицах — система пересчитает сама.",
+    position: "left",
+    emoji: "🔢",
+  },
+  {
+    target: "task-photo-card",
+    title: "Фото решения",
+    text: "При желании можно приложить фото решения. Для последней ситуации в этой работе фото обязательно.",
+    position: "right",
+    emoji: "📷",
+  },
+  {
+    target: "task-submit-button",
+    title: "Отправка ответа",
+    text: "Когда всё готово, нажмите кнопку отправки. Система сразу проверит обычную задачу или отправит последнюю ситуацию учителю.",
+    position: "top",
+    emoji: "🚀",
+  },
+];
+
 function OnboardingGuide({ onClose }) {
   const [step, setStep] = useState(0);
   const [pos, setPos] = useState(null);
@@ -1206,8 +1289,106 @@ function OnboardingGuide({ onClose }) {
   );
 }
 
+function TaskOnboardingGuide({ steps, onClose }) {
+  const [step, setStep] = useState(0);
+  const [pos, setPos] = useState(null);
+  const total = steps.length;
+  const current = total ? steps[Math.min(step, total - 1)] : null;
+  const cardWidth = 340;
+
+  useEffect(() => {
+    setStep(0);
+    setPos(null);
+  }, [steps]);
+
+  useEffect(() => {
+    const cur = steps[step];
+    if (!cur) return;
+    const el = document.getElementById(cur.target);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.classList.add("onboarding-highlight");
+
+    const timer = setTimeout(() => {
+      const rect = el.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const position = cur.position || "top";
+      let top;
+      let left;
+      if (position === "right") {
+        left = Math.min(rect.right + 16, vw - cardWidth - 16);
+        top = Math.max(16, rect.top + rect.height / 2 - 100);
+      } else if (position === "left") {
+        left = Math.max(16, rect.left - cardWidth - 16);
+        top = Math.max(16, rect.top + rect.height / 2 - 100);
+      } else {
+        left = Math.max(16, (vw - cardWidth) / 2);
+        top = Math.max(16, rect.top - 220);
+      }
+      if (top + 240 > vh) top = vh - 260;
+      setPos({ top, left });
+    }, 350);
+
+    return () => {
+      clearTimeout(timer);
+      el.classList.remove("onboarding-highlight");
+    };
+  }, [step, steps]);
+
+  const handleNext = () => {
+    setPos(null);
+    if (step < total - 1) setStep(step + 1);
+    else onClose();
+  };
+
+  if (!total || !current) return null;
+
+  return (
+    <>
+      <div className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-[2px]" onClick={onClose} />
+      {pos && (
+        <div
+          className="fixed z-[110] pointer-events-auto bg-white rounded-2xl shadow-2xl p-5 animate-fadeIn border border-indigo-100"
+          style={{ top: pos.top, left: pos.left, width: cardWidth }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {current.position === "right" && (
+            <div className="absolute -left-2 top-12 w-3 h-3 bg-white border-l border-b border-indigo-100 rotate-45" />
+          )}
+          {current.position === "left" && (
+            <div className="absolute -right-2 top-12 w-3 h-3 bg-white border-r border-t border-indigo-100 rotate-45" />
+          )}
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex gap-1.5">
+              {steps.map((_, i) => (
+                <div key={i} className={`h-1.5 rounded-full transition-all ${i === step ? "w-8 bg-indigo-500" : i < step ? "w-4 bg-indigo-300" : "w-4 bg-slate-200"}`} />
+              ))}
+            </div>
+            <button type="button" onClick={onClose} className="text-xs text-slate-400 hover:text-slate-600 transition-colors">
+              Пропустить
+            </button>
+          </div>
+          <div className="text-center mb-4">
+            <div className="text-3xl mb-2">{current.emoji}</div>
+            <h4 className="text-base font-bold text-slate-900 mb-1">{current.title}</h4>
+            <p className="text-sm text-slate-600 leading-relaxed">{current.text}</p>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-slate-400">{step + 1} из {total}</span>
+            <button type="button" onClick={handleNext} className="btn-primary px-5 py-1.5 text-sm">
+              {step < total - 1 ? "Далее →" : "Готово"}
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
 function StageComprehension() {
-  const { ksData, session, updateSession } = useApp();
+  const { ksData, session, updateSession, accountProfile } = useApp();
+  const isPilotMode = !!accountProfile?.is_pilot_mode;
   
   // Onboarding
   const [showOnboarding, setShowOnboarding] = useState(() => {
@@ -1464,12 +1645,14 @@ function StageComprehension() {
 
       {/* Кнопки действий */}
       <div id="comprehension-submit" className="flex justify-between items-center mt-8">
-        <button
-          onClick={handleSkip}
-          className="text-slate-500 hover:text-slate-700 text-sm"
-        >
-          Пропустить (для тестирования) →
-        </button>
+        {isPilotMode ? (
+          <button
+            onClick={handleSkip}
+            className="text-slate-500 hover:text-slate-700 text-sm"
+          >
+            Пропустить (для апробации) →
+          </button>
+        ) : <span />}
 
         {hasQuestions && !results?.passed && (
           <button
@@ -2883,6 +3066,7 @@ function StageTaskList() {
   const [currentTask, setCurrentTask] = useState(null);
   const [taskProgress, setTaskProgress] = useState(null);
   const [answer, setAnswer] = useState("");
+  const [selectedUnit, setSelectedUnit] = useState("");
   /** Локальные фото перед отправкой: { id, file, previewUrl } */
   const [answerPhotos, setAnswerPhotos] = useState([]);
 
@@ -2928,7 +3112,10 @@ function StageTaskList() {
   const [submitting, setSubmitting] = useState(false);
   const [hasSeenAlgorithmHelp, setHasSeenAlgorithmHelp] = useState(false);
   const [showAlgorithmHelp, setShowAlgorithmHelp] = useState(false);
-  const [trackHintDismissed, setTrackHintDismissed] = useState(false);
+  const [showFinalTaskIntro, setShowFinalTaskIntro] = useState(false);
+  const [showTaskOnboarding, setShowTaskOnboarding] = useState(() => {
+    try { return !window.localStorage.getItem("eora_task_onboarding_done"); } catch { return true; }
+  });
 
   const loadNextTask = async () => {
     setLoading(true);
@@ -2946,7 +3133,16 @@ function StageTaskList() {
           });
           await updateSession();
         } else {
+          const prevTaskId = currentTask?.id ?? null;
           setCurrentTask(data.task);
+          if (prevTaskId != null && data.task?.id != null && data.task.id !== prevTaskId) {
+            setShowTaskOnboarding(false);
+          }
+          setSelectedUnit(
+            data.task?.answer_unit ||
+            data.task?.allowed_answer_units?.[0] ||
+            ""
+          );
           setTaskProgress({
             tasks_solved: data.tasks_solved,
             tasks_correct: data.tasks_correct,
@@ -2958,6 +3154,23 @@ function StageTaskList() {
           setPendingDifficulty("");
           setResult(null);
           setShowSolution(false);
+          const nextTaskNumber = (data.tasks_solved ?? 0) + 1;
+          const nextTarget = effectiveTaskTrackTarget({ target_tasks_count: data.target_tasks_count }, session);
+          const shouldShowFinalIntro = nextTaskNumber === nextTarget;
+          if (shouldShowFinalIntro) {
+            try {
+              const key = `eora_final_task_intro_seen_${session.id}_${nextTaskNumber}`;
+              if (!window.localStorage.getItem(key)) {
+                setShowFinalTaskIntro(true);
+              } else {
+                setShowFinalTaskIntro(false);
+              }
+            } catch {
+              setShowFinalTaskIntro(true);
+            }
+          } else {
+            setShowFinalTaskIntro(false);
+          }
         }
       } else {
         throw new Error("Ошибка загрузки задачи");
@@ -2999,6 +3212,9 @@ function StageTaskList() {
       const formData = new FormData();
       formData.append("session_id", String(session.id));
       formData.append("answer_numeric", String(numericAnswer));
+      if (selectedUnit) {
+        formData.append("answer_unit", selectedUnit);
+      }
       answerPhotos.forEach((p) => {
         formData.append("answer_images", p.file);
       });
@@ -3201,10 +3417,66 @@ function StageTaskList() {
   const finalPending = finalStatus === "pending";
   const finalRejected = finalStatus === "rejected";
   const finalAccepted = finalStatus === "accepted";
-  const statusSlots = Array.from({ length: targetSlots }, (_, i) => i + 1);
+
+  const taskOnboardingSteps = useMemo(
+    () =>
+      TASK_ONBOARDING_STEPS.filter(
+        (s) => s.target !== "task-difficulty-card" || needsDifficultyChoice
+      ),
+    [needsDifficultyChoice]
+  );
 
   return (
     <div className="max-w-3xl mx-auto px-2">
+      {showTaskOnboarding && !result && currentTask && (
+        <TaskOnboardingGuide
+          key={`${session.id}-${currentTask.id}`}
+          steps={taskOnboardingSteps}
+          onClose={() => {
+            setShowTaskOnboarding(false);
+            try { window.localStorage.setItem("eora_task_onboarding_done", "1"); } catch { /* ignore */ }
+          }}
+        />
+      )}
+
+      {showFinalTaskIntro && (
+        <FullScreenModal>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-[calc(100vw-2rem)] p-6 border border-blue-100">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-2xl">📌</div>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-slate-900">Последняя ситуация</h3>
+                <p className="text-sm text-slate-600 mt-2">
+                  Это последняя задача в текущей работе. Для неё нужно обязательно приложить хотя бы одно фото решения.
+                </p>
+                <p className="text-sm text-slate-600 mt-2">
+                  После отправки ответ уйдёт на проверку учителю, а результат появится позже.
+                </p>
+              </div>
+            </div>
+            <div className="mt-6 flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  try { window.localStorage.setItem(`eora_final_task_intro_seen_${session.id}_${taskNumber}`, "1"); } catch { /* ignore */ }
+                  setShowFinalTaskIntro(false);
+                }}
+                className="btn-primary flex-1"
+              >
+                Понятно
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowFinalTaskIntro(false)}
+                className="btn-outline flex-1"
+              >
+                Напомнить позже
+              </button>
+            </div>
+          </div>
+        </FullScreenModal>
+      )}
+
       {/* Compact progress strip */}
       {taskProgress && (
         <div className="card px-5 py-3 mb-5 flex items-center gap-4">
@@ -3223,65 +3495,21 @@ function StageTaskList() {
         </div>
       )}
 
-      <div className="card p-4 mb-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-3">Статусы ситуаций</p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {statusSlots.map((n) => {
-            let text = "Ожидает";
-            let cls = "border-slate-200 bg-slate-50 text-slate-600";
-            if (n < taskNumber) {
-              text = "Решена";
-              cls = "border-emerald-200 bg-emerald-50 text-emerald-700";
-            } else if (n === taskNumber) {
-              text = "Текущая";
-              cls = "border-indigo-200 bg-indigo-50 text-indigo-700";
-            }
-            if (n === targetSlots && finalPending) {
-              text = "На оценивании";
-              cls = "border-blue-200 bg-blue-50 text-blue-700";
-            }
-            if (n === targetSlots && finalAccepted) {
-              text = "Проверено";
-              cls = "border-emerald-200 bg-emerald-50 text-emerald-700";
-            }
-            if (n === targetSlots && finalRejected) {
-              text = "На доработке";
-              cls = "border-amber-200 bg-amber-50 text-amber-700";
-            }
-            return (
-              <div key={n} className={`rounded-lg border px-3 py-2 ${cls}`}>
-                <p className="text-sm font-semibold">Ситуация {n}</p>
-                <p className="text-xs mt-0.5">{text}</p>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {!trackHintDismissed && (session?.target_tasks_count || taskProgress?.target_tasks_count) ? (
-        <div className="rounded-xl border border-sky-200 bg-sky-50/90 p-4 mb-5 text-sm text-sky-950 shadow-sm">
-          <div className="flex justify-between gap-3 items-start">
-            <div className="space-y-2 pr-2">
-              <p className="font-semibold text-sky-900">Самостоятельная работа</p>
-              <p className="text-sky-900/90 leading-relaxed">
-                Решайте <strong>{targetSlots}</strong> ситуаций по
-                порядку. Фото решения можно добавить к любому ответу; для <strong>последней ситуации</strong> в этой
-                работе фото обязательно (можно несколько снимков).
-              </p>
-              <p className="text-sky-900/90 leading-relaxed">
-                Последняя ситуация проверяется учителем — результат появится позже.
-              </p>
-            </div>
-            <button
-              type="button"
-              className="shrink-0 text-xs font-medium text-sky-700 hover:text-sky-900 underline decoration-sky-400/60"
-              onClick={() => setTrackHintDismissed(true)}
-            >
-              Скрыть
-            </button>
+      {finalPending && (
+        <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 mb-5 flex items-start justify-between gap-4">
+          <div>
+            <p className="text-sm font-semibold text-blue-900">Работа отправлена учителю на проверку</p>
+            <p className="text-sm text-blue-800 mt-1">Результат появится здесь, как только учитель проверит работу.</p>
           </div>
+          <button
+            type="button"
+            onClick={async () => { try { await updateSession(); } catch { /* ignore */ } }}
+            className="shrink-0 px-3 py-1.5 text-xs font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Обновить
+          </button>
         </div>
-      ) : null}
+      )}
 
       {finalRejected && (
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 mb-5">
@@ -3313,7 +3541,7 @@ function StageTaskList() {
         </div>
 
         {/* Task text */}
-        <div className="bg-slate-50 rounded-xl p-5 md:p-6 border border-slate-200 mb-5">
+        <div id="task-problem-card" className="bg-slate-50 rounded-xl p-5 md:p-6 border border-slate-200 mb-5">
           <p className="text-slate-800 leading-relaxed" style={{ fontSize: "1.15rem" }}>{currentTask.text}</p>
         </div>
 
@@ -3323,8 +3551,8 @@ function StageTaskList() {
             <span className="text-lg leading-none mt-0.5">📝</span>
             <span>
               {photoRequired
-                ? "Решите в тетради, введите числовой ответ в единицах СИ и приложите хотя бы одно чёткое фото решения (можно несколько снимков)."
-                : "Решите в тетради, введите числовой ответ в единицах СИ. При желании приложите фото решения (можно несколько снимков)."}
+                ? "Решите в тетради, введите числовой ответ и приложите хотя бы одно чёткое фото решения (можно несколько снимков)."
+                : "Решите в тетради, введите числовой ответ. При желании приложите фото решения (можно несколько снимков)."}
             </span>
           </div>
         )}
@@ -3332,54 +3560,36 @@ function StageTaskList() {
         {/* Answer section */}
         <div className="space-y-4">
             {needsDifficultyChoice && (
-              <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 md:p-6">
-                <h4 className="font-semibold text-amber-900 mb-2">Оцените трудность первой задачи</h4>
-                <p className="text-sm text-amber-800 mb-4">
-                  Сначала выберите вариант, затем подтвердите свой выбор. До подтверждения можно изменить решение.
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <button
-                    onClick={() => setPendingDifficulty("easy")}
-                    className={`btn-outline h-11 ${pendingDifficulty === "easy" ? "border-emerald-500 bg-emerald-50 text-emerald-700" : ""}`}
-                  >
-                    Легко
-                  </button>
-                  <button
-                    onClick={() => setPendingDifficulty("medium")}
-                    className={`btn-outline h-11 ${pendingDifficulty === "medium" ? "border-amber-500 bg-amber-50 text-amber-700" : ""}`}
-                  >
-                    Непросто
-                  </button>
-                  <button
-                    onClick={() => setPendingDifficulty("hard")}
-                    className={`btn-outline h-11 ${pendingDifficulty === "hard" ? "border-rose-500 bg-rose-50 text-rose-700" : ""}`}
-                  >
-                    Трудно
-                  </button>
-                </div>
-                {pendingDifficulty && (
-                  <div className="mt-4 rounded-lg border border-amber-200 bg-white p-3 text-sm text-slate-700">
-                    {pendingDifficulty === "easy" &&
-                      "Уровень «Легко»: ориентир — самостоятельное решение задач с минимальной поддержкой."}
-                    {pendingDifficulty === "medium" &&
-                      "Уровень «Непросто»: перед списком ситуаций — упражнение на порядок шагов метода решения."}
-                    {pendingDifficulty === "hard" &&
-                      "Уровень «Трудно»: при необходимости доступны дополнительные пошаговые подсказки и разбор."}
-                  </div>
-                )}
-                <button
-                  onClick={handleConfirmDifficulty}
-                  disabled={!pendingDifficulty || savingDifficulty}
-                  className="btn-primary w-full mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {savingDifficulty ? "Сохраняем..." : "Подтвердить выбор трудности"}
-                </button>
+              <div id="task-difficulty-card" className="mb-2">
+                <TaskDifficultyPickerLayout
+                  embedded
+                  selected={pendingDifficulty}
+                  onPick={setPendingDifficulty}
+                  disabled={savingDifficulty}
+                  childrenAfterHint={
+                    <div className="mt-6">
+                      <button
+                        type="button"
+                        onClick={handleConfirmDifficulty}
+                        disabled={!pendingDifficulty || savingDifficulty}
+                        className="btn-primary w-full btn-lg rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {savingDifficulty ? "Сохраняем..." : "Подтвердить выбор трудности"}
+                      </button>
+                    </div>
+                  }
+                />
               </div>
             )}
 
-            <div>
-              <label className="block text-sm font-semibold mb-2">Ответ:</label>
-              <div className="flex gap-3 mb-4">
+            <div id="task-answer-card" className="rounded-xl border border-slate-200 bg-slate-50 p-5">
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <div>
+                  <label className="block text-base font-semibold text-slate-900">Ответ</label>
+                  <p className="text-sm text-slate-500 mt-1">Введите число и выберите удобные единицы измерения.</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-[1fr_180px] gap-3 mb-4">
                 <NumericAnswerInput
                   value={answer}
                   onChange={(e) => setAnswer(e.target.value)}
@@ -3388,12 +3598,24 @@ function StageTaskList() {
                   disabled={result !== null || submitting}
                   aria-label="Числовой ответ на задачу"
                 />
-                <span className="self-center text-slate-500 font-semibold text-lg min-w-[60px]">
-                  {currentTask.answer_unit || ""}
-                </span>
+                <select
+                  value={selectedUnit}
+                  onChange={(e) => setSelectedUnit(e.target.value)}
+                  disabled={result !== null || submitting || !(currentTask.allowed_answer_units?.length)}
+                  className="input input-lg"
+                  aria-label="Единица измерения ответа"
+                >
+                  {(currentTask.allowed_answer_units?.length ? currentTask.allowed_answer_units : [currentTask.answer_unit || ""]).filter(Boolean).map((unit) => (
+                    <option key={unit} value={unit}>{unit}</option>
+                  ))}
+                </select>
               </div>
+              <p className="text-xs text-slate-500">
+                Базовая единица задачи: <span className="font-medium text-slate-700">{currentTask.answer_unit || "без единицы"}</span>
+              </p>
+            </div>
 
-              <div className="mb-4">
+              <div id="task-photo-card" className="mb-4 rounded-xl border border-slate-200 bg-white p-5">
                 <label className="block text-sm font-semibold mb-1.5">
                   Фото решения{" "}
                   {photoRequired ? (
@@ -3467,6 +3689,7 @@ function StageTaskList() {
 
               {!result ? (
                 <button
+                  id="task-submit-button"
                   onClick={handleSubmit}
                   disabled={
                     !answer ||
@@ -3646,7 +3869,6 @@ function StageTaskList() {
               )}
             </div>
         </div>
-      </div>
       {/* Плавающая кнопка-подсказка (лампочка) для алгоритма, если ученик уже видел модалку */}
       {hasSeenAlgorithmHelp && ksData?.solution_method?.steps?.length > 0 && (
         <button
@@ -3726,10 +3948,161 @@ function StageTaskList() {
 // STAGE: DIFFICULTY ASSESSMENT
 // ============================================================================
 
+function IconDifficultyBulb({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M9 21h6M10 18h4M12 3a5 5 0 0 1 3.9 8.1c-.5.6-.9 1.3-1.1 2.1-.2.8-.3 1.5-.3 2.3H9.5c0-.8-.1-1.5-.3-2.3-.2-.8-.6-1.5-1.1-2.1A5 5 0 0 1 12 3Z"
+        stroke="currentColor"
+        strokeWidth="1.65"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconDifficultyBook({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"
+        stroke="currentColor"
+        strokeWidth="1.65"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M4 4v15.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5Z"
+        stroke="currentColor"
+        strokeWidth="1.65"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconDifficultyStar({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M12 2.5l2.8 5.7 6.3.9-4.5 4.4 1.1 6.3L12 17.3 6.3 19.8l1.1-6.3-4.5-4.4 6.3-.9L12 2.5Z"
+        fill="currentColor"
+        fillOpacity="0.15"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+const DIFFICULTY_CARD_DEFS = [
+  {
+    key: "easy",
+    title: "Лёгкое",
+    body: "Решаю первую задачу самостоятельно, дальше продолжаю без восстановления порядка шагов.",
+    Icon: IconDifficultyBulb,
+    ring: "ring-emerald-400/80",
+    borderIdle: "border-emerald-200 hover:border-emerald-300",
+    borderSelected: "border-emerald-500",
+    iconWrap: "text-emerald-600 bg-emerald-50 border border-emerald-200/80",
+    shadow: "shadow-sm shadow-emerald-900/5",
+  },
+  {
+    key: "medium",
+    title: "Непростое",
+    body: "Сначала восстановлю правильный порядок шагов метода для этой системы знаний.",
+    Icon: IconDifficultyBook,
+    ring: "ring-amber-400/90",
+    borderIdle: "border-amber-200 hover:border-amber-300",
+    borderSelected: "border-amber-500",
+    iconWrap: "text-amber-700 bg-amber-50 border border-amber-200/80",
+    shadow: "shadow-sm shadow-amber-900/5",
+  },
+  {
+    key: "hard",
+    title: "Трудное",
+    body: "Нужен пошаговый пооперационный контроль решения.",
+    Icon: IconDifficultyStar,
+    ring: "ring-orange-400/90",
+    borderIdle: "border-orange-200 hover:border-orange-300",
+    borderSelected: "border-orange-500",
+    iconWrap: "text-orange-600 bg-orange-50 border border-orange-200/80",
+    shadow: "shadow-sm shadow-orange-900/5",
+  },
+];
+
+function TaskDifficultyPickerLayout({
+  embedded,
+  selected,
+  onPick,
+  disabled,
+  childrenAfterHint,
+}) {
+  return (
+    <div className={embedded ? "" : "max-w-5xl mx-auto"}>
+      <div
+        className={
+          embedded
+            ? "rounded-2xl border border-slate-200/80 bg-white p-5 md:p-7 shadow-sm"
+            : "rounded-2xl border border-slate-200 bg-white p-6 md:p-10 shadow-md shadow-slate-900/5"
+        }
+      >
+        {embedded ? (
+          <div className="mb-6">
+            <h4 className="font-semibold text-slate-900 mb-1">Оцените трудность первой задачи</h4>
+            <p className="text-sm text-slate-600">
+              Выберите вариант и подтвердите выбор — до подтверждения можно изменить решение.
+            </p>
+          </div>
+        ) : (
+          <div className="eora-screen-header max-w-2xl mx-auto mb-8">
+            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Оценка трудности</h2>
+            <p className="eora-screen-lead">
+              Укажите, какой режим работы с заданием вам ближе: это определит дальнейшую последовательность этапов.
+            </p>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5">
+          {DIFFICULTY_CARD_DEFS.map(({ key, title, body, Icon, ring, borderIdle, borderSelected, iconWrap, shadow }) => {
+            const isOn = selected === key;
+            return (
+              <button
+                key={key}
+                type="button"
+                disabled={disabled}
+                onClick={() => onPick(key)}
+                className={`group relative flex flex-col items-center text-center rounded-2xl border-2 bg-white px-4 py-6 md:py-8 transition-all duration-200 ${shadow} ${
+                  isOn ? `${borderSelected} ring-2 ring-offset-2 ${ring} scale-[1.01]` : `${borderIdle}`
+                } ${disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer hover:-translate-y-0.5 hover:shadow-md"}`}
+              >
+                <div
+                  className={`mb-4 flex h-14 w-14 items-center justify-center rounded-2xl transition-transform group-hover:scale-105 ${iconWrap}`}
+                >
+                  <Icon className="h-7 w-7" />
+                </div>
+                <h3 className="text-base md:text-lg font-bold text-slate-900 mb-2">{title}</h3>
+                <p className="text-sm text-slate-500 leading-relaxed max-w-[16rem] mx-auto">{body}</p>
+              </button>
+            );
+          })}
+        </div>
+
+        {childrenAfterHint}
+      </div>
+    </div>
+  );
+}
+
 function StageDifficultyAssessment() {
   const { session, updateSession } = useApp();
+  const [busyKey, setBusyKey] = useState(null);
 
   const handleSelect = async (difficulty) => {
+    setBusyKey(difficulty);
     try {
       await ensureCSRFCookie();
       const res = await fetch(`/api/session/${session.id}/set_difficulty/`, {
@@ -3748,66 +4121,19 @@ function StageDifficultyAssessment() {
       await updateSession();
     } catch (e) {
       alert("Ошибка: " + e.message);
+    } finally {
+      setBusyKey(null);
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <div className="card p-6 md:p-8">
-        <div className="eora-screen-header max-w-2xl mx-auto mb-8">
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Оценка трудности</h2>
-          <p className="eora-screen-lead">
-            Укажите, какой режим работы с заданием вам ближе: это определит дальнейшую последовательность этапов.
-          </p>
-        </div>
-
-        <div className="space-y-3 stagger-children">
-          <button
-            onClick={() => handleSelect("easy")}
-            className="w-full card-interactive p-5 text-left hover:border-emerald-400 group transition-all"
-          >
-            <div className="flex items-center gap-4">
-              <div className="eora-option-badge eora-option-badge--easy group-hover:scale-[1.02] transition-transform">
-                Л
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-bold text-lg mb-0.5 text-slate-900">Легко</h3>
-                <p className="text-sm text-slate-600">Считаю задание понятным; работаю в основном самостоятельно.</p>
-              </div>
-            </div>
-          </button>
-
-          <button
-            onClick={() => handleSelect("medium")}
-            className="w-full card-interactive p-5 text-left hover:border-amber-400 group transition-all"
-          >
-            <div className="flex items-center gap-4">
-              <div className="eora-option-badge eora-option-badge--medium group-hover:scale-[1.02] transition-transform">
-                Н
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-bold text-lg mb-0.5 text-slate-900">Непросто</h3>
-                <p className="text-sm text-slate-600">Нужен опорный разбор примера перед самостоятельным решением.</p>
-              </div>
-            </div>
-          </button>
-
-          <button
-            onClick={() => handleSelect("hard")}
-            className="w-full card-interactive p-5 text-left hover:border-rose-400 group transition-all"
-          >
-            <div className="flex items-center gap-4">
-              <div className="eora-option-badge eora-option-badge--hard group-hover:scale-[1.02] transition-transform">
-                Т
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-bold text-lg mb-0.5 text-slate-900">Трудно</h3>
-                <p className="text-sm text-slate-600">Нужны разбор примера и пошаговое сопровождение.</p>
-              </div>
-            </div>
-          </button>
-        </div>
-      </div>
+    <div className="max-w-5xl mx-auto animate-fadeIn">
+      <TaskDifficultyPickerLayout
+        embedded={false}
+        selected={busyKey}
+        onPick={handleSelect}
+        disabled={!!busyKey}
+      />
     </div>
   );
 }
@@ -3866,9 +4192,7 @@ function StageSolving() {
   const situationSolving = (session?.tasks_solved_count ?? 0) + 1;
   const photoMandatorySolving = situationSolving === targetSlotsSolving;
 
-  // Определяем целевое количество задач в зависимости от режима
-  const targetTasks = session?.difficulty_choice === "easy" ? 5 : 
-                      session?.difficulty_choice === "medium" ? 6 : 8;
+  const targetTasks = effectiveTaskTrackTarget(null, session);
 
   // Выбор следующей задачи по алгоритму
   const selectNextTask = useCallback((currentLevel, solved) => {
@@ -4259,6 +4583,18 @@ function StageSolving() {
       <div className="mt-4 text-center">
         <p className="text-xs text-slate-400">Система подбирает сложность задач под ваш уровень</p>
       </div>
+
+      {!showTaskOnboarding && currentTask && !result && !loading && (
+        <button
+          type="button"
+          onClick={() => setShowTaskOnboarding(true)}
+          className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-gradient-to-br from-blue-500 to-teal-500 text-white rounded-full shadow-lg shadow-blue-300/40 hover:shadow-xl hover:scale-110 transition-all flex items-center justify-center text-xl"
+          title="Показать подсказки по экрану"
+          aria-label="Показать подсказки по экрану задачи"
+        >
+          💡
+        </button>
+      )}
     </div>
   );
 }
@@ -4296,13 +4632,40 @@ function StageMethodComposition() {
   const [orderResult, setOrderResult] = useState(null); // null | "wrong" | "ok"
   const [orderDragIndex, setOrderDragIndex] = useState(null);
   const [orderDropBeforeIndex, setOrderDropBeforeIndex] = useState(null);
+  const [orderWrongCount, setOrderWrongCount] = useState(0);
+
+  const getLockedIndexesForSteps = useCallback((steps) => {
+    if (orderWrongCount < 2) return new Set();
+    const locked = new Set();
+    steps.forEach((step, index) => {
+      if (step.order === sortedSteps[index]?.order) {
+        locked.add(index);
+      }
+    });
+    return locked;
+  }, [orderWrongCount, sortedSteps]);
+
+  const lockedOrderIndexes = useMemo(
+    () => getLockedIndexesForSteps(orderedSteps),
+    [getLockedIndexesForSteps, orderedSteps]
+  );
 
   const reorderOrderedSteps = (fromIndex, toIndex) => {
     if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0) return;
     setOrderedSteps((prev) => {
+      const locked = getLockedIndexesForSteps(prev);
+      if (locked.has(fromIndex) || locked.has(toIndex)) return prev;
+      const movableIndexes = prev.map((_, idx) => idx).filter((idx) => !locked.has(idx));
+      const fromMovable = movableIndexes.indexOf(fromIndex);
+      const toMovable = movableIndexes.indexOf(toIndex);
+      if (fromMovable < 0 || toMovable < 0) return prev;
+      const movableSteps = movableIndexes.map((idx) => prev[idx]);
+      const [removed] = movableSteps.splice(fromMovable, 1);
+      movableSteps.splice(toMovable, 0, removed);
       const next = [...prev];
-      const [removed] = next.splice(fromIndex, 1);
-      next.splice(toIndex, 0, removed);
+      movableIndexes.forEach((idx, pos) => {
+        next[idx] = movableSteps[pos];
+      });
       return next;
     });
     setOrderResult(null);
@@ -4314,15 +4677,21 @@ function StageMethodComposition() {
     if (sorted.length < 2) return;
     setOrderedSteps(shuffleMethodStepsForChallenge(sorted));
     setOrderResult(null);
+    setOrderWrongCount(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- stepsSig синхронизирует пересбор при смене шагов
   }, [useMediumOrdering, stepsSig]);
 
   const moveOrderStep = (index, delta) => {
     setOrderedSteps((prev) => {
+      const locked = getLockedIndexesForSteps(prev);
+      if (locked.has(index)) return prev;
+      const movableIndexes = prev.map((_, idx) => idx).filter((idx) => !locked.has(idx));
+      const currentPos = movableIndexes.indexOf(index);
+      const targetPos = currentPos + delta;
+      if (currentPos < 0 || targetPos < 0 || targetPos >= movableIndexes.length) return prev;
       const next = [...prev];
-      const j = index + delta;
-      if (j < 0 || j >= next.length) return prev;
-      [next[index], next[j]] = [next[j], next[index]];
+      const targetIndex = movableIndexes[targetPos];
+      [next[index], next[targetIndex]] = [next[targetIndex], next[index]];
       return next;
     });
     setOrderResult(null);
@@ -4332,6 +4701,11 @@ function StageMethodComposition() {
     const ok = orderedSteps.length === sortedSteps.length
       && orderedSteps.every((s, i) => s.order === sortedSteps[i].order);
     setOrderResult(ok ? "ok" : "wrong");
+    if (ok) {
+      setOrderWrongCount(0);
+    } else {
+      setOrderWrongCount((prev) => prev + 1);
+    }
   };
 
   const handleSubmit = async () => {
@@ -4425,19 +4799,26 @@ function StageMethodComposition() {
                   {orderDragIndex !== null && orderDropBeforeIndex === idx && (
                     <div className="h-0.5 bg-indigo-500 shadow-[0_0_6px_rgba(79,70,229,0.6)]" aria-hidden />
                   )}
+                  {(() => {
+                    const isLocked = lockedOrderIndexes.has(idx);
+                    return (
                   <div
                     className={`group flex select-none items-stretch gap-1.5 py-0.5 pl-1 pr-1 transition-colors ${
-                      orderDragIndex === idx ? "bg-amber-100/50 opacity-50" : "hover:bg-white/60"
+                      isLocked
+                        ? "bg-emerald-50/90"
+                        : orderDragIndex === idx
+                          ? "bg-amber-100/50 opacity-50"
+                          : "hover:bg-white/60"
                     }`}
                     onDragOver={(e) => {
-                      if (orderResult === "ok" || orderDragIndex === null) return;
+                      if (orderResult === "ok" || orderDragIndex === null || isLocked) return;
                       e.preventDefault();
                       e.dataTransfer.dropEffect = "move";
                       setOrderDropBeforeIndex(idx);
                     }}
                     onDrop={(e) => {
                       e.preventDefault();
-                      if (orderResult === "ok") return;
+                      if (orderResult === "ok" || isLocked) return;
                       const from = parseInt(e.dataTransfer.getData("text/plain"), 10);
                       if (Number.isNaN(from)) return;
                       reorderOrderedSteps(from, idx);
@@ -4446,9 +4827,9 @@ function StageMethodComposition() {
                     }}
                   >
                     <div
-                      draggable={orderResult !== "ok"}
+                      draggable={orderResult !== "ok" && !isLocked}
                       onDragStart={(e) => {
-                        if (orderResult === "ok") return;
+                        if (orderResult === "ok" || isLocked) return;
                         e.dataTransfer.setData("text/plain", String(idx));
                         e.dataTransfer.effectAllowed = "move";
                         try {
@@ -4465,8 +4846,12 @@ function StageMethodComposition() {
                       }}
                       title="Перетащить строку"
                       aria-label="Перетащить шаг"
-                      className={`flex w-8 shrink-0 cursor-grab touch-manipulation items-center justify-center self-stretch rounded border border-amber-200/90 bg-white text-slate-400 hover:border-amber-400 hover:text-amber-900 active:cursor-grabbing ${
-                        orderResult === "ok" ? "cursor-not-allowed opacity-40" : ""
+                      className={`flex w-8 shrink-0 touch-manipulation items-center justify-center self-stretch rounded border bg-white ${
+                        isLocked
+                          ? "cursor-not-allowed border-emerald-200 text-emerald-500 opacity-80"
+                          : `cursor-grab border-amber-200/90 text-slate-400 hover:border-amber-400 hover:text-amber-900 active:cursor-grabbing ${
+                              orderResult === "ok" ? "cursor-not-allowed opacity-40" : ""
+                            }`
                       }`}
                     >
                       <span className="pointer-events-none text-[11px] font-bold leading-none tracking-tighter">
@@ -4474,13 +4859,20 @@ function StageMethodComposition() {
                       </span>
                     </div>
                     <div className="flex min-w-0 flex-1 items-center gap-2 py-0.5">
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-amber-500 text-[11px] font-bold text-white">
+                      <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded text-[11px] font-bold text-white ${
+                        isLocked ? "bg-emerald-500" : "bg-amber-500"
+                      }`}>
                         {idx + 1}
                       </span>
                       <div className="min-w-0 flex-1">
                         <h4 className="text-sm font-semibold leading-tight text-slate-900 line-clamp-2">
                           {step.title}
                         </h4>
+                        {isLocked && (
+                          <p className="mt-1 text-[11px] font-medium text-emerald-700">
+                            Этот шаг уже стоит верно и зафиксирован.
+                          </p>
+                        )}
                         {step.description ? (
                           <details className="mt-0.5">
                             <summary className="cursor-pointer text-[11px] text-amber-800/90 hover:underline list-none [&::-webkit-details-marker]:hidden">
@@ -4497,7 +4889,7 @@ function StageMethodComposition() {
                       <button
                         type="button"
                         aria-label="Выше"
-                        disabled={idx === 0 || orderResult === "ok"}
+                        disabled={idx === 0 || orderResult === "ok" || isLocked}
                         onClick={() => moveOrderStep(idx, -1)}
                         className="rounded border border-slate-200/80 bg-white px-1.5 py-0 text-[11px] leading-none text-slate-600 hover:bg-slate-50 disabled:opacity-25"
                       >
@@ -4506,7 +4898,7 @@ function StageMethodComposition() {
                       <button
                         type="button"
                         aria-label="Ниже"
-                        disabled={idx === orderedSteps.length - 1 || orderResult === "ok"}
+                        disabled={idx === orderedSteps.length - 1 || orderResult === "ok" || isLocked}
                         onClick={() => moveOrderStep(idx, 1)}
                         className="rounded border border-slate-200/80 bg-white px-1.5 py-0 text-[11px] leading-none text-slate-600 hover:bg-slate-50 disabled:opacity-25"
                       >
@@ -4514,6 +4906,8 @@ function StageMethodComposition() {
                       </button>
                     </div>
                   </div>
+                    );
+                  })()}
                 </div>
               ))}
             </div>
@@ -6064,7 +6458,8 @@ function SemiCircleGauge({ value = 0 }) {
 }
 
 function StageCompleted() {
-  const { session, handleBackToCatalog, ksData, updateSession } = useApp();
+  const { session, handleBackToCatalog, ksData, updateSession, accountProfile } = useApp();
+  const isPilotMode = !!accountProfile?.is_pilot_mode;
   const snap =
     session?.has_completed && session?.last_completed && !session?.id
       ? {
@@ -6206,9 +6601,11 @@ function StageCompleted() {
           <button type="button" onClick={handleBackToCatalog} className="btn-primary btn-lg w-full sm:flex-1">
             Вернуться к каталогу
           </button>
-          <button type="button" onClick={handleStartNewFromCompleted} className="btn-outline btn-lg w-full sm:flex-1">
-            Пройти эту систему знаний заново
-          </button>
+          {isPilotMode && (
+            <button type="button" onClick={handleStartNewFromCompleted} className="btn-outline btn-lg w-full sm:flex-1">
+              Пройти эту систему знаний заново
+            </button>
+          )}
         </div>
       </div>
     </div>

@@ -331,7 +331,7 @@ class TaskDetailSerializer(serializers.ModelSerializer):
         model = Task
         fields = (
             "id", "order", "title", "text",
-            "correct_answer", "answer_unit", "answer_tolerance",
+            "correct_answer", "answer_unit", "allowed_answer_units", "answer_tolerance",
             "difficulty",
             "solution_summary", "solution_detailed",
             "schema_templates"
@@ -353,7 +353,7 @@ class TaskListSerializer(serializers.ModelSerializer):
         fields = (
             "id", "order", "title", "text",
             "ks", "ks_title", "topic_title",
-            "correct_answer", "correct_answer_text", "answer_unit", "difficulty",
+            "correct_answer", "correct_answer_text", "answer_unit", "allowed_answer_units", "difficulty",
             "has_schema"
         )
 
@@ -368,7 +368,7 @@ class TaskCreateUpdateSerializer(serializers.ModelSerializer):
         fields = (
             "id", "ks", "order", "title", "text",
             "correct_answer", "correct_answer_text",
-            "answer_unit", "answer_tolerance", "difficulty",
+            "answer_unit", "allowed_answer_units", "answer_tolerance", "difficulty",
             "solution_summary", "solution_detailed", "solution_image"
         )
 

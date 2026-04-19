@@ -41,6 +41,12 @@ class AuthLoginView(APIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
         login(request, user)
+        # Строка профиля нужна для /api/account/me/ (student_mode и т.д.)
+        UserProfile.objects.get_or_create(
+            user=user,
+            defaults={"must_change_password": False},
+        )
+        request.session.modified = True
         return Response(
             {
                 "ok": True,
@@ -68,13 +74,18 @@ class AccountMeView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        profile = getattr(request.user, "learning_profile", None)
+        profile = _learning_profile(request.user)
+        student_mode = (profile.student_mode if profile else "student")
+        is_pilot = student_mode == "pilot"
         return Response(
             {
                 "username": request.user.username,
                 "first_name": request.user.first_name or "",
                 "must_change_password": bool(profile and profile.must_change_password),
                 "is_staff": bool(request.user.is_staff),
+                "student_mode": student_mode,
+                "is_pilot_mode": is_pilot,
+                "can_reset_progress": is_pilot,
             }
         )
 
@@ -113,7 +124,7 @@ class AccountChangePasswordView(APIView):
             return Response({"detail": detail}, status=status.HTTP_400_BAD_REQUEST)
         request.user.set_password(new_password)
         request.user.save(update_fields=["password"])
-        profile = getattr(request.user, "learning_profile", None)
+        profile = _learning_profile(request.user)
         if profile and profile.must_change_password:
             profile.must_change_password = False
             profile.save(update_fields=["must_change_password"])
@@ -142,6 +153,14 @@ from .serializers import (
     StepAttemptSerializer, StepAttemptCreateSerializer,
     StudyGroupSerializer,
 )
+
+
+def _learning_profile(user):
+    """UserProfile для user; без исключения, если строки профиля ещё нет (reverse OneToOne)."""
+    if not user or not getattr(user, "is_authenticated", False):
+        return None
+    return UserProfile.objects.filter(user_id=user.pk).first()
+
 
 def _build_result_summary(session):
     """Build result_summary dict from TaskAttempts for a session."""
@@ -217,6 +236,17 @@ def _teacher_can_view_session(teacher, session):
     if ids is None:
         return True
     return session.user_id in ids
+
+
+def _get_student_mode(user):
+    prof = _learning_profile(user)
+    if not prof:
+        return UserProfile.MODE_STUDENT
+    return prof.student_mode or UserProfile.MODE_STUDENT
+
+
+def _is_pilot_user(user):
+    return _get_student_mode(user) == UserProfile.MODE_PILOT
 
 
 def _recalculate_mastery_after_teacher_review(session, review_status, grade_2_5):
@@ -832,10 +862,8 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
             return Response({"detail": "Invalid difficulty"}, status=status.HTTP_400_BAD_REQUEST)
 
         session.difficulty_choice = difficulty
-        if difficulty == "easy":
-            session.target_tasks_count = 5
-        else:
-            session.target_tasks_count = 6
+        # Всегда 6 «ситуаций» в треке: 1–5 обычные, 6-я — итоговая с обязательным фото и проверкой учителя.
+        session.target_tasks_count = 6
 
         st = session.current_stage
         if st in (
@@ -913,6 +941,11 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
             session = LearningSession.objects.get(pk=pk, user=request.user)
         except LearningSession.DoesNotExist:
             return Response({"detail": "Session not found"}, status=status.HTTP_404_NOT_FOUND)
+        if not _is_pilot_user(request.user):
+            return Response(
+                {"detail": "Сброс доступен только в режиме апробации"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
         
         # Если сессия не завершена, завершаем её
         if not session.finished_at:
@@ -950,6 +983,11 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
         ks_id = request.query_params.get("ks_id") or request.data.get("ks_id")
         if not ks_id:
             return Response({"detail": "ks_id required"}, status=status.HTTP_400_BAD_REQUEST)
+        if not _is_pilot_user(request.user):
+            return Response(
+                {"detail": "Новый запуск доступен только в режиме апробации"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
         
         try:
             ks = KnowledgeSystem.objects.get(pk=ks_id)
@@ -1088,6 +1126,15 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
 
         next_stage = request.data.get("next_stage")
         if next_stage:
+            if (
+                not _is_pilot_user(request.user)
+                and session.current_stage == "comprehension"
+                and next_stage == "typical_task"
+            ):
+                return Response(
+                    {"detail": "В режиме «ученик» нельзя пропускать этап осмысления"},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
             if next_stage not in ALLOWED_STAGES:
                 return Response({"detail": "Invalid next_stage"}, status=status.HTTP_400_BAD_REQUEST)
             allowed_next = ALLOWED_STAGE_TRANSITIONS.get(session.current_stage, set())
@@ -1261,6 +1308,7 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
                 "text": next_task.text,
                 "difficulty": next_task.difficulty,
                 "answer_unit": next_task.answer_unit or "",
+                "allowed_answer_units": next_task.allowed_answer_units or ([next_task.answer_unit] if next_task.answer_unit else []),
             },
             "is_completed": False,
             "current_task_index": session.current_task_index,
@@ -1330,6 +1378,7 @@ class TaskViewSet(viewsets.GenericViewSet):
             "text": task.text,
             "difficulty": task.difficulty,
             "answer_unit": task.answer_unit,
+            "allowed_answer_units": task.allowed_answer_units or ([task.answer_unit] if task.answer_unit else []),
             "ks_id": task.ks_id,
             "ks_title": task.ks.title,
         }, status=status.HTTP_200_OK)
@@ -1357,6 +1406,7 @@ class TaskViewSet(viewsets.GenericViewSet):
             return Response({"detail": "Task does not belong to session knowledge system"}, status=status.HTTP_400_BAD_REQUEST)
 
         answer_numeric = request.data.get("answer_numeric")
+        answer_unit = (request.data.get("answer_unit") or "").strip()
         answer_text = request.data.get("answer_text", "")
         answer_files = list(request.FILES.getlist("answer_images"))
         legacy_image = request.FILES.get("answer_image")
@@ -1384,7 +1434,7 @@ class TaskViewSet(viewsets.GenericViewSet):
             try:
                 answer_numeric = float(answer_numeric)
                 if task.correct_answer is not None:
-                    is_correct = task.check_answer(answer_numeric)
+                    is_correct = task.check_answer(answer_numeric, answer_unit or task.answer_unit)
                 else:
                     is_correct = False
             except (ValueError, TypeError):
@@ -1454,6 +1504,7 @@ class TaskViewSet(viewsets.GenericViewSet):
             payload={
                 "task_id": task.id,
                 "answer_numeric": answer_numeric,
+                "answer_unit": answer_unit or task.answer_unit or "",
                 "answer_text": answer_text,
                 "is_correct": is_correct,
                 "attempt_id": attempt.id,
@@ -1494,6 +1545,8 @@ class TaskViewSet(viewsets.GenericViewSet):
             "task_attempts_count": task_attempts_count,
             "task_wrong_attempts_count": task_wrong_attempts_count,
             "answer_unit": task.answer_unit or "",
+            "selected_answer_unit": answer_unit or task.answer_unit or "",
+            "allowed_answer_units": task.allowed_answer_units or ([task.answer_unit] if task.answer_unit else []),
             "is_final_grade_task": is_final_grade_task,
         }
         if is_final_grade_task:
@@ -1548,6 +1601,7 @@ class TaskViewSet(viewsets.GenericViewSet):
             "task_id": task.id,
             "correct_answer": task.correct_answer,
             "answer_unit": task.answer_unit,
+            "allowed_answer_units": task.allowed_answer_units or ([task.answer_unit] if task.answer_unit else []),
             "solution_summary": task.solution_summary,
             "solution_detailed": task.solution_detailed,
             "steps": steps,
@@ -2089,6 +2143,9 @@ class OrganizerStudyGroupViewSet(viewsets.ModelViewSet):
         password = request.data.get("password") or ""
         first_name = (request.data.get("first_name") or "").strip()
         last_name = (request.data.get("last_name") or "").strip()
+        student_mode = (request.data.get("student_mode") or UserProfile.MODE_STUDENT).strip()
+        if student_mode not in (UserProfile.MODE_STUDENT, UserProfile.MODE_PILOT):
+            return Response({"detail": "student_mode должен быть student|pilot"}, status=status.HTTP_400_BAD_REQUEST)
         if not username or not password:
             return Response(
                 {"detail": "Нужны username и password"},
@@ -2108,7 +2165,7 @@ class OrganizerStudyGroupViewSet(viewsets.ModelViewSet):
         user.save(update_fields=["is_staff", "is_superuser"])
         StudyGroupMembership.objects.get_or_create(group=group, user=user)
         UserProfile.objects.update_or_create(
-            user=user, defaults={"must_change_password": True}
+            user=user, defaults={"must_change_password": True, "student_mode": student_mode}
         )
         EventLog.objects.create(
             user=request.user,
@@ -2116,7 +2173,7 @@ class OrganizerStudyGroupViewSet(viewsets.ModelViewSet):
             event="organizer_student_created",
             payload={"group_id": group.id, "student_username": user.username},
         )
-        return Response({"ok": True, "user_id": user.id, "username": user.username})
+        return Response({"ok": True, "user_id": user.id, "username": user.username, "student_mode": student_mode})
 
     @action(detail=True, methods=["post"], url_path="remove_student")
     def remove_student(self, request, pk=None):
@@ -2133,17 +2190,114 @@ class OrganizerStudyGroupViewSet(viewsets.ModelViewSet):
         rows = []
         for m in group.memberships.select_related("user"):
             u = m.user
-            prof = getattr(u, "learning_profile", None)
+            prof = _learning_profile(u)
             rows.append(
                 {
                     "user_id": u.id,
                     "username": u.username,
                     "first_name": u.first_name or "",
+                    "last_name": u.last_name or "",
                     "must_change_password": bool(prof and prof.must_change_password),
+                    "student_mode": (prof.student_mode if prof else UserProfile.MODE_STUDENT),
                     "joined_at": m.created_at.isoformat(),
                 }
             )
         return Response(rows)
+
+    @action(detail=True, methods=["get"], url_path="student_card")
+    def student_card(self, request, pk=None):
+        group = self.get_object()
+        uid = request.query_params.get("user_id")
+        if not uid:
+            return Response({"detail": "user_id обязателен"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            uid_int = int(uid)
+        except (TypeError, ValueError):
+            return Response({"detail": "Некорректный user_id"}, status=status.HTTP_400_BAD_REQUEST)
+        if not StudyGroupMembership.objects.filter(group=group, user_id=uid_int).exists():
+            return Response({"detail": "Ученик не состоит в этой группе"}, status=status.HTTP_404_NOT_FOUND)
+        User = get_user_model()
+        try:
+            user = User.objects.get(pk=uid_int)
+        except User.DoesNotExist:
+            return Response({"detail": "Пользователь не найден"}, status=status.HTTP_404_NOT_FOUND)
+        profile = _learning_profile(user)
+        sessions = LearningSession.objects.filter(user=user).select_related("ks").order_by("-created_at")
+        sessions_data = [
+            {
+                "session_id": s.id,
+                "ks_id": s.ks_id,
+                "ks_title": s.ks.title,
+                "current_stage": s.current_stage,
+                "score_percent": s.score_percent,
+                "mastery_percent": s.mastery_percent,
+                "tasks_solved_count": s.tasks_solved_count,
+                "tasks_correct_count": s.tasks_correct_count,
+                "finished_at": s.finished_at.isoformat() if s.finished_at else None,
+            }
+            for s in sessions[:60]
+        ]
+        return Response({
+            "user_id": user.id,
+            "username": user.username,
+            "first_name": user.first_name or "",
+            "last_name": user.last_name or "",
+            "must_change_password": bool(profile and profile.must_change_password),
+            "student_mode": (profile.student_mode if profile else UserProfile.MODE_STUDENT),
+            "sessions": sessions_data,
+        })
+
+    @action(detail=True, methods=["patch"], url_path="update_student")
+    def update_student(self, request, pk=None):
+        group = self.get_object()
+        uid = request.data.get("user_id")
+        if not uid:
+            return Response({"detail": "user_id обязателен"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            uid_int = int(uid)
+        except (TypeError, ValueError):
+            return Response({"detail": "Некорректный user_id"}, status=status.HTTP_400_BAD_REQUEST)
+        if not StudyGroupMembership.objects.filter(group=group, user_id=uid_int).exists():
+            return Response({"detail": "Ученик не состоит в этой группе"}, status=status.HTTP_404_NOT_FOUND)
+        User = get_user_model()
+        try:
+            user = User.objects.get(pk=uid_int)
+        except User.DoesNotExist:
+            return Response({"detail": "Пользователь не найден"}, status=status.HTTP_404_NOT_FOUND)
+        profile, _ = UserProfile.objects.get_or_create(user=user)
+
+        updates_user = []
+        updates_profile = []
+        if "first_name" in request.data:
+            user.first_name = (request.data.get("first_name") or "").strip()
+            updates_user.append("first_name")
+        if "last_name" in request.data:
+            user.last_name = (request.data.get("last_name") or "").strip()
+            updates_user.append("last_name")
+        if "must_change_password" in request.data:
+            profile.must_change_password = bool(request.data.get("must_change_password"))
+            updates_profile.append("must_change_password")
+        if "student_mode" in request.data:
+            mode = (request.data.get("student_mode") or "").strip()
+            if mode not in (UserProfile.MODE_STUDENT, UserProfile.MODE_PILOT):
+                return Response({"detail": "student_mode должен быть student|pilot"}, status=status.HTTP_400_BAD_REQUEST)
+            profile.student_mode = mode
+            updates_profile.append("student_mode")
+        if updates_user:
+            user.save(update_fields=list(dict.fromkeys(updates_user)))
+        if updates_profile:
+            profile.save(update_fields=list(dict.fromkeys(updates_profile)))
+
+        if bool(request.data.get("clear_learning_data")):
+            if profile.student_mode != UserProfile.MODE_PILOT:
+                return Response(
+                    {"detail": "Стирание данных доступно только для режима апробации"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            LearningSession.objects.filter(user=user).delete()
+            EventLog.objects.filter(user=user).delete()
+
+        return Response({"ok": True})
 
 
 class TeacherPilotDashboardViewSet(viewsets.ViewSet):
@@ -2734,44 +2888,116 @@ class TeacherFinalTaskReviewViewSet(viewsets.GenericViewSet):
     permission_classes = [IsTeacher]
     queryset = TaskAttempt.objects.none()
 
+    @staticmethod
+    def _serialize_attempt(a, request):
+        img_urls = []
+        if a.answer_image:
+            img_urls.append(request.build_absolute_uri(a.answer_image.url))
+        for row in a.answer_images.all().order_by("order", "id"):
+            img_urls.append(request.build_absolute_uri(row.image.url))
+        user = a.session.user
+        return {
+            "id": a.id,
+            "created_at": a.created_at.isoformat(),
+            "reviewed_at": a.reviewed_at.isoformat() if a.reviewed_at else None,
+            "answer_numeric": a.answer_numeric,
+            "answer_text": a.answer_text,
+            "answer_image_url": img_urls[0] if img_urls else None,
+            "answer_image_urls": img_urls,
+            "is_correct_auto": a.is_correct,
+            "teacher_review_status": a.teacher_review_status,
+            "teacher_grade_2_5": a.teacher_grade_2_5,
+            "teacher_comment": a.teacher_comment or "",
+            "student": user.get_full_name() or user.username,
+            "student_id": user.id,
+            "session_id": a.session_id,
+            "task_id": a.task_id,
+            "task_order": a.task.order,
+            "ks_id": a.task.ks_id,
+            "ks_title": a.task.ks.title,
+        }
+
     def list(self, request):
         ks_id = request.query_params.get("ks_id")
+        status_filter = request.query_params.get("status", "pending")  # pending | reviewed | all
         qs = (
-            TaskAttempt.objects.filter(teacher_review_status="pending")
+            TaskAttempt.objects.exclude(teacher_review_status="")
             .select_related("session__user", "task", "task__ks")
             .prefetch_related("answer_images")
         )
+        if status_filter == "pending":
+            qs = qs.filter(teacher_review_status="pending")
+        elif status_filter == "reviewed":
+            qs = qs.filter(teacher_review_status__in=["accepted", "rejected"])
+        # "all" — no extra filter
         student_ids = _student_ids_for_teacher_groups(request.user)
         if student_ids is not None:
             qs = qs.filter(session__user_id__in=student_ids)
         if ks_id:
             qs = qs.filter(task__ks_id=int(ks_id))
         qs = qs.order_by("-created_at")
-        out = []
-        for a in qs[:200]:
-            img_urls = []
-            if a.answer_image:
-                img_urls.append(request.build_absolute_uri(a.answer_image.url))
-            for row in a.answer_images.all().order_by("order", "id"):
-                img_urls.append(request.build_absolute_uri(row.image.url))
-            out.append(
-                {
-                    "id": a.id,
-                    "created_at": a.created_at.isoformat(),
-                    "answer_numeric": a.answer_numeric,
-                    "answer_text": a.answer_text,
-                    "answer_image_url": img_urls[0] if img_urls else None,
-                    "answer_image_urls": img_urls,
-                    "is_correct_auto": a.is_correct,
-                    "student": getattr(a.session.user, "username", str(a.session.user_id)),
-                    "session_id": a.session_id,
-                    "task_id": a.task_id,
-                    "task_order": a.task.order,
-                    "ks_id": a.task.ks_id,
-                    "ks_title": a.task.ks.title,
-                }
-            )
+        out = [self._serialize_attempt(a, request) for a in qs[:200]]
         return Response(out)
+
+    @action(detail=True, methods=["patch"], url_path="edit")
+    def edit_review(self, request, pk=None):
+        """Редактировать уже выставленную оценку / комментарий."""
+        try:
+            attempt = TaskAttempt.objects.select_related("task", "session").get(pk=pk)
+        except (TaskAttempt.DoesNotExist, ValueError):
+            return Response({"detail": "Попытка не найдена"}, status=status.HTTP_404_NOT_FOUND)
+        if attempt.teacher_review_status not in ("accepted", "rejected"):
+            return Response(
+                {"detail": "Можно редактировать только уже проверенные работы"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if not _teacher_can_view_session(request.user, attempt.session):
+            return Response({"detail": "Нет доступа"}, status=status.HTTP_403_FORBIDDEN)
+
+        new_status = request.data.get("status", attempt.teacher_review_status)
+        if new_status not in ("accepted", "rejected"):
+            return Response({"detail": "status должен быть accepted|rejected"}, status=status.HTTP_400_BAD_REQUEST)
+
+        comment = (request.data.get("comment") or "").strip()
+        grade_raw = request.data.get("grade_2_5")
+        grade = attempt.teacher_grade_2_5
+        if grade_raw is not None and grade_raw != "":
+            try:
+                grade = int(grade_raw)
+            except (TypeError, ValueError):
+                return Response({"detail": "grade_2_5 должен быть целым числом 2–5"}, status=status.HTTP_400_BAD_REQUEST)
+            if grade not in (2, 3, 4, 5):
+                return Response({"detail": "Отметка должна быть в диапазоне 2–5"}, status=status.HTTP_400_BAD_REQUEST)
+        if new_status == "accepted" and not grade:
+            return Response({"detail": "Для принятия работы укажите отметку 2–5"}, status=status.HTTP_400_BAD_REQUEST)
+
+        prev_status = attempt.teacher_review_status
+        attempt.teacher_review_status = new_status
+        attempt.teacher_comment = comment
+        attempt.teacher_grade_2_5 = grade
+        attempt.reviewed_by = request.user
+        attempt.save(update_fields=["teacher_review_status", "teacher_comment", "teacher_grade_2_5", "reviewed_by"])
+
+        sess = attempt.session
+        target = max(2, int(sess.target_tasks_count or 6))
+        # Adjust session stage/state only if status changed
+        if prev_status != new_status:
+            if new_status == "rejected":
+                if sess.tasks_solved_count >= target:
+                    sess.tasks_solved_count = target - 1
+                sess.current_stage = "task_list"
+                sess.current_task_index = max(0, target - 1)
+                sess.finished_at = None
+                sess.save(update_fields=["tasks_solved_count", "current_stage", "current_task_index", "finished_at"])
+            else:
+                if sess.tasks_solved_count < target:
+                    sess.tasks_solved_count = target
+                sess.current_stage = "completed"
+                if not sess.finished_at:
+                    sess.finished_at = timezone.now()
+                sess.save(update_fields=["tasks_solved_count", "current_stage", "finished_at"])
+        _recalculate_mastery_after_teacher_review(sess, new_status, grade)
+        return Response({"ok": True, "mastery_percent": sess.mastery_percent})
 
     @action(detail=False, methods=["post"], url_path="submit")
     def submit_review(self, request):
@@ -2871,3 +3097,79 @@ class TeacherFinalTaskReviewViewSet(viewsets.GenericViewSet):
                 "teacher_comment": attempt.teacher_comment or "",
             }
         )
+
+    @action(detail=False, methods=["get"], url_path="gradebook")
+    def gradebook(self, request):
+        """
+        Журнал оценок: ученики × СК × результаты.
+        Returns { students, ks_list, cells }
+        """
+        student_ids = _student_ids_for_teacher_groups(request.user)
+        qs = (
+            LearningSession.objects.select_related("user", "ks")
+            .order_by("user__last_name", "user__first_name", "ks__title")
+        )
+        if student_ids is not None:
+            qs = qs.filter(user_id__in=student_ids)
+
+        students = {}  # id → {id, username, full_name}
+        ks_map = {}    # id → {id, title, topic_title}
+        cells = {}     # "{user_id}_{ks_id}" → cell data
+
+        # Pre-fetch final review attempts for efficiency
+        session_ids = list(qs.values_list("id", flat=True))
+        final_attempts = (
+            TaskAttempt.objects.filter(session_id__in=session_ids)
+            .exclude(teacher_review_status="")
+            .select_related("task__ks")
+            .order_by("-created_at")
+        )
+        latest_attempt_by_session = {}
+        for a in final_attempts:
+            if a.session_id not in latest_attempt_by_session:
+                latest_attempt_by_session[a.session_id] = a
+
+        for sess in qs:
+            user = sess.user
+            ks = sess.ks
+            uid = user.id
+            kid = ks.id
+
+            if uid not in students:
+                full_name = (user.get_full_name() or "").strip()
+                students[uid] = {
+                    "id": uid,
+                    "username": user.username,
+                    "full_name": full_name or user.username,
+                }
+            if kid not in ks_map:
+                ks_map[kid] = {"id": kid, "title": ks.title}
+
+            key = f"{uid}_{kid}"
+            fa = latest_attempt_by_session.get(sess.id)
+            grade = fa.teacher_grade_2_5 if fa else None
+            final_status = fa.teacher_review_status if fa else None
+
+            # Keep only the most progressed session per student/ks
+            existing = cells.get(key)
+            is_better = (
+                not existing
+                or (sess.current_stage == "completed" and existing["current_stage"] != "completed")
+                or (grade is not None and existing["grade"] is None)
+            )
+            if is_better:
+                cells[key] = {
+                    "session_id": sess.id,
+                    "mastery_percent": sess.mastery_percent,
+                    "grade": grade,
+                    "current_stage": sess.current_stage,
+                    "final_review_status": final_status,
+                    "finished_at": sess.finished_at.isoformat() if sess.finished_at else None,
+                    "attempt_id": fa.id if fa else None,
+                }
+
+        return Response({
+            "students": sorted(students.values(), key=lambda x: x["full_name"]),
+            "ks_list": sorted(ks_map.values(), key=lambda x: x["title"]),
+            "cells": cells,
+        })

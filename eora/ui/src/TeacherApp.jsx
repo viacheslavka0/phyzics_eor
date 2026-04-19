@@ -10,6 +10,24 @@ import React, { useEffect, useState, lazy, Suspense, useCallback } from "react";
 const SchemaEditor = lazy(() => import("./components/SchemaEditor"));
 const ElementCreatorVisual = lazy(() => import("./components/ElementCreatorVisual"));
 
+const UNIT_GROUP_OPTIONS = [
+  {
+    key: "length",
+    label: "Длина",
+    units: ["см", "м", "км"],
+  },
+  {
+    key: "time",
+    label: "Время",
+    units: ["с", "мин", "ч", "сут", "лет"],
+  },
+  {
+    key: "speed",
+    label: "Скорость",
+    units: ["м/с", "км/ч", "км/с"],
+  },
+];
+
 // =============================================================================
 // UTILS
 // =============================================================================
@@ -60,6 +78,11 @@ function formatTeacherTaskAnswer(task) {
   return null;
 }
 
+function inferUnitGroup(unit) {
+  const code = String(unit || "").trim();
+  return UNIT_GROUP_OPTIONS.find((group) => group.units.includes(code)) || null;
+}
+
 const apiUpload = async (url, formData) => {
   const res = await fetch(url, {
     method: "POST",
@@ -81,9 +104,23 @@ const apiUpload = async (url, formData) => {
 // =============================================================================
 
 export default function TeacherApp() {
-  const [view, setView] = useState("pilot-dashboard"); // pilot-dashboard | pilot-organizer | structure | ks-edit | tasks | elements | final-reviews
+  const [view, setView] = useState("pilot-dashboard"); // pilot-dashboard | pilot-organizer | structure | ks-edit | tasks | elements | final-reviews | gradebook
   const [selectedKS, setSelectedKS] = useState(null);
   const [error, setError] = useState("");
+  const [pendingCount, setPendingCount] = useState(0);
+
+  // Poll pending review count every 60s
+  useEffect(() => {
+    const fetchCount = async () => {
+      try {
+        const d = await api("/api/teacher/final-reviews/?status=pending");
+        setPendingCount(Array.isArray(d) ? d.length : 0);
+      } catch { /* ignore */ }
+    };
+    fetchCount();
+    const id = setInterval(fetchCount, 60000);
+    return () => clearInterval(id);
+  }, []);
 
   const handleEditKS = (ks) => {
     setSelectedKS(ks);
@@ -207,13 +244,29 @@ export default function TeacherApp() {
             <button
               type="button"
               onClick={() => setView("final-reviews")}
-              className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+              className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors flex items-center gap-1.5 ${
                 view === "final-reviews"
                   ? "text-indigo-600 border-indigo-600"
                   : "text-slate-600 border-transparent hover:text-slate-900"
               }`}
             >
-              Итоговые работы
+              ✏️ Итоговые работы
+              {pendingCount > 0 && (
+                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-amber-500 text-white text-xs font-bold leading-none">
+                  {pendingCount}
+                </span>
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => setView("gradebook")}
+              className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+                view === "gradebook"
+                  ? "text-indigo-600 border-indigo-600"
+                  : "text-slate-600 border-transparent hover:text-slate-900"
+              }`}
+            >
+              📋 Журнал
             </button>
           </div>
         </div>
@@ -231,7 +284,8 @@ export default function TeacherApp() {
         )}
         {view === "tasks" && <TasksView />}
         {view === "elements" && <ElementsView />}
-        {view === "final-reviews" && <FinalReviewsView />}
+        {view === "final-reviews" && <FinalReviewsView onPendingChange={setPendingCount} />}
+        {view === "gradebook" && <GradebookView />}
       </main>
     </div>
   );
@@ -2594,6 +2648,11 @@ function TasksView() {
                     ) : (
                       <span className="text-sm text-amber-700 italic">не задан</span>
                     )}
+                    {!!task.allowed_answer_units?.length && (
+                      <span className="text-xs text-slate-500">
+                        Допустимые единицы: {task.allowed_answer_units.join(", ")}
+                      </span>
+                    )}
                   </div>
                   <p className="text-xs text-slate-500 mt-2">{task.ks_title}</p>
                 </div>
@@ -2633,6 +2692,7 @@ function TasksView() {
 // =============================================================================
 
 function TaskEditor({ task, ksList, onBack }) {
+  const initialUnitGroup = inferUnitGroup(task?.answer_unit)?.key || "";
   const isNew = !task;
   const [formData, setFormData] = useState({
     ks: task?.ks || (ksList[0]?.id || ""),
@@ -2641,11 +2701,30 @@ function TaskEditor({ task, ksList, onBack }) {
     text: task?.text || "",
     correct_answer: task?.correct_answer || "",
     answer_unit: task?.answer_unit || "",
+    allowed_answer_units: task?.allowed_answer_units || (task?.answer_unit ? [task.answer_unit] : []),
     answer_tolerance: task?.answer_tolerance || 1,
     correct_answer_text: task?.correct_answer_text || "",
     difficulty: task?.difficulty || 3,
   });
   const [saving, setSaving] = useState(false);
+  const [unitGroup, setUnitGroup] = useState(initialUnitGroup);
+
+  const selectedUnitGroup = UNIT_GROUP_OPTIONS.find((group) => group.key === unitGroup) || null;
+  const selectedUnits = formData.allowed_answer_units || [];
+
+  const toggleAllowedUnit = (unit) => {
+    setFormData((prev) => {
+      const current = prev.allowed_answer_units || [];
+      const next = current.includes(unit)
+        ? current.filter((value) => value !== unit)
+        : [...current, unit];
+      return {
+        ...prev,
+        allowed_answer_units: next,
+        answer_unit: next.includes(prev.answer_unit) ? prev.answer_unit : (next[0] || ""),
+      };
+    });
+  };
 
   const handleSave = async () => {
     if (!formData.ks || !formData.title.trim()) {
@@ -2663,6 +2742,7 @@ function TaskEditor({ task, ksList, onBack }) {
         body: JSON.stringify({
           ...formData,
           correct_answer: formData.correct_answer ? parseFloat(formData.correct_answer) : null,
+          allowed_answer_units: formData.allowed_answer_units || [],
         }),
       });
       
@@ -2771,14 +2851,17 @@ function TaskEditor({ task, ksList, onBack }) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Ед. изм.</label>
-                <input
-                  type="text"
+                <label className="block text-sm font-medium text-slate-700 mb-1">Базовая единица</label>
+                <select
                   value={formData.answer_unit}
                   onChange={(e) => setFormData({ ...formData, answer_unit: e.target.value })}
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg"
-                  placeholder="м/с, км, ..."
-                />
+                >
+                  <option value="">Выберите...</option>
+                  {selectedUnits.map((unit) => (
+                    <option key={unit} value={unit}>{unit}</option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">Погрешность, %</label>
@@ -2789,6 +2872,61 @@ function TaskEditor({ task, ksList, onBack }) {
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg"
                 />
               </div>
+            </div>
+
+            <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+                <div>
+                  <p className="text-sm font-medium text-slate-800">Допустимые единицы для ученика</p>
+                  <p className="text-xs text-slate-500">Сначала выберите тип величины, затем отметьте единицы, которые можно использовать в ответе.</p>
+                </div>
+                <select
+                  value={unitGroup}
+                  onChange={(e) => {
+                    const nextGroup = e.target.value;
+                    setUnitGroup(nextGroup);
+                    const group = UNIT_GROUP_OPTIONS.find((item) => item.key === nextGroup);
+                    if (!group) {
+                      setFormData((prev) => ({ ...prev, answer_unit: "", allowed_answer_units: [] }));
+                      return;
+                    }
+                    setFormData((prev) => ({
+                      ...prev,
+                      allowed_answer_units: group.units,
+                      answer_unit: group.units.includes(prev.answer_unit) ? prev.answer_unit : group.units[0],
+                    }));
+                  }}
+                  className="px-4 py-2 border border-slate-300 rounded-lg bg-white"
+                >
+                  <option value="">Выберите тип величины...</option>
+                  {UNIT_GROUP_OPTIONS.map((group) => (
+                    <option key={group.key} value={group.key}>{group.label}</option>
+                  ))}
+                </select>
+              </div>
+              {selectedUnitGroup ? (
+                <div className="flex flex-wrap gap-2">
+                  {selectedUnitGroup.units.map((unit) => {
+                    const active = selectedUnits.includes(unit);
+                    return (
+                      <button
+                        key={unit}
+                        type="button"
+                        onClick={() => toggleAllowedUnit(unit)}
+                        className={`px-3 py-1.5 rounded-lg border text-sm transition-colors ${
+                          active
+                            ? "border-indigo-300 bg-indigo-50 text-indigo-700"
+                            : "border-slate-300 bg-white text-slate-600 hover:border-slate-400"
+                        }`}
+                      >
+                        {active ? "✓ " : ""}{unit}
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="text-sm text-slate-500">Для текстовых задач можно оставить этот блок пустым.</p>
+              )}
             </div>
 
             <div className="mt-4">
@@ -4309,11 +4447,18 @@ function PilotDashboardView({ onGoReviews }) {
                 </ul>
               )}
             </div>
-            <div className="bg-amber-50 rounded-xl border border-amber-200 p-5">
+            <button
+              type="button"
+              onClick={onGoReviews}
+              className="bg-amber-50 rounded-xl border border-amber-200 p-5 text-left hover:bg-amber-100 transition-colors w-full"
+            >
               <h3 className="font-bold text-amber-950 mb-2">Очередь проверки</h3>
               <p className="text-3xl font-extrabold text-amber-900">{pending.length}</p>
-              <p className="text-sm text-amber-900/80 mt-1">работ в статусе «ожидает проверки»</p>
-            </div>
+              <p className="text-sm text-amber-900/80 mt-1">работ ожидают проверки</p>
+              {pending.length > 0 && (
+                <p className="text-xs font-semibold text-indigo-600 mt-2 underline">Нажмите, чтобы перейти →</p>
+              )}
+            </button>
           </div>
 
           <div className="bg-white rounded-xl border border-slate-200 p-5">
@@ -4379,6 +4524,7 @@ function PilotOrganizerView() {
   const [groups, setGroups] = useState([]);
   const [selGroup, setSelGroup] = useState(null);
   const [members, setMembers] = useState([]);
+  const [addTargetGroup, setAddTargetGroup] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [title, setTitle] = useState("");
@@ -4387,6 +4533,10 @@ function PilotOrganizerView() {
   const [stuUser, setStuUser] = useState("");
   const [stuPass, setStuPass] = useState("");
   const [stuFirst, setStuFirst] = useState("");
+  const [stuLast, setStuLast] = useState("");
+  const [stuMode, setStuMode] = useState("student");
+  const [studentCard, setStudentCard] = useState(null);
+  const [studentCardLoading, setStudentCardLoading] = useState(false);
 
   const loadGroups = useCallback(async () => {
     setError("");
@@ -4449,24 +4599,88 @@ function PilotOrganizerView() {
 
   const addStudent = async (e) => {
     e.preventDefault();
-    if (!selGroup) return;
+    if (!addTargetGroup) return;
     setError("");
     try {
-      await api(`/api/organizer/study-groups/${selGroup}/add_student/`, {
+      await api(`/api/organizer/study-groups/${addTargetGroup}/add_student/`, {
         method: "POST",
         body: JSON.stringify({
           username: stuUser.trim(),
           password: stuPass,
           first_name: stuFirst.trim(),
+          last_name: stuLast.trim(),
+          student_mode: stuMode,
         }),
       });
       setStuUser("");
       setStuPass("");
       setStuFirst("");
-      await loadMembers(selGroup);
+      setStuLast("");
+      setStuMode("student");
+      await loadMembers(addTargetGroup);
       await loadGroups();
+      setAddTargetGroup(null);
     } catch (err) {
       setError(err.message);
+    }
+  };
+
+  const openStudentCard = async (groupId, userId) => {
+    setStudentCardLoading(true);
+    setStudentCard(null);
+    try {
+      const data = await api(`/api/organizer/study-groups/${groupId}/student_card/?user_id=${userId}`);
+      setStudentCard({ ...data, group_id: groupId });
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setStudentCardLoading(false);
+    }
+  };
+
+  const saveStudentCard = async () => {
+    if (!studentCard) return;
+    setStudentCardLoading(true);
+    setError("");
+    try {
+      await api(`/api/organizer/study-groups/${studentCard.group_id}/update_student/`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          user_id: studentCard.user_id,
+          first_name: studentCard.first_name || "",
+          last_name: studentCard.last_name || "",
+          must_change_password: !!studentCard.must_change_password,
+          student_mode: studentCard.student_mode || "student",
+        }),
+      });
+      if (selGroup) await loadMembers(selGroup);
+      setStudentCard(null);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setStudentCardLoading(false);
+    }
+  };
+
+  const clearStudentData = async () => {
+    if (!studentCard) return;
+    if (!confirm("Удалить все учебные данные этого ученика по системам знаний?")) return;
+    setStudentCardLoading(true);
+    setError("");
+    try {
+      await api(`/api/organizer/study-groups/${studentCard.group_id}/update_student/`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          user_id: studentCard.user_id,
+          clear_learning_data: true,
+        }),
+      });
+      const data = await api(`/api/organizer/study-groups/${studentCard.group_id}/student_card/?user_id=${studentCard.user_id}`);
+      setStudentCard({ ...data, group_id: studentCard.group_id });
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setStudentCardLoading(false);
     }
   };
 
@@ -4536,23 +4750,67 @@ function PilotOrganizerView() {
                   Буква: {g.letter || "—"} · участников: {g.member_count}
                 </div>
               </div>
-              <button
-                type="button"
-                className="text-sm text-indigo-600 font-medium"
-                onClick={() => {
-                  setSelGroup(g.id);
-                  loadMembers(g.id);
-                }}
-              >
-                Показать учеников
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 text-sm font-medium"
+                  onClick={() => {
+                    setAddTargetGroup(g.id);
+                    setSelGroup(g.id);
+                    loadMembers(g.id);
+                  }}
+                >
+                  ＋ Ученик
+                </button>
+                <button
+                  type="button"
+                  className="text-sm text-indigo-600 font-medium"
+                  onClick={() => {
+                    setSelGroup(g.id);
+                    loadMembers(g.id);
+                  }}
+                >
+                  Показать учеников
+                </button>
+              </div>
             </div>
           ))}
         </div>
 
         {selGroup && (
           <div className="mt-6 border-t border-slate-200 pt-6">
-            <h4 className="font-semibold mb-2">Добавить ученика в выбранную группу</h4>
+            <h4 className="font-semibold mb-2">Ученики выбранной группы</h4>
+            <ul className="mt-4 space-y-1 text-sm">
+              {members.map((m) => (
+                <li key={m.user_id} className="flex items-center justify-between py-2 border-b border-slate-50">
+                  <button
+                    type="button"
+                    onClick={() => openStudentCard(selGroup, m.user_id)}
+                    className="text-left hover:text-indigo-700"
+                  >
+                    <span className="font-medium">{m.username}</span>
+                    {m.first_name ? <span className="ml-2 text-slate-500">{m.first_name}</span> : null}
+                    <span className={`ml-2 text-xs px-2 py-0.5 rounded ${
+                      m.student_mode === "pilot" ? "bg-indigo-100 text-indigo-700" : "bg-slate-100 text-slate-600"
+                    }`}>
+                      {m.student_mode === "pilot" ? "апробация" : "ученик"}
+                    </span>
+                    {m.must_change_password ? (
+                      <span className="ml-2 text-amber-600 text-xs">нужна смена пароля</span>
+                    ) : null}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      {addTargetGroup && (
+        <div className="fixed inset-0 z-[160] bg-black/45 flex items-center justify-center p-4" onClick={() => setAddTargetGroup(null)}>
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 p-6 w-full max-w-xl" onClick={(e) => e.stopPropagation()}>
+            <h4 className="text-lg font-bold text-slate-900 mb-1">Добавить ученика в группу</h4>
+            <p className="text-sm text-slate-500 mb-4">{groups.find((g) => g.id === addTargetGroup)?.title || ""}</p>
             <form onSubmit={addStudent} className="grid sm:grid-cols-2 gap-3">
               <input
                 className="px-3 py-2 border border-slate-300 rounded-lg"
@@ -4571,187 +4829,689 @@ function PilotOrganizerView() {
                 required
               />
               <input
-                className="px-3 py-2 border border-slate-300 rounded-lg sm:col-span-2"
+                className="px-3 py-2 border border-slate-300 rounded-lg"
                 placeholder="Имя (необязательно)"
                 value={stuFirst}
                 onChange={(e) => setStuFirst(e.target.value)}
               />
-              <button type="submit" className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm sm:col-span-2">
-                Добавить ученика
-              </button>
+              <input
+                className="px-3 py-2 border border-slate-300 rounded-lg"
+                placeholder="Фамилия (необязательно)"
+                value={stuLast}
+                onChange={(e) => setStuLast(e.target.value)}
+              />
+              <div className="sm:col-span-2">
+                <label className="block text-xs text-slate-500 mb-1">Режим ученика</label>
+                <select
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+                  value={stuMode}
+                  onChange={(e) => setStuMode(e.target.value)}
+                >
+                  <option value="student">Ученик (без пропуска этапов, без сброса данных)</option>
+                  <option value="pilot">Апробация (можно пропускать и очищать данные)</option>
+                </select>
+              </div>
+              <div className="sm:col-span-2 flex gap-2">
+                <button type="submit" className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm">
+                  Добавить ученика
+                </button>
+                <button type="button" onClick={() => setAddTargetGroup(null)} className="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm">
+                  Отмена
+                </button>
+              </div>
             </form>
-            <ul className="mt-4 space-y-1 text-sm">
-              {members.map((m) => (
-                <li key={m.user_id} className="flex justify-between py-1 border-b border-slate-50">
-                  <span>
-                    {m.username}
-                    {m.must_change_password ? (
-                      <span className="ml-2 text-amber-600 text-xs">нужна смена пароля</span>
-                    ) : null}
-                  </span>
-                </li>
-              ))}
-            </ul>
+          </div>
+        </div>
+      )}
+
+      {(studentCardLoading || studentCard) && (
+        <div className="fixed inset-0 z-[170] bg-black/45 flex items-center justify-center p-4" onClick={() => setStudentCard(null)}>
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 p-6 w-full max-w-2xl max-h-[88vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
+            {studentCardLoading && !studentCard ? (
+              <p className="text-slate-500">Загрузка карточки ученика…</p>
+            ) : studentCard ? (
+              <div className="space-y-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h4 className="text-lg font-bold text-slate-900">@{studentCard.username}</h4>
+                    <p className="text-sm text-slate-500">Карточка ученика</p>
+                  </div>
+                  <button type="button" onClick={() => setStudentCard(null)} className="text-slate-500 hover:text-slate-800">✕</button>
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs text-slate-500 mb-1">Имя</label>
+                    <input
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+                      value={studentCard.first_name || ""}
+                      onChange={(e) => setStudentCard((prev) => ({ ...prev, first_name: e.target.value }))}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-slate-500 mb-1">Фамилия</label>
+                    <input
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+                      value={studentCard.last_name || ""}
+                      onChange={(e) => setStudentCard((prev) => ({ ...prev, last_name: e.target.value }))}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-slate-500 mb-1">Режим</label>
+                    <select
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg"
+                      value={studentCard.student_mode || "student"}
+                      onChange={(e) => setStudentCard((prev) => ({ ...prev, student_mode: e.target.value }))}
+                    >
+                      <option value="student">Ученик</option>
+                      <option value="pilot">Апробация</option>
+                    </select>
+                  </div>
+                  <label className="inline-flex items-center gap-2 mt-6">
+                    <input
+                      type="checkbox"
+                      checked={!!studentCard.must_change_password}
+                      onChange={(e) => setStudentCard((prev) => ({ ...prev, must_change_password: e.target.checked }))}
+                    />
+                    <span className="text-sm text-slate-700">Требовать смену пароля при входе</span>
+                  </label>
+                </div>
+
+                <div>
+                  <h5 className="font-semibold text-slate-800 mb-2">Успеваемость ученика</h5>
+                  <div className="space-y-2">
+                    {(studentCard.sessions || []).map((s) => (
+                      <div key={s.session_id} className="rounded-lg border border-slate-200 p-3 text-sm">
+                        <div className="font-medium text-slate-800">{s.ks_title}</div>
+                        <div className="text-slate-500 mt-1">
+                          Этап: {s.current_stage} · Решено: {s.tasks_solved_count} · Верно: {s.tasks_correct_count}
+                        </div>
+                        <div className="text-slate-500">
+                          Авто: {s.score_percent ?? 0}% · Итог: {s.mastery_percent ?? 0}%
+                        </div>
+                      </div>
+                    ))}
+                    {!(studentCard.sessions || []).length && (
+                      <p className="text-sm text-slate-500">Сессий пока нет.</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  <button type="button" onClick={saveStudentCard} className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm">
+                    Сохранить
+                  </button>
+                  <button
+                    type="button"
+                    onClick={clearStudentData}
+                    disabled={(studentCard.student_mode || "student") !== "pilot"}
+                    className="px-4 py-2 bg-rose-50 text-rose-700 rounded-lg text-sm disabled:opacity-40"
+                  >
+                    Стереть учебные данные
+                  </button>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Карточка одной работы (переиспользуется в Очереди и Архиве)
+// ---------------------------------------------------------------------------
+function ReviewCard({ row, onRefresh, isArchive }) {
+  const [comment, setComment] = useState(row.teacher_comment || "");
+  const [grade, setGrade] = useState(row.teacher_grade_2_5 != null ? String(row.teacher_grade_2_5) : "");
+  const [busy, setBusy] = useState(false);
+  const [editMode, setEditMode] = useState(!isArchive); // очередь — сразу edit; архив — нажать Edit
+
+  const submit = async (newStatus) => {
+    if (!grade && newStatus === "accepted") {
+      alert("Выберите отметку 2–5 перед тем, как принять работу.");
+      return;
+    }
+    setBusy(true);
+    try {
+      if (isArchive) {
+        await api(`/api/teacher/final-reviews/${row.id}/edit/`, {
+          method: "PATCH",
+          body: JSON.stringify({
+            status: newStatus,
+            comment,
+            grade_2_5: grade !== "" ? Number(grade) : undefined,
+          }),
+        });
+      } else {
+        await api("/api/teacher/final-reviews/submit/", {
+          method: "POST",
+          body: JSON.stringify({
+            attempt_id: row.id,
+            status: newStatus,
+            comment,
+            grade_2_5: grade !== "" ? Number(grade) : undefined,
+          }),
+        });
+      }
+      setEditMode(false);
+      onRefresh();
+    } catch (e) {
+      alert(e.message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const autoCheckBadge =
+    row.is_correct_auto === true ? (
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium">
+        ✓ автопроверка: верно
+      </span>
+    ) : row.is_correct_auto === false ? (
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-red-100 text-red-800 text-xs font-medium">
+        ✗ автопроверка: неверно
+      </span>
+    ) : null;
+
+  const statusBadge =
+    row.teacher_review_status === "accepted" ? (
+      <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-medium">Принято</span>
+    ) : row.teacher_review_status === "rejected" ? (
+      <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-xs font-medium">На доработку</span>
+    ) : (
+      <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 text-xs font-medium">Ожидает</span>
+    );
+
+  const images = row.answer_image_urls?.length
+    ? row.answer_image_urls
+    : row.answer_image_url
+    ? [row.answer_image_url]
+    : [];
+
+  return (
+    <div className="bg-white rounded-xl border border-slate-200 p-5 space-y-4">
+      {/* Header */}
+      <div className="flex flex-wrap justify-between gap-2">
+        <div>
+          <span className="font-semibold text-slate-900">{row.student}</span>
+          <span className="text-slate-500 text-sm ml-2">· {row.ks_title}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          {statusBadge}
+          {isArchive && !editMode && (
+            <button
+              type="button"
+              onClick={() => setEditMode(true)}
+              className="text-xs text-indigo-600 font-medium hover:underline"
+            >
+              Изменить оценку
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Student answer */}
+      <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">Ответ ученика</p>
+        <p className="text-slate-900 text-base font-medium">
+          {row.answer_numeric != null && row.answer_numeric !== ""
+            ? String(row.answer_numeric)
+            : row.answer_text || "—"}
+        </p>
+        {autoCheckBadge && <div className="mt-2">{autoCheckBadge}</div>}
+        {images.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {images.map((url, i) => (
+              <a
+                key={`${row.id}-img-${i}`}
+                href={url}
+                target="_blank"
+                rel="noreferrer"
+                className="block rounded-lg overflow-hidden border border-slate-200 hover:opacity-80"
+              >
+                <img
+                  src={url}
+                  alt={`Фото ${i + 1}`}
+                  className="h-32 w-auto object-cover"
+                  onError={(e) => { e.currentTarget.style.display = "none"; }}
+                />
+              </a>
+            ))}
           </div>
         )}
       </div>
+
+      {/* Archive: show existing review summary when not editing */}
+      {isArchive && !editMode && row.teacher_grade_2_5 != null && (
+        <div className="rounded-xl border border-slate-200 bg-white p-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1">Оценка учителя</p>
+          <p className="text-2xl font-bold text-slate-900">{row.teacher_grade_2_5}</p>
+          {row.teacher_comment && (
+            <p className="text-sm text-slate-600 mt-1 whitespace-pre-line">{row.teacher_comment}</p>
+          )}
+        </div>
+      )}
+
+      {/* Edit / Submit form */}
+      {editMode && (
+        <div className="space-y-3">
+          <div>
+            <label className="block text-xs font-medium text-slate-600 mb-1">Комментарий учителя</label>
+            <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="Необязательно — ученик увидит этот текст"
+              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm min-h-[68px]"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-slate-600 mb-1">Отметка 2–5</label>
+            <select
+              className="px-3 py-2 border border-slate-300 rounded-lg text-sm"
+              value={grade}
+              onChange={(e) => setGrade(e.target.value)}
+            >
+              <option value="">— выберите —</option>
+              <option value="5">5 — отлично</option>
+              <option value="4">4 — хорошо</option>
+              <option value="3">3 — удовлетворительно</option>
+              <option value="2">2 — неудовлетворительно</option>
+            </select>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => submit("accepted")}
+              className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium disabled:opacity-50"
+            >
+              {busy ? "…" : isArchive ? "Сохранить (принято)" : "Принять работу"}
+            </button>
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => submit("rejected")}
+              className="px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium disabled:opacity-50"
+            >
+              {busy ? "…" : "На доработку"}
+            </button>
+            {isArchive && (
+              <button
+                type="button"
+                onClick={() => { setComment(row.teacher_comment || ""); setGrade(row.teacher_grade_2_5 != null ? String(row.teacher_grade_2_5) : ""); setEditMode(false); }}
+                className="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg text-sm"
+              >
+                Отмена
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 function FinalReviewsView() {
+  const [tab, setTab] = useState("pending"); // pending | archive
   const [items, setItems] = useState([]);
-  const [ksId, setKsId] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [commentById, setCommentById] = useState({});
-  const [gradeById, setGradeById] = useState({});
 
   const load = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
-      const q = ksId.trim() ? `?ks_id=${encodeURIComponent(ksId.trim())}` : "";
-      const data = await api(`/api/teacher/final-reviews/${q}`);
+      const statusParam = tab === "archive" ? "reviewed" : "pending";
+      const data = await api(`/api/teacher/final-reviews/?status=${statusParam}`);
       setItems(Array.isArray(data) ? data : []);
     } catch (e) {
       setError(e.message);
     } finally {
       setLoading(false);
     }
-  }, [ksId]);
+  }, [tab]);
 
   useEffect(() => {
     load();
   }, [load]);
 
-  const submitReview = async (attemptId, status) => {
-    try {
-      const g = gradeById[attemptId];
-      await api("/api/teacher/final-reviews/submit/", {
-        method: "POST",
-        body: JSON.stringify({
-          attempt_id: attemptId,
-          status,
-          comment: commentById[attemptId] || "",
-          grade_2_5: g != null && g !== "" ? Number(g) : undefined,
-        }),
-      });
-      await load();
-    } catch (e) {
-      alert(e.message);
-    }
-  };
+  const tabCls = (t) =>
+    `px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+      tab === t
+        ? "bg-indigo-600 text-white"
+        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+    }`;
 
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-xl border border-slate-200 p-6">
-        <h2 className="text-xl font-bold text-slate-900 mb-2">Проверка итоговых ответов</h2>
+        <h2 className="text-xl font-bold text-slate-900 mb-1">Итоговые работы учеников</h2>
         <p className="text-sm text-slate-600 mb-4">
-          Итоговые работы без мгновенной автоматической оценки для ученика. Выставьте отметку 2–5: она учитывается в итоговом проценте усвоения вместе с автоматикой по задачам и активностью по журналу событий.
+          Финальные ситуации проверяются учителем. Выставите отметку 2–5 — она учитывается в итоговом проценте усвоения.
         </p>
-        <div className="flex flex-wrap gap-3 items-end">
-          <div>
-            <label className="block text-xs text-slate-500 mb-1">Фильтр по ID системы знаний (необязательно)</label>
-            <input
-              type="text"
-              value={ksId}
-              onChange={(e) => setKsId(e.target.value)}
-              className="px-3 py-2 border border-slate-300 rounded-lg text-sm w-48"
-              placeholder="ks_id"
-            />
-          </div>
-          <button type="button" onClick={() => load()} className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm">
+        <div className="flex flex-wrap items-center gap-3">
+          <button type="button" className={tabCls("pending")} onClick={() => setTab("pending")}>
+            Очередь {tab === "pending" && items.length > 0 ? `(${items.length})` : ""}
+          </button>
+          <button type="button" className={tabCls("archive")} onClick={() => setTab("archive")}>
+            Архив проверенных
+          </button>
+          <button type="button" onClick={load} className="ml-auto px-3 py-2 text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg">
             Обновить
           </button>
         </div>
       </div>
+
       {error && <p className="text-red-600 text-sm">{error}</p>}
+
       {loading ? (
         <LoadingScreen />
       ) : items.length === 0 ? (
-        <p className="text-slate-500">Нет ответов в статусе «ожидает проверки».</p>
+        <div className="bg-white rounded-xl border border-slate-200 p-10 text-center text-slate-500">
+          {tab === "pending"
+            ? "Очередь пуста — всё проверено или ученики ещё не отправили итоговые ответы."
+            : "Проверенных работ пока нет."}
+        </div>
       ) : (
         <div className="space-y-4">
           {items.map((row) => (
-            <div key={row.id} className="bg-white rounded-xl border border-slate-200 p-5">
-              <div className="flex flex-wrap justify-between gap-2 text-sm text-slate-600 mb-2">
-                <span>
-                  <strong>{row.student}</strong> · сессия {row.session_id} · задача {row.task_id} (порядок {row.task_order})
-                </span>
-                <span>{row.ks_title}</span>
-              </div>
-              <div className="text-slate-800 mb-2">
-                Ответ:{" "}
-                <strong>
-                  {row.answer_numeric != null && row.answer_numeric !== ""
-                    ? String(row.answer_numeric)
-                    : row.answer_text || "—"}
-                </strong>
-                {row.is_correct_auto != null && (
-                  <span className="ml-2 text-xs text-slate-500">
-                    (автопроверка: {row.is_correct_auto ? "верно" : "неверно"})
-                  </span>
-                )}
-              </div>
-              {(row.answer_image_urls && row.answer_image_urls.length > 0
-                ? row.answer_image_urls
-                : row.answer_image_url
-                  ? [row.answer_image_url]
-                  : []
-              ).map((url, i) => (
-                <a
-                  key={`${row.id}-img-${i}`}
-                  href={url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-sm text-indigo-600 underline block mb-1"
-                >
-                  {row.answer_image_urls?.length > 1 ? `Фото решения ${i + 1}` : "Открыть фото решения"}
-                </a>
-              ))}
-              <textarea
-                value={commentById[row.id] ?? ""}
-                onChange={(e) => setCommentById((prev) => ({ ...prev, [row.id]: e.target.value }))}
-                placeholder="Комментарий учителя (необязательно)"
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm mb-3 min-h-[72px]"
-              />
-              <div className="mb-3">
-                <label className="block text-xs text-slate-500 mb-1">Отметка 2–5 (рекомендуется)</label>
-                <select
-                  className="px-3 py-2 border border-slate-300 rounded-lg text-sm"
-                  value={gradeById[row.id] ?? ""}
-                  onChange={(e) =>
-                    setGradeById((prev) => ({ ...prev, [row.id]: e.target.value }))
-                  }
-                >
-                  <option value="">— выберите —</option>
-                  <option value="5">5 (отлично)</option>
-                  <option value="4">4 (хорошо)</option>
-                  <option value="3">3 (удовл.)</option>
-                  <option value="2">2 (неудовл.)</option>
-                </select>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => submitReview(row.id, "accepted")}
-                  className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm"
-                >
-                  Принять
-                </button>
-                <button
-                  type="button"
-                  onClick={() => submitReview(row.id, "rejected")}
-                  className="px-4 py-2 bg-amber-600 text-white rounded-lg text-sm"
-                >
-                  На доработку
-                </button>
-              </div>
-            </div>
+            <ReviewCard key={row.id} row={row} onRefresh={load} isArchive={tab === "archive"} />
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// GRADEBOOK VIEW — Журнал: ученики × СК × оценки
+// ---------------------------------------------------------------------------
+function GradebookView() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [selectedCell, setSelectedCell] = useState(null);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const d = await api("/api/teacher/final-reviews/gradebook/");
+      setData(d);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  if (loading) return <LoadingScreen />;
+  if (error) return <p className="text-red-600 text-sm">{error}</p>;
+  if (!data) return null;
+
+  const { students, ks_list, cells } = data;
+
+  const gradeColor = (g) => {
+    if (!g) return "text-slate-400";
+    if (g >= 5) return "text-emerald-700 font-bold";
+    if (g >= 4) return "text-green-700 font-semibold";
+    if (g >= 3) return "text-amber-700 font-semibold";
+    return "text-red-700 font-semibold";
+  };
+
+  const stageBadge = (stage, finalStatus) => {
+    if (stage === "completed" && finalStatus === "accepted") return { label: "Зачёт ✓", cls: "bg-emerald-100 text-emerald-800" };
+    if (stage === "completed") return { label: "Завершено", cls: "bg-slate-100 text-slate-600" };
+    if (finalStatus === "pending") return { label: "На проверке", cls: "bg-blue-100 text-blue-800" };
+    if (finalStatus === "rejected") return { label: "На доработке", cls: "bg-amber-100 text-amber-800" };
+    return { label: "В процессе", cls: "bg-slate-50 text-slate-500" };
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="bg-white rounded-xl border border-slate-200 p-6 flex items-start justify-between gap-4">
+        <div>
+          <h2 className="text-xl font-bold text-slate-900 mb-1">Журнал оценок</h2>
+          <p className="text-sm text-slate-600">
+            Ученики × системы знаний. Нажмите на ячейку — откроется детальный отчёт и возможность скорректировать оценку.
+          </p>
+        </div>
+        <button type="button" onClick={load} className="shrink-0 px-3 py-2 text-sm bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg">
+          Обновить
+        </button>
+      </div>
+
+      {students.length === 0 ? (
+        <div className="bg-white rounded-xl border border-slate-200 p-10 text-center text-slate-500">
+          Нет данных — добавьте учеников в группы в разделе «Классы и ученики».
+        </div>
+      ) : (
+        <div className="bg-white rounded-xl border border-slate-200 overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead className="bg-slate-50 border-b border-slate-200">
+              <tr>
+                <th className="px-4 py-3 text-left font-semibold text-slate-700 min-w-[160px] sticky left-0 bg-slate-50">
+                  Ученик
+                </th>
+                {ks_list.map((ks) => (
+                  <th
+                    key={ks.id}
+                    className="px-3 py-3 text-center font-semibold text-slate-700 min-w-[130px] max-w-[190px]"
+                  >
+                    <span className="block truncate text-xs" title={ks.title}>{ks.title}</span>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {students.map((stu) => (
+                <tr key={stu.id} className="hover:bg-slate-50/60">
+                  <td className="px-4 py-3 font-medium text-slate-800 sticky left-0 bg-white">
+                    {stu.full_name}
+                  </td>
+                  {ks_list.map((ks) => {
+                    const cell = cells[`${stu.id}_${ks.id}`];
+                    if (!cell) {
+                      return <td key={ks.id} className="px-3 py-3 text-center text-slate-200 text-lg">—</td>;
+                    }
+                    const badge = stageBadge(cell.current_stage, cell.final_review_status);
+                    return (
+                      <td key={ks.id} className="px-3 py-3 text-center">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedCell({ student: stu, ks, cell })}
+                          className="w-full flex flex-col items-center gap-1 rounded-lg p-2 hover:bg-indigo-50 transition-colors"
+                        >
+                          {cell.grade != null ? (
+                            <span className={`text-2xl ${gradeColor(cell.grade)}`}>{cell.grade}</span>
+                          ) : (
+                            <span className="text-slate-300 text-xl">·</span>
+                          )}
+                          <span className={`text-xs px-1.5 py-0.5 rounded-full whitespace-nowrap ${badge.cls}`}>
+                            {badge.label}
+                          </span>
+                          {cell.mastery_percent != null && (
+                            <span className="text-xs text-slate-400">{cell.mastery_percent}%</span>
+                          )}
+                        </button>
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {selectedCell && (
+        <GradebookCellModal
+          student={selectedCell.student}
+          ks={selectedCell.ks}
+          cell={selectedCell.cell}
+          onClose={() => setSelectedCell(null)}
+          onRefresh={() => { setSelectedCell(null); load(); }}
+        />
+      )}
+    </div>
+  );
+}
+
+function GradebookCellModal({ student, ks, cell, onClose, onRefresh }) {
+  const [detail, setDetail] = useState(null);
+  const [loadingDetail, setLoadingDetail] = useState(true);
+  const [editMode, setEditMode] = useState(false);
+  const [grade, setGrade] = useState(cell.grade != null ? String(cell.grade) : "");
+  const [comment, setComment] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      setLoadingDetail(true);
+      try {
+        const d = await api(`/api/teacher/pilot-sessions/${cell.session_id}/`);
+        setDetail(d);
+        if (cell.attempt_id) {
+          try {
+            const reviews = await api("/api/teacher/final-reviews/?status=reviewed");
+            const found = reviews.find((r) => r.id === cell.attempt_id);
+            if (found) setComment(found.teacher_comment || "");
+          } catch { /* ignore */ }
+        }
+      } catch (e) {
+        setErr(e.message);
+      } finally {
+        setLoadingDetail(false);
+      }
+    })();
+  }, [cell.session_id, cell.attempt_id]);
+
+  const saveGrade = async (newStatus) => {
+    if (!grade && newStatus === "accepted") { alert("Выберите отметку 2–5"); return; }
+    if (!cell.attempt_id) { alert("Нет итоговой попытки для этой сессии."); return; }
+    setBusy(true);
+    try {
+      await api(`/api/teacher/final-reviews/${cell.attempt_id}/edit/`, {
+        method: "PATCH",
+        body: JSON.stringify({ status: newStatus, comment, grade_2_5: grade !== "" ? Number(grade) : undefined }),
+      });
+      onRefresh();
+    } catch (e) {
+      setErr(e.message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
+      <div
+        className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="p-6 border-b border-slate-100 flex items-start justify-between gap-4">
+          <div>
+            <h3 className="text-lg font-bold text-slate-900">{student.full_name}</h3>
+            <p className="text-sm text-slate-500">{ks.title}</p>
+          </div>
+          <button type="button" onClick={onClose} className="text-slate-400 hover:text-slate-700 text-2xl leading-none">&times;</button>
+        </div>
+
+        <div className="p-6 space-y-4">
+          {err && <p className="text-red-600 text-sm">{err}</p>}
+
+          {loadingDetail ? (
+            <p className="text-slate-500 text-sm animate-pulse">Загрузка данных сессии…</p>
+          ) : detail ? (
+            <div className="rounded-xl bg-slate-50 border border-slate-200 p-4 space-y-1 text-sm text-slate-700">
+              <p>Автооценка: <strong>{detail.score_percent ?? "—"}%</strong>
+                {detail.mastery_percent != null && <> · Усвоение: <strong>{detail.mastery_percent}%</strong></>}
+              </p>
+              <p>
+                Решено: <strong>{detail.tasks_solved_count}</strong> / <strong>{detail.target_tasks_count}</strong> ·
+                Верно: <strong>{detail.tasks_correct_count ?? "—"}</strong> ·
+                Зачёт: <strong>{detail.passed ? "✓ да" : "✗ нет"}</strong>
+              </p>
+              {detail.event_counts?.length > 0 && (
+                <p className="text-xs text-slate-500 pt-1 border-t border-slate-200 mt-2">
+                  События: {detail.event_counts.map((e) => `${e.event}: ${e.c}`).join(" · ")}
+                </p>
+              )}
+            </div>
+          ) : null}
+
+          <div className="rounded-xl border border-slate-200 p-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-3">Оценка учителя</p>
+            {!editMode ? (
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  {cell.grade != null ? (
+                    <span className="text-3xl font-bold text-slate-900">{cell.grade}</span>
+                  ) : (
+                    <span className="text-slate-400 text-sm">Не выставлена</span>
+                  )}
+                  {comment && <p className="text-sm text-slate-600 mt-1 whitespace-pre-line">{comment}</p>}
+                </div>
+                {cell.attempt_id && (
+                  <button
+                    type="button"
+                    onClick={() => setEditMode(true)}
+                    className="px-3 py-1.5 text-xs font-medium bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100"
+                  >
+                    Изменить
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <select
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                  value={grade}
+                  onChange={(e) => setGrade(e.target.value)}
+                >
+                  <option value="">— выберите отметку —</option>
+                  <option value="5">5 — отлично</option>
+                  <option value="4">4 — хорошо</option>
+                  <option value="3">3 — удовлетворительно</option>
+                  <option value="2">2 — неудовлетворительно</option>
+                </select>
+                <textarea
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  placeholder="Комментарий учителю (необязательно)"
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm min-h-[60px]"
+                />
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    disabled={busy}
+                    onClick={() => saveGrade("accepted")}
+                    className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm disabled:opacity-50"
+                  >
+                    {busy ? "…" : "Сохранить (принято)"}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={busy}
+                    onClick={() => saveGrade("rejected")}
+                    className="px-4 py-2 bg-amber-600 text-white rounded-lg text-sm disabled:opacity-50"
+                  >
+                    На доработку
+                  </button>
+                  <button type="button" onClick={() => setEditMode(false)} className="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg text-sm">
+                    Отмена
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

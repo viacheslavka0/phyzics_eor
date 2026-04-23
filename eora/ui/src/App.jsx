@@ -3418,12 +3418,8 @@ function StageTaskList() {
   const finalRejected = finalStatus === "rejected";
   const finalAccepted = finalStatus === "accepted";
 
-  const taskOnboardingSteps = useMemo(
-    () =>
-      TASK_ONBOARDING_STEPS.filter(
-        (s) => s.target !== "task-difficulty-card" || needsDifficultyChoice
-      ),
-    [needsDifficultyChoice]
+  const taskOnboardingSteps = TASK_ONBOARDING_STEPS.filter(
+    (s) => s.target !== "task-difficulty-card" || needsDifficultyChoice
   );
 
   return (

@@ -1153,7 +1153,7 @@ const TASK_ONBOARDING_STEPS = [
   {
     target: "task-difficulty-card",
     title: "Выбор трудности",
-    text: "Если этот блок показан, выберите уровень трудности до отправки ответа — от этого зависит дальнейший маршрут.",
+    text: "Выбери, насколько сейчас сложно, и продолжай решать.",
     position: "top",
     emoji: "⚖️",
   },
@@ -1174,7 +1174,7 @@ const TASK_ONBOARDING_STEPS = [
   {
     target: "task-submit-button",
     title: "Отправка ответа",
-    text: "Когда всё готово, нажмите кнопку отправки. Система сразу проверит обычную задачу или отправит последнюю ситуацию учителю.",
+    text: "Когда всё готово, нажми «Отправить». Обычно ответ проверяется сразу, а последнюю задачу посмотрит учитель.",
     position: "top",
     emoji: "🚀",
   },
@@ -2629,7 +2629,7 @@ function StageLearningPathChoice() {
         <div className="eora-screen-header max-w-2xl mx-auto mb-8">
           <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Порядок работы с материалом</h2>
           <p className="eora-screen-lead">
-            Выберите вариант, который соответствует вашей готовности решать задания по этой системе знаний.
+            Выбери, как тебе удобнее начать.
           </p>
         </div>
 
@@ -3416,7 +3416,6 @@ function StageTaskList() {
   const finalStatus = finalReview?.status || "";
   const finalPending = finalStatus === "pending";
   const finalRejected = finalStatus === "rejected";
-  const finalAccepted = finalStatus === "accepted";
 
   const taskOnboardingSteps = TASK_ONBOARDING_STEPS.filter(
     (s) => s.target !== "task-difficulty-card" || needsDifficultyChoice
@@ -3443,10 +3442,10 @@ function StageTaskList() {
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-slate-900">Последняя ситуация</h3>
                 <p className="text-sm text-slate-600 mt-2">
-                  Это последняя задача в текущей работе. Для неё нужно обязательно приложить хотя бы одно фото решения.
+                  Это последняя задача. Добавь хотя бы одно фото решения в тетради.
                 </p>
                 <p className="text-sm text-slate-600 mt-2">
-                  После отправки ответ уйдёт на проверку учителю, а результат появится позже.
+                  После отправки учитель проверит решение, и результат появится чуть позже.
                 </p>
               </div>
             </div>
@@ -3494,8 +3493,8 @@ function StageTaskList() {
       {finalPending && (
         <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 mb-5 flex items-start justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold text-blue-900">Работа отправлена учителю на проверку</p>
-            <p className="text-sm text-blue-800 mt-1">Результат появится здесь, как только учитель проверит работу.</p>
+            <p className="text-sm font-semibold text-blue-900">Отправлено учителю на проверку</p>
+            <p className="text-sm text-blue-800 mt-1">Здесь появится результат, как только учитель всё проверит.</p>
           </div>
           <button
             type="button"
@@ -3510,7 +3509,7 @@ function StageTaskList() {
       {finalRejected && (
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 mb-5">
           <p className="text-sm font-semibold text-amber-900">
-            Последняя ситуация отправлена на доработку
+            Последнюю задачу нужно доработать
           </p>
           {finalReview?.teacher_comment ? (
             <p className="text-sm text-amber-800 mt-2 whitespace-pre-line">
@@ -3518,7 +3517,7 @@ function StageTaskList() {
             </p>
           ) : (
             <p className="text-sm text-amber-800 mt-1">
-              Учитель попросил пересмотреть решение и отправить новую попытку.
+              Попробуй ещё раз: исправь решение и отправь заново.
             </p>
           )}
         </div>
@@ -3699,7 +3698,7 @@ function StageTaskList() {
                   {submitting
                     ? "Проверка..."
                     : photoRequired && finalPending
-                      ? "Ожидается проверка учителя"
+                      ? "Ждёт проверки учителя"
                       : "Отправить ответ"}
                 </button>
               ) : (
@@ -3714,7 +3713,7 @@ function StageTaskList() {
                         Ответ отправлен.
                       </p>
                       <p className="text-sm text-blue-900 mt-2">
-                        Ответ передан на проверку учителю.
+                        Ответ отправлен учителю.
                         {result?.teacher_review_status === "pending" && (
                           <span className="block mt-1 font-medium">Статус: ожидает проверки.</span>
                         )}
@@ -3751,13 +3750,13 @@ function StageTaskList() {
                 {/* Предложение сравнить решение */}
                 <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4">
                   <p className="text-indigo-900 font-medium mb-2">
-                    Проверьте своё решение по эталонному и оцените по критериям.
+                    Сверь своё решение с образцом и проверь, всё ли верно.
                   </p>
                   <button
                     onClick={() => setShowSolution(!showSolution)}
                     className="btn-outline"
                   >
-                    {showSolution ? "Скрыть эталонное решение" : "Показать эталонное решение"}
+                    {showSolution ? "Скрыть пример решения" : "Показать пример решения"}
                   </button>
                 </div>
 
@@ -3998,7 +3997,7 @@ const DIFFICULTY_CARD_DEFS = [
   {
     key: "easy",
     title: "Лёгкое",
-    body: "Решаю первую задачу самостоятельно, дальше продолжаю без восстановления порядка шагов.",
+    body: "Попробую решить самостоятельно.",
     Icon: IconDifficultyBulb,
     ring: "ring-emerald-400/80",
     borderIdle: "border-emerald-200 hover:border-emerald-300",
@@ -4009,7 +4008,7 @@ const DIFFICULTY_CARD_DEFS = [
   {
     key: "medium",
     title: "Непростое",
-    body: "Сначала восстановлю правильный порядок шагов метода для этой системы знаний.",
+    body: "Хорошо бы сначала разобрать пример.",
     Icon: IconDifficultyBook,
     ring: "ring-amber-400/90",
     borderIdle: "border-amber-200 hover:border-amber-300",
@@ -4020,7 +4019,7 @@ const DIFFICULTY_CARD_DEFS = [
   {
     key: "hard",
     title: "Трудное",
-    body: "Нужен пошаговый пооперационный контроль решения.",
+    body: "Нужно обсудить способ решения и разобрать пример.",
     Icon: IconDifficultyStar,
     ring: "ring-orange-400/90",
     borderIdle: "border-orange-200 hover:border-orange-300",
@@ -4050,20 +4049,20 @@ function TaskDifficultyPickerLayout({
           <div className="mb-6">
             <h4 className="font-semibold text-slate-900 mb-1">Оцените трудность первой задачи</h4>
             <p className="text-sm text-slate-600">
-              Выберите вариант и подтвердите выбор — до подтверждения можно изменить решение.
+              Выбери вариант. Если нужно, выбор можно поменять.
             </p>
           </div>
         ) : (
           <div className="eora-screen-header max-w-2xl mx-auto mb-8">
             <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Оценка трудности</h2>
             <p className="eora-screen-lead">
-              Укажите, какой режим работы с заданием вам ближе: это определит дальнейшую последовательность этапов.
+              Выбери, как тебе удобнее работать с задачей.
             </p>
           </div>
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5">
-          {DIFFICULTY_CARD_DEFS.map(({ key, title, body, Icon, ring, borderIdle, borderSelected, iconWrap, shadow }) => {
+          {DIFFICULTY_CARD_DEFS.map(({ key, title, body, Icon: IconComponent, ring, borderIdle, borderSelected, iconWrap, shadow }) => {
             const isOn = selected === key;
             return (
               <button
@@ -4078,7 +4077,7 @@ function TaskDifficultyPickerLayout({
                 <div
                   className={`mb-4 flex h-14 w-14 items-center justify-center rounded-2xl transition-transform group-hover:scale-105 ${iconWrap}`}
                 >
-                  <Icon className="h-7 w-7" />
+                  {React.createElement(IconComponent, { className: "h-7 w-7" })}
                 </div>
                 <h3 className="text-base md:text-lg font-bold text-slate-900 mb-2">{title}</h3>
                 <p className="text-sm text-slate-500 leading-relaxed max-w-[16rem] mx-auto">{body}</p>
@@ -4580,17 +4579,6 @@ function StageSolving() {
         <p className="text-xs text-slate-400">Система подбирает сложность задач под ваш уровень</p>
       </div>
 
-      {!showTaskOnboarding && currentTask && !result && !loading && (
-        <button
-          type="button"
-          onClick={() => setShowTaskOnboarding(true)}
-          className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-gradient-to-br from-blue-500 to-teal-500 text-white rounded-full shadow-lg shadow-blue-300/40 hover:shadow-xl hover:scale-110 transition-all flex items-center justify-center text-xl"
-          title="Показать подсказки по экрану"
-          aria-label="Показать подсказки по экрану задачи"
-        >
-          💡
-        </button>
-      )}
     </div>
   );
 }
@@ -4999,7 +4987,7 @@ function StageMethodComposition() {
           <div className="bg-amber-50 rounded-xl p-6 text-center">
             <p className="text-amber-800 mb-2">Метод решения ещё не добавлен для этой системы знаний.</p>
             <p className="text-sm text-amber-700 mb-4">
-              Этот этап будет пропущен, вы сразу перейдёте к разбору примера решения и задачам.
+              Этот шаг пропустим и сразу перейдём к примеру и задачам.
             </p>
             <button
               onClick={handleContinue}
@@ -5400,7 +5388,7 @@ function StageStepByStep() {
         <FullScreenModal>
           <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 p-8">
             <div className="eora-screen-header mb-5">
-              <h3 className="text-xl font-bold text-slate-900">Пошаговый разбор задачи</h3>
+              <h3 className="text-xl font-bold text-slate-900">Разберём задачу по шагам</h3>
               <p className="eora-screen-lead text-sm mt-2">
                 Решение представлено по шагам: на каждом шаге сформулируйте ответ, сравните его с эталоном и отметьте
                 выбранный вариант.
@@ -5429,7 +5417,7 @@ function StageStepByStep() {
         {/* Scaffolding notice */}
         {isScaffolded && (
           <div className="card px-5 py-3 mb-4 bg-indigo-50 border-indigo-200 text-indigo-800 text-sm">
-            Вы уже освоили метод. Выполните ключевые шаги самостоятельно.
+            Ты уже знаком с методом — попробуй выполнить основные шаги сам.
           </div>
         )}
 
@@ -5578,7 +5566,7 @@ function StageStepByStep() {
               <div className={`rounded-lg p-3 mb-4 text-sm ${errCount >= 2 ? "bg-amber-50 border border-amber-200 text-amber-800" : "bg-blue-50 border border-blue-200 text-blue-800"}`}>
                 {errCount >= 2
                   ? "На этом шаге вы ошибались ранее. Внимательно перечитайте условие и проверьте свои рассуждения."
-                  : "На этом шаге была ошибка в прошлый раз. Будьте внимательны."}
+                  : "В прошлый раз здесь была ошибка — сейчас проверь этот шаг особенно внимательно."}
               </div>
             );
           })()}
@@ -6266,7 +6254,7 @@ function StageStepByStep() {
               )}
               {(allStepsCompleted || (currentStepIndex === activeSteps.length - 1 && attempt?.final_answer)) && (
                 <button onClick={handleComplete} className="btn-primary btn-lg">
-                  Завершить разбор →
+                  Закончить разбор →
                 </button>
               )}
             </div>

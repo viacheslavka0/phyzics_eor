@@ -794,7 +794,6 @@ function ComprehensionTab({ ksId, data, onUpdated }) {
   );
   const [threshold, setThreshold] = useState(data.comprehension_pass_threshold || 85);
   const [saving, setSaving] = useState(false);
-  const [activeSection, setActiveSection] = useState("image"); // image | questions
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -839,97 +838,59 @@ function ComprehensionTab({ ksId, data, onUpdated }) {
 
   return (
     <div className="space-y-6">
-      {/* Секции */}
-      <div className="flex gap-2 border-b border-slate-200 pb-2">
-        <button
-          onClick={() => setActiveSection("image")}
-          className={`px-4 py-2 text-sm rounded-lg ${
-            activeSection === "image" ? "bg-indigo-100 text-indigo-700" : "text-slate-600 hover:bg-slate-100"
-          }`}
-        >
-          🖼️ Изображение и зоны
-        </button>
-        <button
-          onClick={() => setActiveSection("questions")}
-          className={`px-4 py-2 text-sm rounded-lg ${
-            activeSection === "questions" ? "bg-indigo-100 text-indigo-700" : "text-slate-600 hover:bg-slate-100"
-          }`}
-        >
-          ❓ Вопросы ({questions.length})
-        </button>
-      </div>
-
       {/* Секция: Изображение и зоны */}
-      {activeSection === "image" && (
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
-              Изображение таблицы
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
-            />
-          </div>
-
-          {imageUrl && (
-            <div className="border border-slate-200 rounded-lg p-4">
-              <p className="text-sm text-slate-600 mb-2">
-                Нарисуйте прямоугольные зоны на изображении (в разработке)
-              </p>
-              <ZoneEditor
-                imageUrl={imageUrl}
-                zones={zones}
-                onZonesChange={setZones}
-              />
-            </div>
-          )}
-
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              Порог прохождения (%)
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              value={threshold}
-              onChange={(e) => setThreshold(parseInt(e.target.value) || 85)}
-              className="w-32 px-4 py-2 border border-slate-300 rounded-lg"
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Секция: Вопросы */}
-      {activeSection === "questions" && (
-        <div className="space-y-4">
-          {imageUrl && (
-            <div>
-              <p className="text-sm text-slate-600 mb-2">
-                Таблица с отмеченными зонами (для удобства при выборе правильных зон в вопросах)
-              </p>
-              <div className="border border-slate-200 rounded-lg bg-slate-50 overflow-hidden">
-                <div className="max-h-64 flex items-center justify-center overflow-auto bg-slate-900/5">
-                  <img
-                    src={imageUrl}
-                    alt="Таблица системы знаний"
-                    className="max-h-64 w-auto"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          <QuestionsEditor
-            questions={questions}
-            zones={zones}
-            onChange={setQuestions}
+      <div className="space-y-4 rounded-lg border border-slate-200 p-4">
+        <h3 className="text-sm font-semibold text-slate-800">🖼️ Изображение и зоны</h3>
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-2">
+            Изображение таблицы
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
           />
         </div>
-      )}
+
+        {imageUrl && (
+          <div className="border border-slate-200 rounded-lg p-4">
+            <p className="text-sm text-slate-600 mb-2">
+              Нарисуйте прямоугольные зоны на изображении
+            </p>
+            <ZoneEditor
+              imageUrl={imageUrl}
+              zones={zones}
+              onZonesChange={setZones}
+            />
+          </div>
+        )}
+
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Порог прохождения (%)
+          </label>
+          <input
+            type="number"
+            min="0"
+            max="100"
+            value={threshold}
+            onChange={(e) => setThreshold(parseInt(e.target.value) || 85)}
+            className="w-32 px-4 py-2 border border-slate-300 rounded-lg"
+          />
+        </div>
+      </div>
+
+      {/* Секция: Вопросы */}
+      <div className="space-y-4 rounded-lg border border-slate-200 p-4">
+        <h3 className="text-sm font-semibold text-slate-800">❓ Вопросы ({questions.length})</h3>
+        <QuestionsEditor
+          questions={questions}
+          zones={zones}
+          imageUrl={imageUrl}
+          onChange={setQuestions}
+        />
+      </div>
 
       {/* Кнопка сохранения */}
       <div className="pt-4 border-t border-slate-200">
@@ -1770,7 +1731,7 @@ function ZoneEditor({ imageUrl, zones, onZonesChange }) {
 // QUESTIONS EDITOR — Редактор вопросов
 // =============================================================================
 
-function QuestionsEditor({ questions, zones, onChange }) {
+function QuestionsEditor({ questions, zones, imageUrl, onChange }) {
   const [editingQuestion, setEditingQuestion] = useState(null);
 
   const handleAddQuestion = () => {
@@ -1820,6 +1781,7 @@ function QuestionsEditor({ questions, zones, onChange }) {
               question={q}
               index={idx}
               zones={zones}
+              imageUrl={imageUrl}
               isExpanded={editingQuestion === q.id}
               onToggle={() => setEditingQuestion(editingQuestion === q.id ? null : q.id)}
               onUpdate={(updates) => handleUpdateQuestion(q.id, updates)}
@@ -1832,12 +1794,20 @@ function QuestionsEditor({ questions, zones, onChange }) {
   );
 }
 
-function QuestionItem({ question, index, zones, isExpanded, onToggle, onUpdate, onDelete }) {
+function QuestionItem({ question, index, zones, imageUrl, isExpanded, onToggle, onUpdate, onDelete }) {
   const typeLabels = {
     text: "Открытый ответ",
     single: "Выбор одного",
     multiple: "Множественный выбор",
     match: "Соответствие с зонами",
+  };
+  const selectedZoneIds = question.correct_zone_ids || [];
+  const toggleZone = (zoneId) => {
+    if (selectedZoneIds.includes(zoneId)) {
+      onUpdate({ correct_zone_ids: selectedZoneIds.filter((id) => id !== zoneId) });
+    } else {
+      onUpdate({ correct_zone_ids: [...selectedZoneIds, zoneId] });
+    }
   };
 
   return (
@@ -1945,20 +1915,45 @@ function QuestionItem({ question, index, zones, isExpanded, onToggle, onUpdate, 
               <label className="block text-sm font-medium text-slate-700 mb-1">
                 Правильные зоны
               </label>
+              {imageUrl && zones.length > 0 && (
+                <div className="mb-3 border border-slate-200 rounded-lg bg-slate-50 p-3">
+                  <p className="text-xs text-slate-500 mb-2">
+                    Кликните по зонам на изображении, чтобы отметить правильные.
+                  </p>
+                  <div className="relative inline-block max-w-full">
+                    <img src={imageUrl} alt="Выбор зон для вопроса" className="max-w-full h-auto rounded" />
+                    {zones.map((zone) => {
+                      const isActive = selectedZoneIds.includes(zone.id);
+                      return (
+                        <button
+                          key={zone.id}
+                          type="button"
+                          onClick={() => toggleZone(zone.id)}
+                          className={`absolute border-2 rounded-sm ${
+                            isActive
+                              ? "border-emerald-500 bg-emerald-400/20"
+                              : "border-sky-500 bg-sky-400/10 hover:bg-sky-400/20"
+                          }`}
+                          style={{
+                            left: zone.x,
+                            top: zone.y,
+                            width: zone.width,
+                            height: zone.height,
+                          }}
+                          title={zone.label}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
               <div className="flex flex-wrap gap-2">
                 {zones.map((zone) => (
                   <label key={zone.id} className="flex items-center gap-1 bg-slate-100 px-2 py-1 rounded">
                     <input
                       type="checkbox"
-                      checked={(question.correct_zone_ids || []).includes(zone.id)}
-                      onChange={(e) => {
-                        const ids = question.correct_zone_ids || [];
-                        if (e.target.checked) {
-                          onUpdate({ correct_zone_ids: [...ids, zone.id] });
-                        } else {
-                          onUpdate({ correct_zone_ids: ids.filter(id => id !== zone.id) });
-                        }
-                      }}
+                      checked={selectedZoneIds.includes(zone.id)}
+                      onChange={() => toggleZone(zone.id)}
                     />
                     <span className="text-sm">{zone.label}</span>
                   </label>

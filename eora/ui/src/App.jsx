@@ -163,6 +163,12 @@ function buildScenario631ClozeData(ksData) {
 
   if (blanks.length === 0) return null;
 
+  const normalizeWord = (word) =>
+    String(word || "")
+      .trim()
+      .toLowerCase()
+      .replace("ё", "е");
+
   const extraPool = new Set();
   methodSteps.forEach((step) => {
     const text = `${step.title || ""} ${step.description || ""}`;
@@ -173,7 +179,49 @@ function buildScenario631ClozeData(ksData) {
       .forEach((w) => extraPool.add(w));
   });
   const blankWords = blanks.map((b) => b.correct);
-  const extras = Array.from(extraPool).filter((w) => !blankWords.includes(w)).slice(0, 24);
+  const blankNorm = new Set(blankWords.map(normalizeWord));
+
+  // Слова, которые часто являются синонимами правильных и делают задание слишком "угадываемым".
+  const nearSynonymsToFilter = new Set([
+    "определить",
+    "вычислить",
+    "измерить",
+    "описывающие",
+    "описывать",
+    "описывать",
+    "характеристики",
+  ]);
+
+  // Слова-ловушки: по форме похожи на учебные формулировки, но в типовой задаче обычно неверны.
+  const distractorPool = [
+    "абстрактных",
+    "произвольных",
+    "второстепенных",
+    "несвязанных",
+    "идеальных",
+    "случайных",
+    "несущественных",
+    "разрозненных",
+    "условных",
+    "противоречивых",
+    "гипотетических",
+    "приблизительных",
+  ];
+
+  const extrasFromMethod = Array.from(extraPool).filter((w) => {
+    const n = normalizeWord(w);
+    if (!n) return false;
+    if (blankNorm.has(n)) return false;
+    if (nearSynonymsToFilter.has(n)) return false;
+    return true;
+  });
+
+  const extras = Array.from(
+    new Set([
+      ...distractorPool.filter((w) => !blankNorm.has(normalizeWord(w))),
+      ...extrasFromMethod,
+    ])
+  ).slice(0, 24);
 
   return {
     source: "fallback",
@@ -2689,7 +2737,7 @@ function ErrorBranchingBlock({
   result,
   ksData,
   session,
-  updateSession,
+  currentTaskId,
   handleNextTask,
   handleStartStepByStep,
   onAlgorithmViewed,
@@ -2700,6 +2748,8 @@ function ErrorBranchingBlock({
   const [scenarioChecked, setScenarioChecked] = useState(false);
   const [scenarioCheckMessage, setScenarioCheckMessage] = useState("");
   const [scenarioChecking, setScenarioChecking] = useState(false);
+  const [twoErrorEventsCount, setTwoErrorEventsCount] = useState(0);
+  const [handledTwoErrorTaskIds, setHandledTwoErrorTaskIds] = useState([]);
 
   // Стабильный ключ: без этого buildScenario631ClozeData() даёт новый объект на каждый рендер,
   // useEffect ниже срабатывает снова и сбрасывает scenarioChecked сразу после «Проверить».
@@ -2722,8 +2772,58 @@ function ErrorBranchingBlock({
 
   const wrongCount = result?.task_wrong_attempts_count || 0;
   const hasAlgorithm = ksData?.solution_method?.steps?.length > 0;
+  const isMediumDifficulty = session?.difficulty_choice === "medium";
+  const storageScopeKey = `${session?.id || "no-session"}_${ksData?.id || "no-ks"}`;
+  const twoErrorsCountStorageKey = `eora_two_errors_count_${storageScopeKey}`;
+  const twoErrorsHandledTasksStorageKey = `eora_two_errors_tasks_${storageScopeKey}`;
+
+  useEffect(() => {
+    try {
+      const rawCount = window.localStorage.getItem(twoErrorsCountStorageKey);
+      const rawTasks = window.localStorage.getItem(twoErrorsHandledTasksStorageKey);
+      const parsedCount = Number.parseInt(rawCount || "0", 10);
+      const parsedTasks = JSON.parse(rawTasks || "[]");
+      setTwoErrorEventsCount(Number.isFinite(parsedCount) ? parsedCount : 0);
+      setHandledTwoErrorTaskIds(Array.isArray(parsedTasks) ? parsedTasks : []);
+    } catch {
+      setTwoErrorEventsCount(0);
+      setHandledTwoErrorTaskIds([]);
+    }
+  }, [twoErrorsCountStorageKey, twoErrorsHandledTasksStorageKey]);
+
+  useEffect(() => {
+    if (wrongCount < 2 || !currentTaskId) return;
+    if (handledTwoErrorTaskIds.includes(currentTaskId)) return;
+
+    const nextCount = twoErrorEventsCount + 1;
+    const nextHandled = [...handledTwoErrorTaskIds, currentTaskId];
+    setTwoErrorEventsCount(nextCount);
+    setHandledTwoErrorTaskIds(nextHandled);
+    try {
+      window.localStorage.setItem(twoErrorsCountStorageKey, String(nextCount));
+      window.localStorage.setItem(twoErrorsHandledTasksStorageKey, JSON.stringify(nextHandled));
+    } catch {
+      // ignore storage errors
+    }
+  }, [
+    wrongCount,
+    currentTaskId,
+    handledTwoErrorTaskIds,
+    twoErrorEventsCount,
+    twoErrorsCountStorageKey,
+    twoErrorsHandledTasksStorageKey,
+  ]);
+
+  const shouldShowManualComposition =
+    !!hasAlgorithm &&
+    !!scenarioClozeStableKey &&
+    !!scenarioCloze &&
+    (
+      (!isMediumDifficulty && twoErrorEventsCount === 1) ||
+      (isMediumDifficulty && twoErrorEventsCount >= 3)
+    );
   // Модель ветвления:
-  // 2 ошибки -> составление пошагового плана (сценарий/алгоритм),
+  // 2 ошибки: ветка зависит от уровня сложности и номера такого случая за сессию.
   // 3 ошибки -> пооперационный контроль.
   useEffect(() => {
     if (wrongCount < 2) {
@@ -2738,21 +2838,17 @@ function ErrorBranchingBlock({
     }
     if (
       wrongCount >= 2 &&
-      hasAlgorithm &&
-      scenarioClozeStableKey &&
-      scenarioCloze &&
-      !session?.scenario_two_errors_used
+      shouldShowManualComposition
     ) {
       setShowScenario631(true);
       setScenarioChecked(false);
       setScenarioCheckMessage("");
+    } else if (wrongCount >= 2) {
+      setShowScenario631(false);
     }
   }, [
     wrongCount,
-    hasAlgorithm,
-    scenarioClozeStableKey,
-    scenarioCloze,
-    session?.scenario_two_errors_used,
+    shouldShowManualComposition,
     handleStartStepByStep,
   ]);
 
@@ -2790,7 +2886,7 @@ function ErrorBranchingBlock({
     );
   }
 
-  if (showScenario631 && scenarioCloze && !session?.scenario_two_errors_used) {
+  if (showScenario631 && scenarioCloze) {
     const renderedPositions = Array.from(
       new Set(
         [...scenarioCloze.text.matchAll(/\{\{(\d+)\}\}/g)].map((m) => parseInt(m[1], 10))
@@ -2945,20 +3041,6 @@ function ErrorBranchingBlock({
               <button
                 type="button"
                 onClick={async () => {
-                  try {
-                    await ensureCSRFCookie();
-                    await fetch(`/api/session/${session.id}/mark_scenario_two_errors_used/`, {
-                      method: "POST",
-                      credentials: "include",
-                      headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRFToken": getCSRFCookie(),
-                      },
-                    });
-                    if (updateSession) await updateSession();
-                  } catch (e) {
-                    console.error(e);
-                  }
                   setShowScenario631(false);
                   if (onAlgorithmViewed) onAlgorithmViewed();
                   handleNextTask();
@@ -2988,7 +3070,7 @@ function ErrorBranchingBlock({
               <div>
                 <h3 className="text-lg font-bold text-slate-900">Вспомни алгоритм решения</h3>
                 <p className="text-sm text-slate-500 mt-1">
-                  {session?.scenario_two_errors_used
+                  {isMediumDifficulty
                     ? "Сверьте свой ход с общим порядком действий и попробуйте снова."
                     : "Кажется, с этим заданием пока не всё получается. Посмотри общий порядок решения задач такого типа — это поможет найти правильный подход."}
                 </p>
@@ -3851,7 +3933,7 @@ function StageTaskList() {
                 result={result}
                 ksData={ksData}
                 session={session}
-                updateSession={updateSession}
+                currentTaskId={currentTask?.id}
                 handleNextTask={handleNextTask}
                 handleStartStepByStep={handleStartStepByStep}
                 onAlgorithmViewed={() => {
@@ -3864,6 +3946,21 @@ function StageTaskList() {
               )}
             </div>
         </div>
+      {/* Плавающая кнопка-подсказка для повторного запуска onboarding по экрану задачи */}
+      {!showTaskOnboarding && currentTask && !loading && (
+        <button
+          type="button"
+          onClick={() => setShowTaskOnboarding(true)}
+          className={`fixed right-6 z-[9000] w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-teal-500 text-white shadow-xl flex items-center justify-center text-2xl hover:scale-105 transition-all ${
+            hasSeenAlgorithmHelp && ksData?.solution_method?.steps?.length > 0 ? "bottom-20" : "bottom-6"
+          }`}
+          aria-label="Показать подсказки по экрану"
+          title="Показать подсказки по экрану"
+        >
+          💡
+        </button>
+      )}
+
       {/* Плавающая кнопка-подсказка (лампочка) для алгоритма, если ученик уже видел модалку */}
       {hasSeenAlgorithmHelp && ksData?.solution_method?.steps?.length > 0 && (
         <button
@@ -4617,29 +4714,13 @@ function StageMethodComposition() {
   const [orderDragIndex, setOrderDragIndex] = useState(null);
   const [orderDropBeforeIndex, setOrderDropBeforeIndex] = useState(null);
   const [orderWrongCount, setOrderWrongCount] = useState(0);
-
-  const getLockedIndexesForSteps = useCallback((steps) => {
-    if (orderWrongCount < 2) return new Set();
-    const locked = new Set();
-    steps.forEach((step, index) => {
-      if (step.order === sortedSteps[index]?.order) {
-        locked.add(index);
-      }
-    });
-    return locked;
-  }, [orderWrongCount, sortedSteps]);
-
-  const lockedOrderIndexes = useMemo(
-    () => getLockedIndexesForSteps(orderedSteps),
-    [getLockedIndexesForSteps, orderedSteps]
-  );
+  const [lockedOrderIndexes, setLockedOrderIndexes] = useState(new Set());
 
   const reorderOrderedSteps = (fromIndex, toIndex) => {
     if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0) return;
     setOrderedSteps((prev) => {
-      const locked = getLockedIndexesForSteps(prev);
-      if (locked.has(fromIndex) || locked.has(toIndex)) return prev;
-      const movableIndexes = prev.map((_, idx) => idx).filter((idx) => !locked.has(idx));
+      if (lockedOrderIndexes.has(fromIndex) || lockedOrderIndexes.has(toIndex)) return prev;
+      const movableIndexes = prev.map((_, idx) => idx).filter((idx) => !lockedOrderIndexes.has(idx));
       const fromMovable = movableIndexes.indexOf(fromIndex);
       const toMovable = movableIndexes.indexOf(toIndex);
       if (fromMovable < 0 || toMovable < 0) return prev;
@@ -4662,14 +4743,14 @@ function StageMethodComposition() {
     setOrderedSteps(shuffleMethodStepsForChallenge(sorted));
     setOrderResult(null);
     setOrderWrongCount(0);
+    setLockedOrderIndexes(new Set());
     // eslint-disable-next-line react-hooks/exhaustive-deps -- stepsSig синхронизирует пересбор при смене шагов
   }, [useMediumOrdering, stepsSig]);
 
   const moveOrderStep = (index, delta) => {
     setOrderedSteps((prev) => {
-      const locked = getLockedIndexesForSteps(prev);
-      if (locked.has(index)) return prev;
-      const movableIndexes = prev.map((_, idx) => idx).filter((idx) => !locked.has(idx));
+      if (lockedOrderIndexes.has(index)) return prev;
+      const movableIndexes = prev.map((_, idx) => idx).filter((idx) => !lockedOrderIndexes.has(idx));
       const currentPos = movableIndexes.indexOf(index);
       const targetPos = currentPos + delta;
       if (currentPos < 0 || targetPos < 0 || targetPos >= movableIndexes.length) return prev;
@@ -4687,8 +4768,21 @@ function StageMethodComposition() {
     setOrderResult(ok ? "ok" : "wrong");
     if (ok) {
       setOrderWrongCount(0);
+      setLockedOrderIndexes(new Set());
     } else {
-      setOrderWrongCount((prev) => prev + 1);
+      const nextWrongCount = orderWrongCount + 1;
+      setOrderWrongCount(nextWrongCount);
+      if (nextWrongCount >= 2) {
+        const locked = new Set();
+        orderedSteps.forEach((step, index) => {
+          if (step.order === sortedSteps[index]?.order) {
+            locked.add(index);
+          }
+        });
+        setLockedOrderIndexes(locked);
+      } else {
+        setLockedOrderIndexes(new Set());
+      }
     }
   };
 
@@ -5062,7 +5156,6 @@ function StageStepByStep() {
   // Для шага со схемой
   const [schemaStudentSnapshot, setSchemaStudentSnapshot] = useState(null);
   const [showSchemaCompareModal, setShowSchemaCompareModal] = useState(false);
-  const [schemaReferenceVisible, setSchemaReferenceVisible] = useState(false);
   const [showMySchema, setShowMySchema] = useState(false);
   const [solutionParts, setSolutionParts] = useState({});
   const [symbolEntries, setSymbolEntries] = useState({});
@@ -5217,6 +5310,7 @@ function StageStepByStep() {
   };
 
   const handleNextStep = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     if (currentStepIndex < activeSteps.length - 1) {
       setCurrentStepIndex(currentStepIndex + 1);
     } else {
@@ -5678,8 +5772,8 @@ function StageStepByStep() {
             {currentStep.step_type === "schema" && (
               <div className="space-y-4">
                 <div className="text-sm text-slate-700">
-                  На этом шаге нужно построить (или скорректировать) схему ситуации. Ниже показана эталонная схема из
-                  решения учителя — сравнивайся с ней и при необходимости изменяй свою.
+                  На этом шаге построй свою схему ситуации. Когда закончишь, нажми кнопку ниже — система покажет эталонную
+                  схему для сравнения, и ты сможешь выбрать: перейти дальше или доработать свою схему.
                 </div>
 
                 {/* Схема ученика (живой редактор, сохраняется в сессию) */}
@@ -5688,31 +5782,6 @@ function StageStepByStep() {
                   sessionId={session?.id}
                   onSchemaSaved={setSchemaStudentSnapshot}
                 />
-
-                {/* Эталонная схема для сравнения, если есть schema_data и режим подсказки включён */}
-                {schemaReferenceVisible && currentStep.reference_solution?.schema_data?.elements?.length > 0 && (
-                  <div className="mt-4">
-                    <div className="text-xs text-slate-500 mb-2">Эталонная схема (решение учителя)</div>
-                    <div className="border border-slate-200 rounded-xl bg-slate-50 p-3">
-                      <Suspense
-                        fallback={
-                          <div className="flex items-center justify-center h-64">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                          </div>
-                        }
-                      >
-                        <SchemaEditor
-                          initialData={currentStep.reference_solution.schema_data}
-                          readOnly={true}
-                          compact={true}
-                          width={700}
-                          height={400}
-                          isTeacher={false}
-                        />
-                      </Suspense>
-                    </div>
-                  </div>
-                )}
 
                 {currentStep.hint && (
                   <p className="text-xs text-slate-500 mt-1 italic">💡 {currentStep.hint}</p>
@@ -5727,7 +5796,7 @@ function StageStepByStep() {
                     }}
                     className="btn-primary"
                   >
-                    Перейти к следующему шагу →
+                    Сравнить с эталоном →
                   </button>
                 </div>
               </div>
@@ -6337,8 +6406,7 @@ function StageStepByStep() {
               <button
                 type="button"
                 onClick={() => {
-                  // Оставляем шаг незавершённым, включаем постоянный показ эталона и закрываем модалку
-                  setSchemaReferenceVisible(true);
+                  // Оставляем шаг незавершённым и закрываем модалку для доработки схемы
                   setShowSchemaCompareModal(false);
                 }}
                 className="btn-secondary w-full md:w-auto"

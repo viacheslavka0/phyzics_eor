@@ -103,7 +103,7 @@ const apiUpload = async (url, formData) => {
 // MAIN APP
 // =============================================================================
 
-export default function TeacherApp() {
+export default function TeacherApp({ currentUser = null, onSwitchToStudentView = null }) {
   const [view, setView] = useState("pilot-dashboard"); // pilot-dashboard | pilot-organizer | structure | ks-edit | tasks | elements | final-reviews | gradebook
   const [selectedKS, setSelectedKS] = useState(null);
   const [error, setError] = useState("");
@@ -152,6 +152,21 @@ export default function TeacherApp() {
               </div>
             </div>
             <div className="flex items-center gap-3">
+              <div className="hidden sm:block text-right">
+                <div className="text-sm font-semibold text-slate-800 leading-tight">
+                  {currentUser?.first_name?.trim() || currentUser?.username || "Пользователь"}
+                </div>
+                <div className="text-xs text-slate-500 leading-tight">Учитель</div>
+              </div>
+              {typeof onSwitchToStudentView === "function" && (
+                <button
+                  type="button"
+                  className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                  onClick={onSwitchToStudentView}
+                >
+                  Режим ученика
+                </button>
+              )}
               <button
                 type="button"
                 className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
@@ -174,12 +189,6 @@ export default function TeacherApp() {
               >
                 Выйти
               </button>
-              <a
-                href="/app/?student=1"
-                className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
-              >
-                Режим ученика
-              </a>
             </div>
           </div>
         </div>

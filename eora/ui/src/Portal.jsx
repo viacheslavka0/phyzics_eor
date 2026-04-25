@@ -13,13 +13,6 @@ const ensureCSRFCookie = async () => {
   await fetch("/api/csrf/", { credentials: "include" });
 };
 
-function wantsStudentOnlyMode() {
-  try {
-    return new URLSearchParams(window.location.search).get("student") === "1";
-  } catch {
-    return false;
-  }
-}
 
 function LoadingBoot() {
   return (
@@ -118,6 +111,13 @@ function UnifiedLogin({ onLoggedIn }) {
 export default function Portal() {
   const [booting, setBooting] = useState(true);
   const [user, setUser] = useState(null);
+  const [forceStudentView, setForceStudentView] = useState(() => {
+    try {
+      return window.sessionStorage.getItem("eora_force_student_view") === "1";
+    } catch {
+      return false;
+    }
+  });
 
   const refreshUser = useCallback(async () => {
     try {
@@ -167,11 +167,39 @@ export default function Portal() {
     );
   }
 
-  const showTeacher = Boolean(user.is_staff) && !wantsStudentOnlyMode();
+  // Роль определяется только сервером (is_staff), URL-параметры не должны влиять на доступ.
+  const showTeacher = Boolean(user.is_staff) && !forceStudentView;
+
+  const switchToStudentView = () => {
+    if (!user?.is_staff) return;
+    setForceStudentView(true);
+    try {
+      window.sessionStorage.setItem("eora_force_student_view", "1");
+    } catch {
+      // ignore
+    }
+  };
+
+  const switchToTeacherView = () => {
+    setForceStudentView(false);
+    try {
+      window.sessionStorage.removeItem("eora_force_student_view");
+    } catch {
+      // ignore
+    }
+  };
 
   return (
     <Suspense fallback={<LoadingBoot />}>
-      {showTeacher ? <TeacherApp /> : <StudentApp />}
+      {showTeacher ? (
+        <TeacherApp currentUser={user} onSwitchToStudentView={switchToStudentView} />
+      ) : (
+        <StudentApp
+          viewerUser={user}
+          forcedStudentView={Boolean(user?.is_staff && forceStudentView)}
+          onReturnToTeacher={switchToTeacherView}
+        />
+      )}
     </Suspense>
   );
 }

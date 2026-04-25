@@ -2223,20 +2223,38 @@ class OrganizerStudyGroupViewSet(viewsets.ModelViewSet):
             return Response({"detail": "Пользователь не найден"}, status=status.HTTP_404_NOT_FOUND)
         profile = _learning_profile(user)
         sessions = LearningSession.objects.filter(user=user).select_related("ks").order_by("-created_at")
-        sessions_data = [
-            {
-                "session_id": s.id,
-                "ks_id": s.ks_id,
-                "ks_title": s.ks.title,
-                "current_stage": s.current_stage,
-                "score_percent": s.score_percent,
-                "mastery_percent": s.mastery_percent,
-                "tasks_solved_count": s.tasks_solved_count,
-                "tasks_correct_count": s.tasks_correct_count,
-                "finished_at": s.finished_at.isoformat() if s.finished_at else None,
-            }
-            for s in sessions[:60]
-        ]
+        sessions_data = []
+        for s in sessions[:60]:
+            try:
+                ks_title = s.ks.title if getattr(s, "ks", None) else "Система знаний"
+                sessions_data.append(
+                    {
+                        "session_id": s.id,
+                        "ks_id": s.ks_id,
+                        "ks_title": ks_title,
+                        "current_stage": s.current_stage,
+                        "score_percent": s.score_percent,
+                        "mastery_percent": getattr(s, "mastery_percent", None),
+                        "tasks_solved_count": s.tasks_solved_count,
+                        "tasks_correct_count": s.tasks_correct_count,
+                        "finished_at": s.finished_at.isoformat() if s.finished_at else None,
+                    }
+                )
+            except Exception:
+                # Не ломаем карточку ученика из-за одной повреждённой/несовместимой записи сессии.
+                sessions_data.append(
+                    {
+                        "session_id": s.id,
+                        "ks_id": s.ks_id,
+                        "ks_title": "Система знаний",
+                        "current_stage": getattr(s, "current_stage", ""),
+                        "score_percent": getattr(s, "score_percent", 0),
+                        "mastery_percent": getattr(s, "mastery_percent", None),
+                        "tasks_solved_count": getattr(s, "tasks_solved_count", 0),
+                        "tasks_correct_count": getattr(s, "tasks_correct_count", 0),
+                        "finished_at": None,
+                    }
+                )
         return Response({
             "user_id": user.id,
             "username": user.username,

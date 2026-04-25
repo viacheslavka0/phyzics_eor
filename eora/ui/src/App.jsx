@@ -334,7 +334,7 @@ function ForcePasswordChange({ onSuccess }) {
   );
 }
 
-export default function App() {
+export default function App({ viewerUser = null, forcedStudentView = false, onReturnToTeacher = null }) {
   // State
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -485,6 +485,9 @@ export default function App() {
     updateSession,
     handleBackToCatalog,
     accountProfile,
+    viewerUser,
+    forcedStudentView,
+    onReturnToTeacher,
   };
 
   // Loading state
@@ -554,9 +557,29 @@ function ErrorScreen({ message }) {
 // ============================================================================
 
 function CatalogView() {
-  const { catalog, setSelectedKS } = useApp();
+  const { catalog, setSelectedKS, accountProfile, viewerUser, forcedStudentView, onReturnToTeacher } = useApp();
   const [expandedClass, setExpandedClass] = useState(null);
   const [expandedSection, setExpandedSection] = useState(null);
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const displayName = accountProfile?.first_name?.trim() || viewerUser?.first_name?.trim() || viewerUser?.username || "Пользователь";
+  const roleLabel = viewerUser?.is_staff ? (forcedStudentView ? "Учитель (режим ученика)" : "Учитель") : "Ученик";
+
+  const handleLogout = async () => {
+    try {
+      await ensureCSRFCookie();
+      await fetch("/api/auth/logout/", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCSRFCookie(),
+        },
+      });
+    } catch {
+      // ignore
+    }
+    window.location.href = "/app/";
+  };
 
   // Подсчёт общего числа СК
   const totalKS = catalog.reduce((acc, sc) =>
@@ -567,13 +590,45 @@ function CatalogView() {
     <div className="min-h-screen">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-lg border-b border-slate-200/60 sticky top-0 z-20">
-        <div className="max-w-5xl mx-auto px-6 py-3 flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-emerald-500 rounded-xl flex items-center justify-center shadow-md shadow-indigo-200">
-            <span className="text-white font-bold text-lg">⚛</span>
+        <div className="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-emerald-500 rounded-xl flex items-center justify-center shadow-md shadow-indigo-200">
+              <span className="text-white font-bold text-lg">⚛</span>
+            </div>
+            <div>
+              <h1 className="text-lg font-bold leading-tight">Физика</h1>
+              <p className="text-xs text-slate-400 leading-tight">Электронный образовательный ресурс</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-lg font-bold leading-tight">Физика</h1>
-            <p className="text-xs text-slate-400 leading-tight">Электронный образовательный ресурс</p>
+          <div className="relative flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => setAccountMenuOpen((v) => !v)}
+              className="text-right px-2 py-1 rounded-lg hover:bg-slate-100 transition-colors"
+            >
+              <div className="text-sm font-semibold text-slate-800 leading-tight">{displayName}</div>
+              <div className="text-xs text-slate-500 leading-tight">{roleLabel}</div>
+            </button>
+            {accountMenuOpen && (
+              <div className="absolute right-0 top-full mt-2 w-44 rounded-lg border border-slate-200 bg-white shadow-lg z-30 p-1">
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-slate-100 text-slate-700"
+                >
+                  Выйти
+                </button>
+              </div>
+            )}
+            {forcedStudentView && viewerUser?.is_staff && onReturnToTeacher && (
+              <button
+                type="button"
+                onClick={onReturnToTeacher}
+                className="px-3 py-1.5 rounded-lg border border-indigo-200 text-indigo-700 text-xs font-medium hover:bg-indigo-50 transition-colors"
+              >
+                В панель учителя
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -735,7 +790,7 @@ function resolveLearningStage(session) {
 }
 
 function LearningView() {
-  const { ksData, session, handleBackToCatalog, accountProfile } = useApp();
+  const { ksData, session, handleBackToCatalog, accountProfile, viewerUser, forcedStudentView, onReturnToTeacher } = useApp();
   const [resetting, setResetting] = useState(false);
   const isPilotMode = !!accountProfile?.is_pilot_mode;
   const stage = resolveLearningStage(session);
@@ -831,13 +886,27 @@ function LearningView() {
   const solved = session?.tasks_solved_count || 0;
   const target = effectiveTaskTrackTarget(null, session);
   const progressPct = Math.min(100, Math.round((solved / target) * 100));
+  const displayName = accountProfile?.first_name?.trim() || viewerUser?.first_name?.trim() || viewerUser?.username || "Пользователь";
+  const roleLabel = viewerUser?.is_staff ? (forcedStudentView ? "Учитель (режим ученика)" : "Учитель") : "Ученик";
 
   return (
     <div className="min-h-screen flex">
       {/* Mobile top bar */}
       <div className="sidebar-mobile-toggle fixed top-0 left-0 right-0 z-[200] bg-slate-900 text-white flex items-center gap-3 px-4 py-3">
         <button onClick={() => setSidebarOpen(true)} className="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center text-lg" aria-label="Меню">☰</button>
-        <span className="font-semibold text-sm truncate flex-1">{ksData.title}</span>
+        <div className="flex-1 min-w-0">
+          <div className="font-semibold text-sm truncate">{ksData.title}</div>
+          <div className="text-[11px] text-slate-300 truncate">{displayName} · {roleLabel}</div>
+        </div>
+        {forcedStudentView && viewerUser?.is_staff && onReturnToTeacher && (
+          <button
+            type="button"
+            onClick={onReturnToTeacher}
+            className="px-2.5 py-1.5 rounded-lg bg-indigo-600 text-[11px] font-medium"
+          >
+            Панель учителя
+          </button>
+        )}
         <button
           type="button"
           onClick={handleLogout}
@@ -989,6 +1058,19 @@ function LearningView() {
           <div className="p-5 border-b border-slate-700">
             <div className="text-xs text-slate-300 uppercase tracking-wider mb-2">Система знаний</div>
             <div className="font-semibold text-base leading-tight text-white">{ksData.title}</div>
+            <div className="mt-3 rounded-lg border border-slate-700 bg-slate-800/70 px-3 py-2">
+              <div className="text-sm font-semibold text-white truncate">{displayName}</div>
+              <div className="text-xs text-slate-300">{roleLabel}</div>
+              {forcedStudentView && viewerUser?.is_staff && onReturnToTeacher && (
+                <button
+                  type="button"
+                  onClick={onReturnToTeacher}
+                  className="mt-2 w-full px-2 py-1.5 rounded-md border border-indigo-400/40 text-indigo-200 text-xs hover:bg-indigo-500/10"
+                >
+                  Вернуться в панель учителя
+                </button>
+              )}
+            </div>
           </div>
 
           {showTaskProgress && (

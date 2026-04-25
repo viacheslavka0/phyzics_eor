@@ -77,11 +77,12 @@ class AccountMeView(APIView):
         profile = _learning_profile(request.user)
         student_mode = (profile.student_mode if profile else "student")
         is_pilot = student_mode == "pilot"
+        must_change_password = bool(profile and profile.must_change_password and not is_pilot)
         return Response(
             {
                 "username": request.user.username,
                 "first_name": request.user.first_name or "",
-                "must_change_password": bool(profile and profile.must_change_password),
+                "must_change_password": must_change_password,
                 "is_staff": bool(request.user.is_staff),
                 "student_mode": student_mode,
                 "is_pilot_mode": is_pilot,
@@ -2165,7 +2166,11 @@ class OrganizerStudyGroupViewSet(viewsets.ModelViewSet):
         user.save(update_fields=["is_staff", "is_superuser"])
         StudyGroupMembership.objects.get_or_create(group=group, user=user)
         UserProfile.objects.update_or_create(
-            user=user, defaults={"must_change_password": True, "student_mode": student_mode}
+            user=user,
+            defaults={
+                "must_change_password": (student_mode != UserProfile.MODE_PILOT),
+                "student_mode": student_mode,
+            },
         )
         EventLog.objects.create(
             user=request.user,
@@ -2197,7 +2202,11 @@ class OrganizerStudyGroupViewSet(viewsets.ModelViewSet):
                     "username": u.username,
                     "first_name": u.first_name or "",
                     "last_name": u.last_name or "",
-                    "must_change_password": bool(prof and prof.must_change_password),
+                    "must_change_password": bool(
+                        prof
+                        and prof.must_change_password
+                        and (prof.student_mode != UserProfile.MODE_PILOT)
+                    ),
                     "student_mode": (prof.student_mode if prof else UserProfile.MODE_STUDENT),
                     "joined_at": m.created_at.isoformat(),
                 }
@@ -2260,7 +2269,11 @@ class OrganizerStudyGroupViewSet(viewsets.ModelViewSet):
             "username": user.username,
             "first_name": user.first_name or "",
             "last_name": user.last_name or "",
-            "must_change_password": bool(profile and profile.must_change_password),
+            "must_change_password": bool(
+                profile
+                and profile.must_change_password
+                and (profile.student_mode != UserProfile.MODE_PILOT)
+            ),
             "student_mode": (profile.student_mode if profile else UserProfile.MODE_STUDENT),
             "sessions": sessions_data,
         })
@@ -2301,6 +2314,10 @@ class OrganizerStudyGroupViewSet(viewsets.ModelViewSet):
                 return Response({"detail": "student_mode должен быть student|pilot"}, status=status.HTTP_400_BAD_REQUEST)
             profile.student_mode = mode
             updates_profile.append("student_mode")
+            # Для режима апробации принудительную смену пароля отключаем.
+            if mode == UserProfile.MODE_PILOT and profile.must_change_password:
+                profile.must_change_password = False
+                updates_profile.append("must_change_password")
         if updates_user:
             user.save(update_fields=list(dict.fromkeys(updates_user)))
         if updates_profile:

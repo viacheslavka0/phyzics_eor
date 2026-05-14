@@ -383,53 +383,28 @@ class KnowledgeSystemViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet)
     # --------------------------------------------------------------------------
     @action(detail=True, methods=["post"])
     def check(self, request, pk=None):
+        from .services import ComprehensionCheckService
+
         ks: KnowledgeSystem = self.get_object()
         data = request.data or {}
         mappings = data.get("mappings", [])
         cloze_answers = data.get("cloze_answers", [])
 
-        # --- Проверка соответствий (вопрос -> набор зон)
-        q_map_correct = {}
-        total_mapping_items = 0
-        for q in KSQuestion.objects.filter(ks=ks).prefetch_related("correct_zones"):
-            total_mapping_items += 1
-            qid = q.id
-            correct_ids = set(q.correct_zones.values_list("id", flat=True))
-            chosen_ids = set()
-            for item in mappings:
-                if int(item.get("question_id", 0)) == qid:
-                    chosen_ids = set(map(int, item.get("selected_zone_ids", [])))
-                    break
-            q_map_correct[qid] = (chosen_ids == correct_ids)
+        # Использование сервиса для проверки
+        service = ComprehensionCheckService(ks)
+        check_result = service.check_all(mappings, cloze_answers)
 
-        # --- Проверка cloze
-        # Новая структура: пропуски хранятся в JSON поле blanks
-        gap_map = {}  # "cloze_id:position" -> correct_word
-        for cl in KSCloze.objects.filter(ks=ks):
-            for blank in cl.blanks:
-                position = blank.get("position", 0)
-                correct_word = blank.get("correct", "").strip().lower()
-                gap_key = f"{cl.id}:{position}"
-                gap_map[gap_key] = correct_word
-
-        cloze_answers_map = {
-            str(ans.get("gap_id", "")): str(ans.get("answer", "")).strip().lower()
-            for ans in cloze_answers
-            if ans.get("gap_id")
-        }
-        cloze_correct = {}
-        total_cloze_items = len(gap_map)
-        for gap_id, correct_word in gap_map.items():
-            student_answer = cloze_answers_map.get(gap_id, "")
-            cloze_correct[gap_id] = (student_answer == correct_word)
-
-        # --- Подсчёт процента
+        # Подсчёт процента
+        total_mapping_items = len(check_result["questions"]["question_results"])
+        total_cloze_items = len(check_result["cloze"]["cloze_results"])
         total_items = total_mapping_items + total_cloze_items
+
         correct_items = (
-            sum(1 for ok in q_map_correct.values() if ok)
-            + sum(1 for ok in cloze_correct.values() if ok)
+            sum(1 for q in check_result["questions"]["question_results"] if q["is_correct"])
+            + sum(1 for c in check_result["cloze"]["cloze_results"] if c["is_correct"])
         )
-        # Если нет вопросов вообще, считаем что пройдено
+
+        # Если нет вопросов, считаем что пройдено
         if total_items == 0:
             score_percent = 100.0
             passed = True
@@ -437,10 +412,10 @@ class KnowledgeSystemViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet)
             score_percent = round((correct_items / total_items) * 100, 2)
             passed = score_percent >= ks.comprehension_pass_threshold
 
-        # --- Сохраняем/обновляем сессию
+        # Сохранение сессии
         session, created = LearningSession.objects.get_or_create(
-                user=request.user,
-                ks=ks,
+            user=request.user,
+            ks=ks,
             finished_at__isnull=True,
             defaults={"current_stage": "comprehension"}
         )
@@ -450,7 +425,7 @@ class KnowledgeSystemViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet)
             session.current_stage = "typical_task"
         session.save()
 
-        # --- Лог
+        # Логирование
         EventLog.objects.create(
             user=request.user,
             session=session,
@@ -1368,7 +1343,9 @@ class TaskViewSet(viewsets.GenericViewSet):
     # --------------------------------------------------------------------------
     def retrieve(self, request, pk=None):
         try:
-            task = Task.objects.select_related("ks").get(pk=pk)
+            task = Task.objects.select_related("ks").prefetch_related(
+                "solution_steps__step"
+            ).get(pk=pk)
         except Task.DoesNotExist:
             return Response({"detail": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -1390,6 +1367,8 @@ class TaskViewSet(viewsets.GenericViewSet):
     # --------------------------------------------------------------------------
     @action(detail=True, methods=["post"])
     def submit(self, request, pk=None):
+        from .services import TaskSubmissionService
+
         try:
             task = Task.objects.get(pk=pk)
         except Task.DoesNotExist:
@@ -1404,120 +1383,44 @@ class TaskViewSet(viewsets.GenericViewSet):
         except LearningSession.DoesNotExist:
             return Response({"detail": "Session not found"}, status=status.HTTP_404_NOT_FOUND)
         if session.ks_id != task.ks_id:
-            return Response({"detail": "Task does not belong to session knowledge system"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "Task does not belong to session knowledge system"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        answer_numeric = request.data.get("answer_numeric")
-        answer_unit = (request.data.get("answer_unit") or "").strip()
-        answer_text = request.data.get("answer_text", "")
+        # Подготовка данных
         answer_files = list(request.FILES.getlist("answer_images"))
         legacy_image = request.FILES.get("answer_image")
         if legacy_image and not answer_files:
             answer_files = [legacy_image]
-        # Фото обязательно только на последней ситуации трека (совпадает с проверкой учителем).
-        # При target_tasks_count == 1 выражение «1 or 6» в Python даёт 1 — фото требовалось с первой попытки.
-        _raw_target = int(session.target_tasks_count or 0)
-        if _raw_target < 2:
-            session.target_tasks_count = 6
-        target = int(session.target_tasks_count)
-        require_photos = (session.tasks_solved_count + 1) >= target
-        if require_photos and not answer_files:
-            return Response(
-                {
-                    "detail": "Для последней ситуации в этой работе нужно прикрепить хотя бы одно фото решения (можно несколько снимков).",
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        time_spent = request.data.get("time_spent_seconds", 0)
 
-        # Проверка ответа
-        is_correct = None
-        if answer_numeric is not None:
-            try:
-                answer_numeric = float(answer_numeric)
-                if task.correct_answer is not None:
-                    is_correct = task.check_answer(answer_numeric, answer_unit or task.answer_unit)
-                else:
-                    is_correct = False
-            except (ValueError, TypeError):
-                is_correct = False
-        elif answer_text and task.correct_answer_text:
-            is_correct = answer_text.strip().lower() == task.correct_answer_text.strip().lower()
+        # Использование сервиса для обработки ответа
+        service = TaskSubmissionService(task, session, request.user)
+        result = service.process_answer({
+            "answer_numeric": request.data.get("answer_numeric"),
+            "answer_unit": request.data.get("answer_unit"),
+            "answer_text": request.data.get("answer_text", ""),
+            "answer_files": answer_files,
+            "time_spent_seconds": request.data.get("time_spent_seconds", 0),
+        })
 
-        is_final_grade_task = (session.tasks_solved_count + 1) >= target
-        attempt_kwargs = dict(
-            session=session,
-            task=task,
-            answer_numeric=answer_numeric,
-            answer_text=answer_text,
-            answer_image=answer_files[0] if answer_files else None,
-            is_correct=is_correct,
-            time_spent_seconds=time_spent,
-        )
-        if is_final_grade_task:
-            attempt_kwargs["teacher_review_status"] = "pending"
-        attempt = TaskAttempt.objects.create(**attempt_kwargs)
-        for i, img in enumerate(answer_files[1:], start=1):
-            TaskAttemptImage.objects.create(attempt=attempt, image=img, order=i)
+        if "errors" in result:
+            return Response(result["errors"], status=status.HTTP_400_BAD_REQUEST)
 
-        # Проверяем, была ли эта задача уже решена правильно ранее
-        previously_solved = TaskAttempt.objects.filter(
-            session=session, task=task, is_correct=True
-        ).exclude(pk=attempt.pk).exists()
+        attempt = result["attempt"]
+        is_correct = result["is_correct"]
+        is_final_grade_task = result["is_final_grade_task"]
 
-        # Обновляем статистику сессии
-        if is_final_grade_task:
-            # Финальная задача считается отправленной, даже если автопроверка не совпала:
-            # итог подтверждает учитель. Повторная отправка после "на доработку" не должна
-            # бесконечно увеличивать счётчик.
-            has_previous_final_submission = TaskAttempt.objects.filter(
-                session=session
-            ).exclude(teacher_review_status="").exclude(pk=attempt.pk).exists()
-            if not has_previous_final_submission:
-                session.tasks_solved_count += 1
-            if is_correct and not previously_solved:
-                session.tasks_correct_count += 1
-                session.wrong_attempts_in_row = 0
-            elif not is_correct:
-                session.wrong_attempts_in_row += 1
-        else:
-            if is_correct and not previously_solved:
-                session.tasks_solved_count += 1
-                session.tasks_correct_count += 1
-                session.wrong_attempts_in_row = 0
-            elif not is_correct:
-                session.wrong_attempts_in_row += 1
-
-        session.save()
-
-        if session.tasks_solved_count >= session.target_tasks_count:
-            _compute_and_save_score(session)
-
-        # Считаем кол-во попыток и неправильных попыток для ЭТОЙ задачи
+        # Подсчёт попыток для этой задачи
         task_all_attempts = TaskAttempt.objects.filter(session=session, task=task)
         task_attempts_count = task_all_attempts.count()
         task_wrong_attempts_count = task_all_attempts.filter(is_correct=False).count()
 
-        # Лог
-        EventLog.objects.create(
-            user=request.user,
-            session=session,
-            event="task_submit",
-            payload={
-                "task_id": task.id,
-                "answer_numeric": answer_numeric,
-                "answer_unit": answer_unit or task.answer_unit or "",
-                "answer_text": answer_text,
-                "is_correct": is_correct,
-                "attempt_id": attempt.id,
-            }
-        )
-
-        # Формируем ответ
+        # Формирование ответа
         solution_image_url = None
         if task.solution_image:
             solution_image_url = request.build_absolute_uri(task.solution_image.url)
-        
-        # Загружаем эталонные решения по шагам, если они есть
+
         solution_steps = []
         task_solution_steps = task.solution_steps.select_related("step").order_by("step__order").all()
         for tss in task_solution_steps:
@@ -1530,31 +1433,31 @@ class TaskViewSet(viewsets.GenericViewSet):
                 step_data["content"] = tss.content
                 if tss.image:
                     step_data["image_url"] = request.build_absolute_uri(tss.image.url)
-            else:  # schema
+            else:
                 step_data["schema_data"] = tss.schema_data
                 if tss.image:
                     step_data["image_url"] = request.build_absolute_uri(tss.image.url)
             solution_steps.append(step_data)
-        
+
         response_data = {
             "attempt_id": attempt.id,
             "tasks_solved_count": session.tasks_solved_count,
             "tasks_correct_count": session.tasks_correct_count,
             "wrong_attempts_in_row": session.wrong_attempts_in_row,
             "current_stage": session.current_stage,
-            # Счётчики по текущей задаче (для логики ветвления при ошибках)
             "task_attempts_count": task_attempts_count,
             "task_wrong_attempts_count": task_wrong_attempts_count,
             "answer_unit": task.answer_unit or "",
-            "selected_answer_unit": answer_unit or task.answer_unit or "",
+            "selected_answer_unit": request.data.get("answer_unit") or task.answer_unit or "",
             "allowed_answer_units": task.allowed_answer_units or ([task.answer_unit] if task.answer_unit else []),
             "is_final_grade_task": is_final_grade_task,
         }
+
         if is_final_grade_task:
             response_data["teacher_review_status"] = attempt.teacher_review_status or "pending"
         else:
             response_data["is_correct"] = is_correct
-        # Для итоговой задачи "на отметку" не раскрываем эталон.
+
         if not is_final_grade_task:
             response_data.update({
                 "correct_answer": task.correct_answer,
@@ -1563,6 +1466,7 @@ class TaskViewSet(viewsets.GenericViewSet):
                 "solution_image_url": solution_image_url,
                 "solution_steps": solution_steps,
             })
+
         urls = []
         if attempt.answer_image:
             urls.append(request.build_absolute_uri(attempt.answer_image.url))

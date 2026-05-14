@@ -67,42 +67,71 @@ function UnifiedLogin({ onLoggedIn }) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-      <div className="card p-8 max-w-md w-full animate-fadeIn">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-emerald-500 rounded-xl flex items-center justify-center shadow-md shadow-indigo-200">
-            <span className="text-white font-bold text-lg">⚛</span>
-          </div>
-          <h2 className="text-xl font-bold text-slate-900 mb-6">Вход</h2>
+    <div className="min-h-screen flex flex-col md:flex-row">
+      {/* Left branding panel */}
+      <div className="hidden md:flex md:w-5/12 lg:w-2/5 gradient-primary flex-col items-center justify-center p-10 text-white">
+        <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-5">
+          <span className="text-4xl">⚛</span>
         </div>
-        <form className="space-y-4" onSubmit={submit}>
-          <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">Логин</label>
-            <input
-              type="text"
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              autoComplete="username"
-              required
-            />
+        <h1 className="text-2xl font-extrabold mb-2 tracking-tight">EORA</h1>
+        <p className="text-indigo-100 text-center max-w-xs leading-relaxed">Физика · 7–9 класс</p>
+        <p className="mt-6 text-indigo-200 text-sm text-center max-w-xs leading-relaxed italic">
+          «Реши задачу — объясни физику»
+        </p>
+      </div>
+
+      {/* Right form panel */}
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 bg-white">
+        <div className="w-full max-w-sm animate-fadeIn">
+          {/* Mobile logo */}
+          <div className="flex md:hidden items-center gap-3 mb-8">
+            <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center">
+              <span className="text-white text-lg font-bold">⚛</span>
+            </div>
+            <span className="text-xl font-bold text-slate-900">EORA · Физика</span>
           </div>
-          <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">Пароль</label>
-            <input
-              type="password"
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              required
-            />
-          </div>
-          {msg && <p className="text-sm text-red-600">{msg}</p>}
-          <button type="submit" className="btn-primary btn-lg w-full" disabled={busy}>
-            {busy ? "Вход…" : "Войти"}
-          </button>
-        </form>
+
+          <h2 className="text-2xl font-bold text-slate-900 mb-1">Добро пожаловать</h2>
+          <p className="text-slate-500 text-sm mb-7">Войдите, чтобы продолжить обучение</p>
+
+          <form className="space-y-5" onSubmit={submit}>
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5">Логин</label>
+              <input
+                type="text"
+                className="input input-lg"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                autoComplete="username"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5">Пароль</label>
+              <input
+                type="password"
+                className="input input-lg"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+                required
+              />
+            </div>
+            {msg && (
+              <div className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-800">
+                {msg}
+              </div>
+            )}
+            <button type="submit" className="btn-primary btn-lg w-full" disabled={busy}>
+              {busy ? (
+                <span className="flex items-center gap-2 justify-center">
+                  <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                  Входим…
+                </span>
+              ) : "Войти"}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

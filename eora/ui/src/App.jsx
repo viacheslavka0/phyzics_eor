@@ -1,6 +1,7 @@
 import React, { useEffect, useState, createContext, useContext, lazy, Suspense, useCallback, useRef, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { apiCall } from "./utils/api";
+import { ToastContainer } from "./components/Toast.jsx";
 
 // Lazy load SchemaEditor for better performance
 const SchemaEditor = lazy(() => import("./components/SchemaEditor"));
@@ -243,6 +244,16 @@ function useApp() {
   return ctx;
 }
 
+function useToast() {
+  const { addToast } = useApp();
+  return {
+    error:   (msg) => addToast("error",   msg),
+    warning: (msg) => addToast("warning", msg),
+    success: (msg) => addToast("success", msg),
+    info:    (msg) => addToast("info",    msg),
+  };
+}
+
 // ============================================================================
 // MAIN APP
 // ============================================================================
@@ -340,6 +351,22 @@ export default function App({ viewerUser = null, forcedStudentView = false, onRe
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [catalog, setCatalog] = useState([]);
+
+  // Toast notifications
+  const [toasts, setToasts] = useState([]);
+  const addToast = useCallback((type, message, dur) => {
+    const id = Math.random().toString(36).slice(2);
+    setToasts((prev) => [...prev, { id, type, message, exiting: false }]);
+    const d = dur ?? (type === "error" ? 5000 : type === "warning" ? 6000 : type === "success" ? 3000 : 4000);
+    setTimeout(() => {
+      setToasts((prev) => prev.map((t) => (t.id === id ? { ...t, exiting: true } : t)));
+      setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), 300);
+    }, d);
+  }, []);
+  const dismissToast = useCallback((id) => {
+    setToasts((prev) => prev.map((t) => (t.id === id ? { ...t, exiting: true } : t)));
+    setTimeout(() => setToasts((prev) => prev.filter((t) => t.id !== id)), 300);
+  }, []);
   const [selectedKS, setSelectedKS] = useState(null);
   const [ksData, setKsData] = useState(null);
   const [session, setSession] = useState(null);
@@ -489,6 +516,7 @@ export default function App({ viewerUser = null, forcedStudentView = false, onRe
     viewerUser,
     forcedStudentView,
     onReturnToTeacher,
+    addToast,
   };
 
   // Loading state
@@ -517,6 +545,7 @@ export default function App({ viewerUser = null, forcedStudentView = false, onRe
         {view === "catalog" && <CatalogView />}
         {view === "learning" && ksData && <LearningView />}
       </div>
+      <ToastContainer toasts={toasts} onDismiss={dismissToast} />
     </AppContext.Provider>
   );
 }
@@ -792,6 +821,7 @@ function resolveLearningStage(session) {
 
 function LearningView() {
   const { ksData, session, handleBackToCatalog, accountProfile, viewerUser, forcedStudentView, onReturnToTeacher } = useApp();
+  const toast = useToast();
   const [resetting, setResetting] = useState(false);
   const isPilotMode = !!accountProfile?.is_pilot_mode;
   const stage = resolveLearningStage(session);
@@ -854,11 +884,11 @@ function LearningView() {
         window.localStorage.removeItem(STEP_BY_STEP_TASK_KEY);
         window.location.reload();
       } else {
-        alert("Ошибка сброса: " + res.status);
+        toast.error("Ошибка сброса: " + res.status);
       }
     } catch (e) {
       console.error(e);
-      alert("Ошибка: " + e.message);
+      toast.error("Ошибка: " + e.message);
     } finally {
       setResetting(false);
     }
@@ -985,27 +1015,27 @@ function LearningView() {
 
       {/* Sidebar */}
       <aside
-        className={`sidebar-desktop bg-slate-900 text-white flex flex-col fixed h-screen z-[310] transition-all duration-300 group ${
+        className={`sidebar-desktop bg-white/95 backdrop-blur-sm border-r border-slate-200/60 text-slate-900 flex flex-col fixed h-screen z-[310] transition-all duration-300 group ${
           sidebarCollapsed ? "w-16 hover:w-72" : "w-72"
         } ${sidebarOpen ? "translate-x-0" : ""}`}
       >
         {/* Close on mobile */}
         <button
           onClick={() => setSidebarOpen(false)}
-          className="sidebar-mobile-toggle absolute top-3 right-3 w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-white text-sm"
+          className="sidebar-mobile-toggle absolute top-3 right-3 w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 text-sm"
           aria-label="Закрыть"
         >✕</button>
 
         {/* Collapse toggle */}
-        <div className={`p-3 border-b border-slate-700 flex items-center ${sidebarCollapsed ? "justify-center" : "justify-between"}`}>
+        <div className={`p-3 border-b border-slate-200 flex items-center ${sidebarCollapsed ? "justify-center" : "justify-between"}`}>
           {!sidebarCollapsed && (
             <button onClick={handleBackToCatalog} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
               <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center flex-shrink-0">
                 <span className="text-white font-bold text-lg">E</span>
               </div>
               <div className="text-left">
-                <div className="font-semibold text-sm">ЭОР</div>
-                <div className="text-xs text-slate-400">← К каталогу</div>
+                <div className="font-semibold text-sm text-slate-900">ЭОР</div>
+                <div className="text-xs text-slate-500">← К каталогу</div>
               </div>
             </button>
           )}
@@ -1020,14 +1050,14 @@ function LearningView() {
                 <span className="text-white font-bold text-lg">E</span>
               </div>
               <div className="text-left">
-                <div className="font-semibold text-sm">ЭОР</div>
-                <div className="text-xs text-slate-400">← К каталогу</div>
+                <div className="font-semibold text-sm text-slate-900">ЭОР</div>
+                <div className="text-xs text-slate-500">← К каталогу</div>
               </div>
             </button>
           )}
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className={`w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-colors text-sm ${sidebarCollapsed ? "hidden group-hover:flex" : ""}`}
+            className={`w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors text-sm ${sidebarCollapsed ? "hidden group-hover:flex" : ""}`}
             title={sidebarCollapsed ? "Закрепить панель" : "Свернуть панель"}
           >
             {sidebarCollapsed ? "☰" : "◀"}
@@ -1039,7 +1069,7 @@ function LearningView() {
           <div className="flex flex-col items-center py-4 gap-3 group-hover:hidden">
             <div className="relative w-10 h-10">
               <svg viewBox="0 0 36 36" className="w-10 h-10 -rotate-90">
-                <circle cx="18" cy="18" r="15.5" fill="none" stroke="#334155" strokeWidth="3" />
+                <circle cx="18" cy="18" r="15.5" fill="none" stroke="#e2e8f0" strokeWidth="3" />
                 <circle
                   cx="18" cy="18" r="15.5" fill="none"
                   stroke="#34d399" strokeWidth="3"
@@ -1047,21 +1077,21 @@ function LearningView() {
                   strokeLinecap="round"
                 />
               </svg>
-              <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-emerald-400">{solved}/{target}</span>
+              <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-emerald-600">{solved}/{target}</span>
             </div>
-            <div className="text-emerald-400 text-lg font-bold">{session?.tasks_correct_count || 0}</div>
-            <div className="text-slate-500 text-[9px] uppercase tracking-wider">верно</div>
+            <div className="text-emerald-600 text-lg font-bold">{session?.tasks_correct_count || 0}</div>
+            <div className="text-slate-400 text-[9px] uppercase tracking-wider">верно</div>
           </div>
         )}
 
         {/* Full sidebar content (visible when expanded or on hover) */}
         <div className={`flex flex-col flex-1 overflow-hidden ${sidebarCollapsed ? "hidden group-hover:flex" : "flex"}`}>
-          <div className="p-5 border-b border-slate-700">
-            <div className="text-xs text-slate-300 uppercase tracking-wider mb-2">Система знаний</div>
-            <div className="font-semibold text-base leading-tight text-white">{ksData.title}</div>
-            <div className="mt-3 rounded-lg border border-slate-700 bg-slate-800/70 px-3 py-2">
-              <div className="text-sm font-semibold text-white truncate">{displayName}</div>
-              <div className="text-xs text-slate-300">{roleLabel}</div>
+          <div className="p-5 border-b border-slate-200">
+            <div className="text-xs text-slate-500 uppercase tracking-wider mb-2">Система знаний</div>
+            <div className="font-semibold text-base leading-tight text-slate-900">{ksData.title}</div>
+            <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+              <div className="text-sm font-semibold text-slate-900 truncate">{displayName}</div>
+              <div className="text-xs text-slate-500">{roleLabel}</div>
               {forcedStudentView && viewerUser?.is_staff && onReturnToTeacher && (
                 <button
                   type="button"
@@ -1076,20 +1106,20 @@ function LearningView() {
 
           {showTaskProgress && (
             <div className="p-5 flex-1 overflow-auto">
-              <div className="text-xs text-slate-400 uppercase tracking-wider mb-4">Прогресс</div>
+              <div className="text-xs text-slate-500 uppercase tracking-wider mb-4">Прогресс</div>
               <StageProgress currentStage={stage} session={session} ksData={ksData} />
             </div>
           )}
 
-          <div className="p-5 border-t border-slate-700 bg-slate-800/50">
+          <div className="p-5 border-t border-slate-200 bg-slate-50/80">
             <div className="grid grid-cols-2 gap-4 text-center mb-4">
               <div>
-                <div className="text-2xl font-bold text-emerald-400">{session?.tasks_correct_count || 0}</div>
-                <div className="text-xs text-slate-400">Решено верно</div>
+                <div className="text-2xl font-bold text-emerald-600">{session?.tasks_correct_count || 0}</div>
+                <div className="text-xs text-slate-500">Решено верно</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-slate-300">{session?.tasks_solved_count || 0}</div>
-                <div className="text-xs text-slate-400">Всего попыток</div>
+                <div className="text-2xl font-bold text-slate-700">{session?.tasks_solved_count || 0}</div>
+                <div className="text-xs text-slate-500">Всего попыток</div>
               </div>
             </div>
             {isPilotMode && (
@@ -1104,7 +1134,7 @@ function LearningView() {
             <button
               type="button"
               onClick={handleLogout}
-              className="w-full mt-2 px-3 py-2 text-xs text-slate-200 border border-slate-500/40 rounded-lg hover:bg-slate-700 transition-colors"
+              className="w-full mt-2 px-3 py-2 text-xs text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-100 transition-colors"
             >
               Выйти из аккаунта
             </button>
@@ -1134,36 +1164,36 @@ function StageProgress({ currentStage, session, ksData }) {
 
   return (
     <div className="space-y-4">
-      <div className="bg-slate-800 rounded-lg p-4">
-        <div className="text-xs text-slate-400 mb-2">Прогресс решения задач</div>
-        <div className="text-2xl font-bold text-white mb-1">
+      <div className="bg-white rounded-lg p-4 border border-slate-200">
+        <div className="text-xs text-slate-500 mb-2">Прогресс решения задач</div>
+        <div className="text-2xl font-bold text-slate-900 mb-1">
           {solvedTasks} / {targetTasks}
         </div>
         <div className="text-sm text-slate-400">
           Осталось решить: {remainingTasks}
         </div>
         <div className="mt-3">
-          <div className="flex justify-between text-xs text-slate-400 mb-1">
+          <div className="flex justify-between text-xs text-slate-500 mb-1">
             <span>Верно решено</span>
             <span>{correctTasks}</span>
           </div>
-          <div className="w-full bg-slate-700 rounded-full h-2">
-            <div 
+          <div className="w-full bg-slate-200 rounded-full h-2">
+            <div
               className="bg-emerald-500 h-2 rounded-full transition-all"
               style={{ width: `${(correctTasks / Math.max(1, solvedTasks)) * 100}%` }}
             />
           </div>
         </div>
-        <div className="mt-3 pt-3 border-t border-slate-700">
-          <div className="w-full bg-slate-700 rounded-full h-2">
-            <div 
-              className="bg-blue-500 h-2 rounded-full transition-all"
+        <div className="mt-3 pt-3 border-t border-slate-200">
+          <div className="w-full bg-slate-200 rounded-full h-2">
+            <div
+              className="bg-indigo-500 h-2 rounded-full transition-all"
               style={{ width: `${(solvedTasks / targetTasks) * 100}%` }}
             />
-      </div>
-          <div className="text-xs text-slate-400 mt-1 text-center">
+          </div>
+          <div className="text-xs text-slate-500 mt-1 text-center">
             Общий прогресс
-    </div>
+          </div>
         </div>
         </div>
       </div>
@@ -1228,7 +1258,7 @@ function LearningContent() {
       )}
 
       {/* Stage content */}
-      <div className="p-4 sm:p-6 md:p-8 animate-fadeIn">
+      <div key={stage} className="p-4 sm:p-6 md:p-8 stage-container">
         {stage === "comprehension" && <StageComprehension />}
         {stage === "typical_task" && <StageTypicalTask />}
         {stage === "task_preview" && <StageTaskPreview />}
@@ -1519,6 +1549,7 @@ function TaskOnboardingGuide({ steps, onClose }) {
 
 function StageComprehension() {
   const { ksData, session, updateSession, accountProfile } = useApp();
+  const toast = useToast();
   const isPilotMode = !!accountProfile?.is_pilot_mode;
   
   // Onboarding
@@ -1616,7 +1647,7 @@ function StageComprehension() {
       }
     } catch (e) {
       console.error(e);
-      alert("Ошибка проверки: " + e.message);
+      toast.error("Ошибка проверки: " + e.message);
     } finally {
       setChecking(false);
     }
@@ -2121,6 +2152,7 @@ function ClozeCard({ cloze, answers, results, onAnswer, disabled }) {
 
 function StageTypicalTask() {
   const { ksData, session, updateSession } = useApp();
+  const toast = useToast();
 
   // Шаг: "choose" (выбор варианта) → "cloze" (заполни пропуски)
   const hasCloze = !!ksData.typical_task_cloze?.marked_text;
@@ -2156,7 +2188,7 @@ function StageTypicalTask() {
       }
     } catch (e) {
       console.error(e);
-      alert("Ошибка: " + e.message);
+      toast.error("Ошибка: " + e.message);
     } finally {
       setSubmitting(false);
     }
@@ -2239,7 +2271,7 @@ function StageTypicalTask() {
       }
     } catch (e) {
       console.error(e);
-      alert("Ошибка: " + e.message);
+      toast.error("Ошибка: " + e.message);
     } finally {
       setClozeChecking(false);
     }
@@ -2748,7 +2780,7 @@ function StageLearningPathChoice() {
 
       await updateSession();
     } catch (e) {
-      alert("Ошибка: " + e.message);
+      toast.error("Ошибка: " + e.message);
     } finally {
       setSubmittingPath("");
     }
@@ -2958,8 +2990,11 @@ function ErrorBranchingBlock({
   if (wrongCount >= 3) {
     return (
       <div className="space-y-3">
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-          <p className="text-red-900 text-sm">Неверно.</p>
+        <div className="feedback-wrong animate-shake">
+          <div className="flex items-center gap-2.5">
+            <span className="text-xl">✗</span>
+            <p className="text-rose-900 font-semibold text-sm">Неверно.</p>
+          </div>
         </div>
         <div className="flex items-center justify-center gap-2 text-blue-600 text-sm font-medium py-4">
           <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
@@ -3209,8 +3244,11 @@ function ErrorBranchingBlock({
   // < 2 ошибок — обычное сообщение
   return (
     <div className="space-y-4">
-      <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-        <p className="text-red-900 text-sm">Неверно. Попробуйте ещё раз.</p>
+      <div className="feedback-wrong animate-shake">
+        <div className="flex items-center gap-2.5">
+          <span className="text-xl">✗</span>
+          <p className="text-rose-900 font-semibold text-sm">Неверно. Попробуйте ещё раз.</p>
+        </div>
       </div>
       <button
         onClick={handleNextTask}
@@ -3228,6 +3266,7 @@ function ErrorBranchingBlock({
 
 function StageTaskList() {
   const { session, ksData, updateSession } = useApp();
+  const toast = useToast();
   const [currentTask, setCurrentTask] = useState(null);
   const [taskProgress, setTaskProgress] = useState(null);
   const [answer, setAnswer] = useState("");
@@ -3342,7 +3381,7 @@ function StageTaskList() {
       }
     } catch (e) {
       console.error(e);
-      alert("Ошибка: " + e.message);
+      toast.error("Ошибка: " + e.message);
     } finally {
       setLoading(false);
     }
@@ -3362,7 +3401,7 @@ function StageTaskList() {
     const situationSubmit = (taskProgress?.tasks_solved ?? 0) + 1;
     const photoNeededSubmit = situationSubmit === targetSlotsSubmit && answerPhotos.length === 0;
     if (photoNeededSubmit) {
-      alert(
+      toast.warning(
         "Для последней ситуации в этой работе нужно прикрепить хотя бы одно фото решения из тетради (можно несколько снимков).",
       );
       return;
@@ -3423,7 +3462,7 @@ function StageTaskList() {
       }
     } catch (e) {
       console.error(e);
-      alert("Ошибка: " + e.message);
+      toast.error("Ошибка: " + e.message);
     } finally {
       setSubmitting(false);
     }
@@ -3449,7 +3488,7 @@ function StageTaskList() {
         await updateSession();
         await loadNextTask();
       } catch (e) {
-        alert("Ошибка: " + e.message);
+        toast.error("Ошибка: " + e.message);
       }
     } else {
       // Неправильный ответ - даем возможность повторить
@@ -3483,7 +3522,7 @@ function StageTaskList() {
         await loadNextTask();
       }
     } catch (e) {
-      alert("Ошибка: " + e.message);
+      toast.error("Ошибка: " + e.message);
     } finally {
       setSavingDifficulty(false);
     }
@@ -3507,7 +3546,7 @@ function StageTaskList() {
       }
       await updateSession();
     } catch (e) {
-      alert("Ошибка: " + e.message);
+      toast.error("Ошибка: " + e.message);
     }
   };
 
@@ -4274,6 +4313,7 @@ function TaskDifficultyPickerLayout({
 
 function StageDifficultyAssessment() {
   const { session, updateSession } = useApp();
+  const toast = useToast();
   const [busyKey, setBusyKey] = useState(null);
 
   const handleSelect = async (difficulty) => {
@@ -4295,7 +4335,7 @@ function StageDifficultyAssessment() {
       }
       await updateSession();
     } catch (e) {
-      alert("Ошибка: " + e.message);
+      toast.error("Ошибка: " + e.message);
     } finally {
       setBusyKey(null);
     }
@@ -4319,6 +4359,7 @@ function StageDifficultyAssessment() {
 
 function StageSolving() {
   const { ksData, session, updateSession } = useApp();
+  const toast = useToast();
   const [currentTask, setCurrentTask] = useState(null);
   const [taskDetails, setTaskDetails] = useState(null);
   const [solvedTaskIds, setSolvedTaskIds] = useState(new Set());
@@ -4416,7 +4457,7 @@ function StageSolving() {
   const handleSubmit = async () => {
     if (!taskDetails) return;
     if (photoMandatorySolving && answerPhotos.length === 0) {
-      alert(
+      toast.warning(
         "Для последней ситуации в этой работе нужно прикрепить хотя бы одно фото решения из тетради (можно несколько снимков).",
       );
       return;
@@ -4451,7 +4492,7 @@ function StageSolving() {
       setStudentLevel(newLevel);
 
     } catch (e) {
-      alert("Ошибка: " + e.message);
+      toast.error("Ошибка: " + e.message);
     }
   };
 
@@ -4769,6 +4810,7 @@ function StageSolving() {
 
 function StageMethodComposition() {
   const { ksData, session, updateSession } = useApp();
+  const toast = useToast();
   const method = ksData.solution_method;
 
   const sortedSteps = useMemo(
@@ -4886,7 +4928,7 @@ function StageMethodComposition() {
       setComparisonResult(data);
     } catch (e) {
       console.error(e);
-      alert("Ошибка проверки: " + e.message);
+      toast.error("Ошибка проверки: " + e.message);
     } finally {
       setChecking(false);
     }
@@ -4910,7 +4952,7 @@ function StageMethodComposition() {
       }
       await updateSession();
     } catch (e) {
-      alert("Ошибка: " + e.message);
+      toast.error("Ошибка: " + e.message);
     }
   };
 
@@ -5226,6 +5268,7 @@ function StageMethodComposition() {
 
 function StageStepByStep() {
   const { ksData, session, updateSession } = useApp();
+  const toast = useToast();
   const [taskData, setTaskData] = useState(null);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [studentAnswers, setStudentAnswers] = useState({});
@@ -5305,7 +5348,7 @@ function StageStepByStep() {
       ? overrideAnswer
       : (studentAnswers[stepOrder] || "");
     if (!studentAnswer.trim()) {
-      alert("Введите ответ на этот шаг");
+      toast.warning("Введите ответ на этот шаг");
       return;
     }
 
@@ -5349,7 +5392,7 @@ function StageStepByStep() {
         }
       });
     } catch (e) {
-      alert("Ошибка проверки: " + e.message);
+      toast.error("Ошибка проверки: " + e.message);
     } finally {
       setChecking(false);
     }
@@ -5388,7 +5431,7 @@ function StageStepByStep() {
         setCurrentStepIndex(currentStepIndex + 1);
       }
     } catch (e) {
-      alert("Ошибка: " + e.message);
+      toast.error("Ошибка: " + e.message);
     }
   };
 
@@ -6102,11 +6145,11 @@ function StageStepByStep() {
                     <button type="button"
                       onClick={() => {
                         if (!targetEntry) {
-                          alert("Укажите, что нужно найти — добавьте хотя бы одну величину как «Найти»");
+                          toast.warning("Укажите, что нужно найти — добавьте хотя бы одну величину как «Найти»");
                           return;
                         }
                         if (givenEntries.length === 0) {
-                          alert("Добавьте хотя бы одну величину в «Дано»");
+                          toast.warning("Добавьте хотя бы одну величину в «Дано»");
                           return;
                         }
                         const payload = JSON.stringify({ fragment: targetEntry.fragment, symbol: targetEntry.symbol });
@@ -6231,7 +6274,7 @@ function StageStepByStep() {
                           parts.calc && `Расчёт: ${parts.calc}`,
                           parts.reasoning && `Оценка: ${parts.reasoning}`,
                         ].filter(Boolean).join("\n");
-                        if (!combined.trim()) { alert("Заполните хотя бы формулу и расчёт"); return; }
+                        if (!combined.trim()) { toast.warning("Заполните хотя бы формулу и расчёт"); return; }
                         setStudentAnswers({ ...studentAnswers, [currentStepOrder]: combined });
                         handleCheckStep(currentStepOrder, combined);
                       }}
@@ -6594,6 +6637,7 @@ function SemiCircleGauge({ value = 0 }) {
 
 function StageCompleted() {
   const { session, handleBackToCatalog, ksData, updateSession, accountProfile } = useApp();
+  const toast = useToast();
   const isPilotMode = !!accountProfile?.is_pilot_mode;
   const snap =
     session?.has_completed && session?.last_completed && !session?.id
@@ -6630,7 +6674,7 @@ function StageCompleted() {
       await updateSession();
     } catch (e) {
       console.error(e);
-      alert("Ошибка: " + e.message);
+      toast.error("Ошибка: " + e.message);
     }
   };
 
@@ -6638,11 +6682,11 @@ function StageCompleted() {
     <div className="max-w-3xl mx-auto">
       <div className="card p-6 md:p-8 animate-fadeIn">
         <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-4 animate-pop">
-            <span className="text-4xl">🏆</span>
+          <div className="celebration-ring mx-auto mb-6">
+            <span className="text-3xl">🏆</span>
           </div>
-          <h2 className="text-3xl font-bold mb-2">Отличная работа!</h2>
-          <p className="text-slate-600">Вы завершили работу с системой знаний.</p>
+          <h2 className="text-3xl font-bold mb-2 animate-slideUp" style={{ animationDelay: "0.1s" }}>Отличная работа!</h2>
+          <p className="text-slate-600 animate-slideUp" style={{ animationDelay: "0.2s" }}>Вы завершили работу с системой знаний.</p>
           <p className="text-sm text-slate-500 mt-3 max-w-xl mx-auto leading-relaxed">
             Ваши ответы и фото решений сохранены.
           </p>
@@ -6686,7 +6730,7 @@ function StageCompleted() {
           </div>
         )}
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 mb-8 stagger-children">
           <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-center">
             <div className="text-2xl font-bold text-emerald-700">{solved}</div>
             <div className="text-xs text-slate-600 mt-1">Решено задач</div>
@@ -6752,6 +6796,7 @@ function StageCompleted() {
 // ============================================================================
 
 function SchemaEditorSection({ taskId, sessionId, onSchemaSaved }) {
+  const toast = useToast();
   const [isOpen, setIsOpen] = useState(true); // Открыт по умолчанию
   const [schemaData, setSchemaData] = useState(null);
   const [starterSchema, setStarterSchema] = useState(null);
@@ -6811,7 +6856,7 @@ function SchemaEditorSection({ taskId, sessionId, onSchemaSaved }) {
       setSaved(true);
     } catch (e) {
       console.error("Failed to save schema:", e);
-      alert("Ошибка сохранения схемы");
+      toast.error("Ошибка сохранения схемы");
     } finally {
       setSaving(false);
     }

@@ -29,11 +29,22 @@ STATIC_ROOT = BASE_DIR / "static_collected"  # collectstatic → один кат
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# --- Загрузка файлов: ограничения ---
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
+ALLOWED_UPLOAD_EXTENSIONS = ("jpg", "jpeg", "png", "gif", "webp")
+
 # --- БАЗОВОЕ ---
-SECRET_KEY = os.environ.get(
-    "DJANGO_SECRET_KEY",
-    "django-insecure-cv_r-4&gnsn4qjg)2zpqbz93d@vk)6f_g7^3z^1a+8m^h6(ynn",
-)
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+if not SECRET_KEY:
+    if _env_bool("DJANGO_DEBUG", True):
+        # Development: использовать небезопасный ключ только в разработке
+        SECRET_KEY = "django-insecure-dev-only-change-in-production"
+    else:
+        raise ValueError(
+            "DJANGO_SECRET_KEY environment variable is required in production"
+        )
+
 DEBUG = _env_bool("DJANGO_DEBUG", True)
 ALLOWED_HOSTS: list[str] = _env_list("DJANGO_ALLOWED_HOSTS")
 if not ALLOWED_HOSTS and DEBUG:
@@ -157,10 +168,28 @@ REST_FRAMEWORK = {
     ],
 }
 
-# --- Прод за reverse-proxy (Nginx) и HTTPS ---
+# --- Прод: HTTPS, Security Headers ---
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     USE_X_FORWARDED_HOST = True
-    SESSION_COOKIE_SECURE = _env_bool("DJANGO_SESSION_COOKIE_SECURE", True)
-    CSRF_COOKIE_SECURE = _env_bool("DJANGO_CSRF_COOKIE_SECURE", True)
-    SECURE_SSL_REDIRECT = _env_bool("DJANGO_SECURE_SSL_REDIRECT", False)
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    CSRF_COOKIE_HTTPONLY = True
+    SECURE_SSL_REDIRECT = _env_bool("DJANGO_SECURE_SSL_REDIRECT", True)
+    SECURE_HSTS_SECONDS = 31536000  # 1 год
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_SECURITY_POLICY = {
+        "default-src": ("'self'",),
+        "script-src": ("'self'", "'unsafe-inline'"),  # Tailwind требует unsafe-inline
+        "style-src": ("'self'", "'unsafe-inline'"),
+        "img-src": ("'self'", "data:", "https:"),
+        "font-src": ("'self'",),
+        "connect-src": ("'self'",),
+    }
+else:
+    # Development
+    SESSION_COOKIE_HTTPONLY = True
+    CSRF_COOKIE_HTTPONLY = True

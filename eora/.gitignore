@@ -1,10 +1,43 @@
+# Python & venv
 .venv/
+venv/
 __pycache__/
 *.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Database & backups
 *.sqlite3
 db.sqlite3
+*.backup
+
+# Environment & secrets
 .env
+.env.*
+!.env.example
+
+# Build & static
 /static_collected/
+/media/
+/ui/node_modules/
+node_modules/
+
+# Logs & temp
 *.log
+*.txt
+session*.log
+*.tmp
+
+# Generated files
+course_dump*.json
+db_dump*.json
+
+# IDE
 .idea/
 .vscode/
+*.swp
+*.swo
+*~
+.DS_Store

@@ -1,7 +1,24 @@
 from django.db import models
 from django.conf import settings
+from django.core.validators import FileExtensionValidator
+from django.core.exceptions import ValidationError
 
 from .unit_catalog import convert_unit_value, sanitize_allowed_units
+
+
+def validate_image_file(file):
+    """Валидатор размера и типа изображения"""
+    max_size = 5 * 1024 * 1024  # 5 MB
+    if file.size > max_size:
+        raise ValidationError(f"Размер файла не должен превышать 5 MB (текущий: {file.size / 1024 / 1024:.1f} MB)")
+
+    allowed_extensions = {"jpg", "jpeg", "png", "gif", "webp"}
+    if hasattr(file, "name"):
+        ext = file.name.rsplit(".", 1)[-1].lower() if "." in file.name else ""
+        if ext not in allowed_extensions:
+            raise ValidationError(
+                f"Недопустимый формат файла: .{ext}. Допустимые: {', '.join(allowed_extensions)}"
+            )
 
 # =============================================================================
 # 1. УЧЕБНАЯ ИЕРАРХИЯ
@@ -183,11 +200,13 @@ class KnowledgeSystem(models.Model):
     image = models.ImageField(
         upload_to="ks/",
         blank=True, null=True,
+        validators=[validate_image_file],
         help_text="Основное изображение Системы Знаний"
     )
     comprehension_image = models.ImageField(
         upload_to="ks/comprehension/",
         blank=True, null=True,
+        validators=[validate_image_file],
         help_text="Изображение таблицы для этапа осмысления (с зонами)"
     )
     show_zones_by_default = models.BooleanField(
@@ -725,6 +744,7 @@ class Task(models.Model):
     )
     solution_image = models.ImageField(
         upload_to="solutions/", blank=True, null=True,
+        validators=[validate_image_file],
         help_text="Изображение с решением"
     )
 
@@ -936,6 +956,7 @@ class SchemaTemplate(models.Model):
     # Превью
     preview_image = models.ImageField(
         upload_to="schema_previews/", blank=True, null=True,
+        validators=[validate_image_file],
         help_text="Автогенерируемое превью схемы"
     )
     
@@ -1143,7 +1164,8 @@ class TaskAttempt(models.Model):
     answer_text = models.CharField(max_length=255, blank=True)
     answer_image = models.ImageField(
         upload_to="student_solutions/", blank=True, null=True,
-        help_text="Фото решения ученика"
+        validators=[validate_image_file],
+        help_text="Фото решения ученика (макс. 5 MB, форматы: JPG, PNG, GIF, WebP)"
     )
     
     # Схема ученика (JSON)
@@ -1211,7 +1233,10 @@ class TaskAttemptImage(models.Model):
     attempt = models.ForeignKey(
         TaskAttempt, on_delete=models.CASCADE, related_name="answer_images"
     )
-    image = models.ImageField(upload_to="student_solutions/")
+    image = models.ImageField(
+        upload_to="student_solutions/",
+        validators=[validate_image_file]
+    )
     order = models.PositiveSmallIntegerField(default=0)
 
     class Meta:
@@ -1235,7 +1260,8 @@ class StepAttempt(models.Model):
     # Ответ ученика на этом шаге
     student_answer = models.TextField(blank=True)
     student_image = models.ImageField(
-        upload_to="step_attempts/", blank=True, null=True
+        upload_to="step_attempts/", blank=True, null=True,
+        validators=[validate_image_file]
     )
     
     # Результат проверки

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, createContext, useContext, lazy, Suspense, useCallback, useRef, useMemo } from "react";
 import { createPortal } from "react-dom";
+import { apiCall } from "./utils/api";
 
 // Lazy load SchemaEditor for better performance
 const SchemaEditor = lazy(() => import("./components/SchemaEditor"));

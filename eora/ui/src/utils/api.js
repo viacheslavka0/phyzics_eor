@@ -6,6 +6,23 @@
  */
 
 /**
+ * Get API base URL. Defaults to localhost:8001 in dev, empty string in prod.
+ * @returns {string} API base URL (empty string for same-origin)
+ */
+export function getApiBaseUrl() {
+  // In development, API might be on a different port
+  if (typeof window !== "undefined" && window.location.hostname === "localhost") {
+    const port = window.location.port;
+    // If frontend is on 5173 or 5174 (Vite dev), use 8001 for backend
+    if (port === "5173" || port === "5174") {
+      return "http://localhost:8001";
+    }
+  }
+  // In production, use relative URL (same origin)
+  return "";
+}
+
+/**
  * Get CSRF token from cookies.
  * @returns {string} CSRF token or empty string
  */
@@ -40,7 +57,7 @@ export async function ensureCsrfToken() {
 /**
  * Authenticated fetch wrapper with automatic CSRF header injection.
  *
- * @param {string} url - The URL to fetch
+ * @param {string} url - The URL to fetch (can be relative or absolute)
  * @param {object} options - Fetch options (method, body, headers, etc.)
  * @returns {Promise<Response>} Fetch response
  *
@@ -52,6 +69,8 @@ export async function ensureCsrfToken() {
  */
 export async function authFetch(url, options = {}) {
   const csrfToken = getCsrfToken();
+  const baseUrl = getApiBaseUrl();
+  const fullUrl = url.startsWith("http") ? url : baseUrl + url;
 
   const headers = {
     "Content-Type": "application/json",
@@ -62,17 +81,17 @@ export async function authFetch(url, options = {}) {
     headers["X-CSRFToken"] = csrfToken;
   }
 
-  return fetch(url, {
+  return fetch(fullUrl, {
     ...options,
     headers,
-    credentials: "same-origin", // Include cookies in request
+    credentials: "include", // Include cookies (works with cross-origin too)
   });
 }
 
 /**
  * Authenticated fetch for multipart/form-data (e.g., file uploads).
  *
- * @param {string} url - The URL to fetch
+ * @param {string} url - The URL to fetch (can be relative or absolute)
  * @param {FormData} formData - FormData object with files
  * @returns {Promise<Response>} Fetch response
  *
@@ -84,17 +103,19 @@ export async function authFetch(url, options = {}) {
  */
 export async function authFetchFormData(url, formData) {
   const csrfToken = getCsrfToken();
+  const baseUrl = getApiBaseUrl();
+  const fullUrl = url.startsWith("http") ? url : baseUrl + url;
 
   const headers = {};
   if (csrfToken) {
     headers["X-CSRFToken"] = csrfToken;
   }
 
-  return fetch(url, {
+  return fetch(fullUrl, {
     method: "POST",
     headers,
     body: formData,
-    credentials: "same-origin",
+    credentials: "include",
   });
 }
 

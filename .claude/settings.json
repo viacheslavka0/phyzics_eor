@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(npm *)",
+      "Bash(python *)",
+      "Bash(python3 *)",
+      "Bash(cd *)",
+      "Bash(find *)",
+      "Bash(cp *)",
+      "Bash(rm *)",
+      "Bash(ls *)",
+      "Bash(mkdir *)",
+      "Bash(cat *)",
+      "Bash(grep *)",
+      "Bash(source *)",
+      "Read",
+      "Edit",
+      "Write"
+    ]
+  }
+}

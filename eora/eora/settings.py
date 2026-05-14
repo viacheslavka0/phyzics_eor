@@ -5,6 +5,7 @@ Django settings for eora project.
 from pathlib import Path
 import os
 from urllib.parse import urlparse
+from typing import Optional
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -16,7 +17,7 @@ def _env_bool(name: str, default: bool) -> bool:
     return str(v).strip().lower() in ("1", "true", "yes", "on")
 
 
-def _env_list(name: str, default: list[str] | None = None) -> list[str]:
+def _env_list(name: str, default: Optional[list] = None) -> list:
     raw = os.environ.get(name, "").strip()
     if not raw:
         return list(default or [])

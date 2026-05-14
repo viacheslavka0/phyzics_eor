@@ -4,6 +4,14 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8001',
+        changeOrigin: true,
+      },
+    },
+  },
   build: {
     outDir: '../static/app',   // КЛАДЁМ В КОРЕНЬ ПРОЕКТА: <project>/static/app
     emptyOutDir: true,

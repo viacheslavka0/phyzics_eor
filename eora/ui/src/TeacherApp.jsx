@@ -43,6 +43,7 @@ const ensureCSRFCookie = async () => {
 };
 
 const api = async (url, options = {}) => {
+  await ensureCSRFCookie();
   const res = await fetch(url, {
     ...options,
     credentials: "include",
@@ -54,6 +55,10 @@ const api = async (url, options = {}) => {
   });
   if (!res.ok) {
     if (res.status === 403) {
+      const errBody = await res.json().catch(() => ({}));
+      if (errBody.detail && errBody.detail.toLowerCase().includes("csrf")) {
+        throw new Error("Ошибка CSRF — обновите страницу и попробуйте снова.");
+      }
       throw new Error("Нет доступа. Войдите на /app/ под учётной записью с правами staff.");
     }
     if (res.status === 401) {

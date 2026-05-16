@@ -30,14 +30,13 @@ function FullScreenModal({ children }) {
   );
 }
 
-const getCSRFCookie = () => {
-  const m = document.cookie.match(/(?:^|; )csrftoken=([^;]+)/);
-  return m ? decodeURIComponent(m[1]) : "";
-};
-
+// CSRF_COOKIE_HTTPONLY=True → кука недоступна JS, берём токен из JSON-ответа /api/csrf/
+let _csrfToken = "";
+const getCSRFCookie = () => _csrfToken;
 const ensureCSRFCookie = async () => {
-  if (getCSRFCookie()) return;
-  await fetch("/api/csrf/", { credentials: "include" });
+  const res = await fetch("/api/csrf/", { credentials: "include" });
+  const data = await res.json().catch(() => ({}));
+  if (data.csrfToken) _csrfToken = data.csrfToken;
 };
 
 const parseHtmlErrorInfo = (html) => {

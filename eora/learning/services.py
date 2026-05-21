@@ -202,23 +202,27 @@ class ComprehensionCheckService:
 
     def check_cloze(self, answers: dict) -> dict:
         """Проверить заполнение пропусков."""
-        clozes = KSCloze.objects.filter(ks=self.ks).prefetch_related("blanks")
-        blanks = self.ks.ks_cloze_blanks or []
+        # Собираем все пропуски из всех KSCloze для данной СК
+        clozes = KSCloze.objects.filter(ks=self.ks).order_by("order")
+        all_blanks = []
+        for cloze in clozes:
+            all_blanks.extend(cloze.blanks or [])
 
-        if not blanks:
-            return {"all_correct": False, "message": "Cloze не настроен"}
+        if not all_blanks:
+            # Cloze не настроен — считаем этот блок пройденным
+            return {"all_correct": True, "cloze_results": []}
 
         result = {
             "all_correct": True,
             "cloze_results": []
         }
 
-        for blank in blanks:
+        for blank in all_blanks:
             pos = str(blank["position"])
-            student = answers.get(pos, "").strip()
-            expected = blank["correct"].strip()
+            student = (answers.get(pos) or "").strip()
+            expected = blank.get("correct", "").strip()
 
-            is_correct = student.lower() == expected.lower()
+            is_correct = bool(expected) and student.lower() == expected.lower()
             if not is_correct:
                 result["all_correct"] = False
 

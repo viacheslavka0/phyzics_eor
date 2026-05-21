@@ -439,9 +439,15 @@ class KnowledgeSystemViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet)
             },
         )
 
-        # --- Ответ
-        mapping_feedback = [{"question_id": qid, "ok": ok} for qid, ok in q_map_correct.items()]
-        cloze_feedback = [{"gap_id": gid, "ok": ok} for gid, ok in cloze_correct.items()]
+        # --- Ответ (используем структуру из check_result)
+        mapping_feedback = [
+            {"question_id": r["question_id"], "ok": r["is_correct"]}
+            for r in check_result["questions"].get("question_results", [])
+        ]
+        cloze_feedback = [
+            {"gap_id": r["position"], "ok": r["is_correct"]}
+            for r in check_result["cloze"].get("cloze_results", [])
+        ]
 
         return Response({
                 "passed": passed,

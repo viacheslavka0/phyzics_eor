@@ -2,6 +2,7 @@
  * ElementCreator — форма для создания новых элементов схемы учителем
  */
 import { useState } from 'react';
+import { getCSRFToken, ensureCSRFToken } from "../utils/api";
 
 const DEFAULT_SVGS = {
   point: `<circle cx="12" cy="12" r="6" fill="currentColor"/>`,
@@ -37,12 +38,13 @@ const ElementCreator = ({ categories, onSave, onCancel }) => {
     setError('');
 
     try {
+      await ensureCSRFToken();
       const response = await fetch('/api/schema-elements/', {
         method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRFToken': document.cookie.match(/csrftoken=([^;]+)/)?.[1] || '',
+          'X-CSRFToken': getCSRFToken(),
         },
         body: JSON.stringify({
           name: name.trim(),

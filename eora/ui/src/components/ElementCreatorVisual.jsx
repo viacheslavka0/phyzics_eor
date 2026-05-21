@@ -4,6 +4,7 @@
  */
 import { useState, useRef, useEffect } from 'react';
 import { Stage, Layer, Circle, Rect, Line, Arrow, Text, Group } from 'react-konva';
+import { getCSRFToken, ensureCSRFToken } from "../utils/api";
 
 // =============================================================================
 // ТИПЫ ЭЛЕМЕНТОВ
@@ -356,12 +357,13 @@ const ElementCreatorVisual = ({ categories, onSave, onCancel }) => {
         }
       }
 
+      await ensureCSRFToken();
       const response = await fetch('/api/schema-elements/', {
         method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRFToken': document.cookie.match(/csrftoken=([^;]+)/)?.[1] || '',
+          'X-CSRFToken': getCSRFToken(),
         },
         body: JSON.stringify({
           name: name.trim(),

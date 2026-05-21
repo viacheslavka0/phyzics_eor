@@ -1,4 +1,5 @@
 import React, { useEffect, useState, lazy, Suspense, useCallback } from "react";
+import { getCSRFToken, ensureCSRFToken } from "./utils/api";
 
 /**
  * EORA Teacher Panel — Интерфейс учителя
@@ -32,14 +33,9 @@ const UNIT_GROUP_OPTIONS = [
 // UTILS
 // =============================================================================
 
-// CSRF_COOKIE_HTTPONLY=True → кука недоступна JS, берём токен из JSON-ответа /api/csrf/
-let _csrfToken = "";
-const getCSRFCookie = () => _csrfToken;
-const ensureCSRFCookie = async () => {
-  const res = await fetch("/api/csrf/", { credentials: "include" });
-  const data = await res.json().catch(() => ({}));
-  if (data.csrfToken) _csrfToken = data.csrfToken;
-};
+// CSRF: синглтон из utils/api.js (CSRF_COOKIE_HTTPONLY=True)
+const getCSRFCookie = getCSRFToken;
+const ensureCSRFCookie = ensureCSRFToken;
 
 const api = async (url, options = {}) => {
   await ensureCSRFCookie();

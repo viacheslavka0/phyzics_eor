@@ -1,6 +1,6 @@
 import React, { useEffect, useState, createContext, useContext, lazy, Suspense, useCallback, useRef, useMemo } from "react";
 import { createPortal } from "react-dom";
-import { apiCall } from "./utils/api";
+import { apiCall, getCSRFToken, ensureCSRFToken } from "./utils/api";
 import { ToastContainer } from "./components/Toast.jsx";
 
 // Lazy load SchemaEditor for better performance
@@ -30,14 +30,9 @@ function FullScreenModal({ children }) {
   );
 }
 
-// CSRF_COOKIE_HTTPONLY=True → кука недоступна JS, берём токен из JSON-ответа /api/csrf/
-let _csrfToken = "";
-const getCSRFCookie = () => _csrfToken;
-const ensureCSRFCookie = async () => {
-  const res = await fetch("/api/csrf/", { credentials: "include" });
-  const data = await res.json().catch(() => ({}));
-  if (data.csrfToken) _csrfToken = data.csrfToken;
-};
+// CSRF: используем синглтон из utils/api.js (CSRF_COOKIE_HTTPONLY=True)
+const getCSRFCookie = getCSRFToken;
+const ensureCSRFCookie = ensureCSRFToken;
 
 const parseHtmlErrorInfo = (html) => {
   const titleMatch = html.match(/<title>(.*?)<\/title>/i);

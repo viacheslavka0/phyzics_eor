@@ -1,9 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-
-const getCSRFCookie = () => {
-  const m = document.cookie.match(/(?:^|; )csrftoken=([^;]+)/);
-  return m ? decodeURIComponent(m[1]) : "";
-};
+import { getCSRFToken as getCSRFCookie } from "./utils/api";
 
 export default function Editor({ ksId, onClose, asPage = false }) {
   const [data, setData] = useState(null);

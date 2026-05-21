@@ -1,163 +1,91 @@
 /**
- * API utilities for EORA frontend.
+ * Shared CSRF + fetch utilities for EORA frontend.
  *
- * Centralized CSRF token management and authenticated fetch wrapper.
- * Replaces duplicate getCSRFCookie() logic across App.jsx, Portal.jsx, TeacherApp.jsx, Editor.jsx
+ * IMPORTANT: CSRF_COOKIE_HTTPONLY=True is set in Django settings, so JavaScript
+ * cannot read the csrftoken cookie via document.cookie. Instead we call /api/csrf/
+ * which returns {"csrfToken": "..."} in the JSON body.
+ *
+ * This module is an ES module singleton — _csrfToken is shared across ALL imports.
+ * Portal.jsx calls ensureCSRFToken() on boot; App.jsx, TeacherApp.jsx etc. all
+ * get the same cached token automatically.
  */
 
-/**
- * Get API base URL. Defaults to localhost:8001 in dev, empty string in prod.
- * @returns {string} API base URL (empty string for same-origin)
- */
-export function getApiBaseUrl() {
-  // In development, API might be on a different port
-  if (typeof window !== "undefined" && window.location.hostname === "localhost") {
-    const port = window.location.port;
-    // If frontend is on 5173 or 5174 (Vite dev), use 8001 for backend
-    if (port === "5173" || port === "5174") {
-      return "http://localhost:8001";
-    }
-  }
-  // In production, use relative URL (same origin)
-  return "";
-}
+let _csrfToken = "";
+
+/** Returns the cached CSRF token (empty string if not yet fetched). */
+export const getCSRFToken = () => _csrfToken;
 
 /**
- * Get CSRF token from cookies.
- * @returns {string} CSRF token or empty string
+ * Fetches a fresh CSRF token from /api/csrf/ and caches it.
+ * Always refetches — call this before any mutating request if you're unsure
+ * whether the token is still valid.
  */
-export function getCsrfToken() {
-  const name = "csrftoken";
-  let cookieValue = "";
-  if (document.cookie && document.cookie !== "") {
-    const cookies = document.cookie.split(";");
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      if (cookie.substring(0, name.length + 1) === name + "=") {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }
-  return cookieValue;
-}
-
-/**
- * Ensure CSRF cookie is set by making a dummy GET request.
- * Django's CsrfViewMiddleware sets the csrftoken cookie on GET requests.
- */
-export async function ensureCsrfToken() {
+export const ensureCSRFToken = async () => {
   try {
-    await fetch("/", { method: "GET", credentials: "same-origin" });
-  } catch (err) {
-    console.warn("Failed to ensure CSRF token:", err);
+    const res = await fetch("/api/csrf/", { credentials: "include" });
+    const data = await res.json().catch(() => ({}));
+    if (data.csrfToken) _csrfToken = data.csrfToken;
+  } catch {
+    // ignore network errors — token stays as-is
   }
-}
+};
 
 /**
- * Authenticated fetch wrapper with automatic CSRF header injection.
+ * Central fetch wrapper: always ensures CSRF token before the request,
+ * attaches credentials and Content-Type automatically.
  *
- * @param {string} url - The URL to fetch (can be relative or absolute)
- * @param {object} options - Fetch options (method, body, headers, etc.)
- * @returns {Promise<Response>} Fetch response
- *
- * @example
- * const data = await authFetch("/api/task/123/submit/", {
- *   method: "POST",
- *   body: JSON.stringify({ answer_numeric: 42 })
- * });
+ * @param {string} url - relative or absolute URL
+ * @param {object} options - standard fetch options
+ * @returns {Promise<Response>}
  */
-export async function authFetch(url, options = {}) {
-  const csrfToken = getCsrfToken();
-  const baseUrl = getApiBaseUrl();
-  const fullUrl = url.startsWith("http") ? url : baseUrl + url;
-
+export async function apiFetch(url, options = {}) {
+  await ensureCSRFToken();
   const headers = {
     "Content-Type": "application/json",
+    "X-CSRFToken": _csrfToken,
     ...options.headers,
   };
-
-  if (csrfToken) {
-    headers["X-CSRFToken"] = csrfToken;
-  }
-
-  return fetch(fullUrl, {
-    ...options,
-    headers,
-    credentials: "include", // Include cookies (works with cross-origin too)
-  });
+  return fetch(url, { ...options, credentials: "include", headers });
 }
 
 /**
- * Authenticated fetch for multipart/form-data (e.g., file uploads).
+ * apiFetch + JSON parse + error throw.
+ * Throws an Error with the server's detail message on non-2xx responses.
  *
- * @param {string} url - The URL to fetch (can be relative or absolute)
- * @param {FormData} formData - FormData object with files
- * @returns {Promise<Response>} Fetch response
- *
- * @example
- * const formData = new FormData();
- * formData.append("answer_images", fileInput.files[0]);
- * formData.append("session_id", "123");
- * const data = await authFetchFormData("/api/task/456/submit/", formData);
- */
-export async function authFetchFormData(url, formData) {
-  const csrfToken = getCsrfToken();
-  const baseUrl = getApiBaseUrl();
-  const fullUrl = url.startsWith("http") ? url : baseUrl + url;
-
-  const headers = {};
-  if (csrfToken) {
-    headers["X-CSRFToken"] = csrfToken;
-  }
-
-  return fetch(fullUrl, {
-    method: "POST",
-    headers,
-    body: formData,
-    credentials: "include",
-  });
-}
-
-/**
- * Helper to parse JSON response with error handling.
- *
- * @param {Response} response - Fetch response object
- * @returns {Promise<object>} Parsed JSON data
- * @throws {Error} If response is not ok or JSON parsing fails
- *
- * @example
- * const response = await authFetch("/api/session/current/");
- * const data = await parseJsonResponse(response);
- */
-export async function parseJsonResponse(response) {
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(
-      errorData.detail ||
-        `API error: ${response.status} ${response.statusText}`
-    );
-  }
-  return response.json();
-}
-
-/**
- * Make authenticated API call with error handling.
- *
- * @param {string} url - API endpoint URL
- * @param {object} options - Fetch options
- * @returns {Promise<object>} Parsed JSON response
- * @throws {Error} On network or API error
- *
- * @example
- * try {
- *   const data = await apiCall("/api/ks/123/", { method: "GET" });
- *   setData(data);
- * } catch (err) {
- *   setError(err.message);
- * }
+ * @param {string} url
+ * @param {object} options
+ * @returns {Promise<any>} parsed JSON
  */
 export async function apiCall(url, options = {}) {
-  const response = await authFetch(url, options);
-  return parseJsonResponse(response);
+  const res = await apiFetch(url, options);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || `HTTP ${res.status}`);
+  }
+  return res.json();
 }
+
+/**
+ * FormData (file upload) variant — omits Content-Type so browser sets multipart boundary.
+ *
+ * @param {string} url
+ * @param {FormData} formData
+ * @returns {Promise<Response>}
+ */
+export async function apiFetchForm(url, formData) {
+  await ensureCSRFToken();
+  return fetch(url, {
+    method: "POST",
+    credentials: "include",
+    headers: { "X-CSRFToken": _csrfToken },
+    body: formData,
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Legacy aliases — keep for backward compat while migrating old call sites
+// ---------------------------------------------------------------------------
+/** @deprecated use getCSRFToken() */
+export const getCsrfToken = getCSRFToken;
+/** @deprecated use ensureCSRFToken() */
+export const ensureCsrfToken = ensureCSRFToken;

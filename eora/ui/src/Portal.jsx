@@ -69,8 +69,8 @@ function UnifiedLogin({ onLoggedIn }) {
           <span className="text-4xl">⚛</span>
         </div>
         <h1 className="text-2xl font-extrabold mb-2 tracking-tight">EORA</h1>
-        <p className="text-indigo-100 text-center max-w-xs leading-relaxed">Физика · 7–9 класс</p>
-        <p className="mt-6 text-indigo-200 text-sm text-center max-w-xs leading-relaxed italic">
+        <p className="text-blue-100 text-center max-w-xs leading-relaxed">Физика · 7–9 класс</p>
+        <p className="mt-6 text-blue-200 text-sm text-center max-w-xs leading-relaxed italic">
           «Реши задачу — объясни физику»
         </p>
       </div>

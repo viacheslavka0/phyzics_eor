@@ -2,6 +2,12 @@ import React, { useEffect, useState, createContext, useContext, lazy, Suspense, 
 import { createPortal } from "react-dom";
 import { apiCall, getCSRFToken, ensureCSRFToken } from "./utils/api";
 import { ToastContainer } from "./components/Toast.jsx";
+import {
+  Menu, X, ChevronLeft, LogOut, CheckCircle2, BarChart2,
+  Flame, BookOpen, Target, Eye, Map, ListChecks, Scale,
+  PencilLine, Puzzle, Footprints, PartyPopper, AlertTriangle,
+  RotateCcw, TrendingUp
+} from "lucide-react";
 
 // Lazy load SchemaEditor for better performance
 const SchemaEditor = lazy(() => import("./components/SchemaEditor"));
@@ -550,10 +556,31 @@ export default function App({ viewerUser = null, forcedStudentView = false, onRe
 
 function LoadingScreen() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50">
-      <div className="text-center">
-        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-        <p className="text-slate-600">Загрузка...</p>
+    <div className="min-h-screen bg-slate-50 p-6">
+      {/* Header skeleton */}
+      <div className="max-w-5xl mx-auto mb-8">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="skeleton w-10 h-10 rounded-xl" />
+          <div className="space-y-2">
+            <div className="skeleton w-24 h-4" />
+            <div className="skeleton w-36 h-3" />
+          </div>
+        </div>
+        {/* Hero skeleton */}
+        <div className="skeleton w-full h-36 rounded-2xl mb-6" />
+        {/* Cards skeleton */}
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-white rounded-2xl border border-slate-200 p-5 flex items-center gap-4">
+              <div className="skeleton w-12 h-12 rounded-2xl flex-shrink-0" />
+              <div className="flex-1 space-y-2">
+                <div className="skeleton h-4 w-32" />
+                <div className="skeleton h-3 w-48" />
+              </div>
+              <div className="skeleton w-6 h-6 rounded" />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -616,7 +643,7 @@ function CatalogView() {
       <header className="bg-white/80 backdrop-blur-lg border-b border-slate-200/60 sticky top-0 z-20">
         <div className="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-emerald-500 rounded-xl flex items-center justify-center shadow-md shadow-indigo-200">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-emerald-500 rounded-xl flex items-center justify-center shadow-md shadow-blue-200">
               <span className="text-white font-bold text-lg">⚛</span>
             </div>
             <div>
@@ -648,7 +675,7 @@ function CatalogView() {
               <button
                 type="button"
                 onClick={onReturnToTeacher}
-                className="px-3 py-1.5 rounded-lg border border-indigo-200 text-indigo-700 text-xs font-medium hover:bg-indigo-50 transition-colors"
+                className="px-3 py-1.5 rounded-lg border border-blue-200 text-blue-700 text-xs font-medium hover:bg-blue-50 transition-colors"
               >
                 В панель учителя
               </button>
@@ -659,13 +686,13 @@ function CatalogView() {
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-indigo-500 to-emerald-500" />
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-700 via-blue-500 to-emerald-500" />
         <div className="absolute inset-0 opacity-[0.07]" style={{backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"}} />
         <div className="relative max-w-5xl mx-auto px-6 py-12 text-center">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-3">
             Привет! Готов изучать физику?
           </h2>
-          <p className="text-indigo-100 sm:text-lg max-w-lg mx-auto">
+          <p className="text-blue-100 sm:text-lg max-w-lg mx-auto">
             Выбери тему — и начни путь от теории к уверенному решению задач
           </p>
           <div className="flex justify-center gap-4 mt-6">
@@ -689,7 +716,7 @@ function CatalogView() {
                   className="w-full px-5 py-4 flex items-center justify-between transition-colors hover:bg-blue-50/30"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-sm text-white font-extrabold text-xl">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-sm text-white font-extrabold text-xl">
                       {schoolClass.number}
                     </div>
                     <div className="text-left">
@@ -747,13 +774,13 @@ function CatalogView() {
                                           className={`group flex items-center gap-2.5 px-4 py-3 rounded-xl border-1.5 transition-all text-sm font-semibold ${
                                             prog?.completed
                                               ? "border-emerald-300 bg-emerald-50/60 hover:bg-emerald-100 hover:border-emerald-400 text-emerald-800"
-                                              : "border-indigo-200 bg-indigo-50/50 hover:bg-indigo-100 hover:border-indigo-300 hover:shadow-sm text-indigo-700"
+                                              : "border-blue-200 bg-blue-50/50 hover:bg-blue-100 hover:border-blue-300 hover:shadow-sm text-blue-700"
                                           }`}
                                         >
                                           <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs transition-colors ${
                                             prog?.completed
                                               ? "bg-emerald-200/60 group-hover:bg-emerald-300/60 text-emerald-700"
-                                              : "bg-indigo-200/60 group-hover:bg-indigo-300/60"
+                                              : "bg-blue-200/60 group-hover:bg-blue-300/60"
                                           }`}>
                                             {prog?.completed ? "✓" : "⚡"}
                                           </span>
@@ -763,7 +790,7 @@ function CatalogView() {
                                               {Math.round(prog.score_percent)}% | {prog.tasks_correct}/{prog.tasks_solved}
                                             </span>
                                           )}
-                                          <span className={`group-hover:translate-x-0.5 transition-transform ml-1 ${prog?.completed ? "text-emerald-500" : "text-indigo-400"}`}>→</span>
+                                          <span className={`group-hover:translate-x-0.5 transition-transform ml-1 ${prog?.completed ? "text-emerald-500" : "text-blue-400"}`}>→</span>
                                         </button>
                                       );
                                     })}
@@ -917,17 +944,19 @@ function LearningView() {
   return (
     <div className="min-h-screen flex">
       {/* Mobile top bar */}
-      <div className="sidebar-mobile-toggle fixed top-0 left-0 right-0 z-[200] bg-slate-900 text-white flex items-center gap-3 px-4 py-3">
-        <button onClick={() => setSidebarOpen(true)} className="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center text-lg" aria-label="Меню">☰</button>
+      <div className="sidebar-mobile-toggle fixed top-0 left-0 right-0 z-[200] bg-white/95 backdrop-blur-sm border-b border-slate-200/60 flex items-center gap-3 px-4 py-3 shadow-sm">
+        <button onClick={() => setSidebarOpen(true)} className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600" aria-label="Меню">
+          <Menu size={18} />
+        </button>
         <div className="flex-1 min-w-0">
-          <div className="font-semibold text-sm truncate">{ksData.title}</div>
-          <div className="text-[11px] text-slate-300 truncate">{displayName} · {roleLabel}</div>
+          <div className="font-semibold text-sm truncate text-slate-900">{ksData.title}</div>
+          <div className="text-[11px] text-slate-400 truncate">{displayName} · {roleLabel}</div>
         </div>
         {forcedStudentView && viewerUser?.is_staff && onReturnToTeacher && (
           <button
             type="button"
             onClick={onReturnToTeacher}
-            className="px-2.5 py-1.5 rounded-lg bg-indigo-600 text-[11px] font-medium"
+            className="px-2.5 py-1.5 rounded-lg bg-blue-600 text-white text-[11px] font-medium"
           >
             Панель учителя
           </button>
@@ -935,9 +964,10 @@ function LearningView() {
         <button
           type="button"
           onClick={handleLogout}
-          className="px-3 py-1.5 rounded-lg bg-slate-800 text-xs font-medium"
+          className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500"
+          aria-label="Выйти"
         >
-          Выйти
+          <LogOut size={15} />
         </button>
       </div>
 
@@ -1016,9 +1046,9 @@ function LearningView() {
         {/* Close on mobile */}
         <button
           onClick={() => setSidebarOpen(false)}
-          className="sidebar-mobile-toggle absolute top-3 right-3 w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600 text-sm"
+          className="sidebar-mobile-toggle absolute top-3 right-3 w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-600"
           aria-label="Закрыть"
-        >✕</button>
+        ><X size={15} /></button>
 
         {/* Collapse toggle */}
         <div className={`p-3 border-b border-slate-200 flex items-center ${sidebarCollapsed ? "justify-center" : "justify-between"}`}>
@@ -1051,10 +1081,10 @@ function LearningView() {
           )}
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className={`w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors text-sm ${sidebarCollapsed ? "hidden group-hover:flex" : ""}`}
+            className={`w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors ${sidebarCollapsed ? "hidden group-hover:flex" : ""}`}
             title={sidebarCollapsed ? "Закрепить панель" : "Свернуть панель"}
           >
-            {sidebarCollapsed ? "☰" : "◀"}
+            {sidebarCollapsed ? <Menu size={16} /> : <ChevronLeft size={16} />}
           </button>
         </div>
 
@@ -1090,7 +1120,7 @@ function LearningView() {
                 <button
                   type="button"
                   onClick={onReturnToTeacher}
-                  className="mt-2 w-full px-2 py-1.5 rounded-md border border-indigo-400/40 text-indigo-200 text-xs hover:bg-indigo-500/10"
+                  className="mt-2 w-full px-2 py-1.5 rounded-md border border-blue-400/40 text-blue-200 text-xs hover:bg-blue-500/10"
                 >
                   Вернуться в панель учителя
                 </button>
@@ -1106,30 +1136,60 @@ function LearningView() {
           )}
 
           <div className="p-5 border-t border-slate-200 bg-slate-50/80">
-            <div className="grid grid-cols-2 gap-4 text-center mb-4">
-              <div>
-                <div className="text-2xl font-bold text-emerald-600">{session?.tasks_correct_count || 0}</div>
-                <div className="text-xs text-slate-500">Решено верно</div>
+            {/* Streak indicator */}
+            {session && (() => {
+              const wrongInRow = session.wrong_attempts_in_row || 0;
+              const correct = session.tasks_correct_count || 0;
+              if (correct >= 3 && wrongInRow === 0) {
+                return (
+                  <div className={`streak-badge ${correct >= 5 ? "streak-hot" : ""} mb-3 w-full justify-center`}>
+                    <Flame size={13} />
+                    <span>Серия {correct} верных!</span>
+                  </div>
+                );
+              }
+              if (wrongInRow >= 2) {
+                return (
+                  <div className="mb-3 w-full flex items-center justify-center gap-1.5 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-full py-1 px-3">
+                    <TrendingUp size={12} />
+                    <span>Не сдавайся, ты справишься!</span>
+                  </div>
+                );
+              }
+              return null;
+            })()}
+            <div className="grid grid-cols-2 gap-3 text-center mb-4">
+              <div className="bg-white rounded-xl p-2.5 border border-slate-200">
+                <div className="flex items-center justify-center gap-1 mb-0.5">
+                  <CheckCircle2 size={14} className="text-emerald-500" />
+                  <span className="text-xl font-bold text-emerald-600">{session?.tasks_correct_count || 0}</span>
+                </div>
+                <div className="text-[10px] text-slate-500 uppercase tracking-wide">Верно</div>
               </div>
-              <div>
-                <div className="text-2xl font-bold text-slate-700">{session?.tasks_solved_count || 0}</div>
-                <div className="text-xs text-slate-500">Всего попыток</div>
+              <div className="bg-white rounded-xl p-2.5 border border-slate-200">
+                <div className="flex items-center justify-center gap-1 mb-0.5">
+                  <BarChart2 size={14} className="text-slate-400" />
+                  <span className="text-xl font-bold text-slate-700">{session?.tasks_solved_count || 0}</span>
+                </div>
+                <div className="text-[10px] text-slate-500 uppercase tracking-wide">Задач</div>
               </div>
             </div>
             {isPilotMode && (
               <button
                 onClick={handleResetProgress}
                 disabled={resetting}
-                className="w-full px-3 py-2 text-xs text-red-400 border border-red-400/30 rounded-lg hover:bg-red-400/10 transition-colors disabled:opacity-50"
+                className="w-full px-3 py-2 text-xs text-red-400 border border-red-400/30 rounded-lg hover:bg-red-400/10 transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5"
               >
+                <RotateCcw size={12} />
                 {resetting ? "Сброс..." : "Сбросить прогресс"}
               </button>
             )}
             <button
               type="button"
               onClick={handleLogout}
-              className="w-full mt-2 px-3 py-2 text-xs text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-100 transition-colors"
+              className="w-full mt-2 px-3 py-2 text-xs text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-100 transition-colors flex items-center justify-center gap-1.5"
             >
+              <LogOut size={12} />
               Выйти из аккаунта
             </button>
           </div>
@@ -1181,7 +1241,7 @@ function StageProgress({ currentStage, session, ksData }) {
         <div className="mt-3 pt-3 border-t border-slate-200">
           <div className="w-full bg-slate-200 rounded-full h-2">
             <div
-              className="bg-indigo-500 h-2 rounded-full transition-all"
+              className="bg-blue-500 h-2 rounded-full transition-all"
               style={{ width: `${(solvedTasks / targetTasks) * 100}%` }}
             />
           </div>
@@ -1394,23 +1454,23 @@ function OnboardingGuide({ onClose }) {
       {/* Карточка подсказки — привязана к элементу */}
       {pos && (
         <div
-          className="fixed z-[110] pointer-events-auto bg-white rounded-2xl shadow-2xl p-5 animate-fadeIn border border-indigo-100"
+          className="fixed z-[110] pointer-events-auto bg-white rounded-2xl shadow-2xl p-5 animate-fadeIn border border-blue-100"
           style={{ top: pos.top, left: pos.left, width: cardWidth }}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Стрелка-указатель */}
           {current.position === "right" && (
-            <div className="absolute -left-2 top-12 w-3 h-3 bg-white border-l border-b border-indigo-100 rotate-45" />
+            <div className="absolute -left-2 top-12 w-3 h-3 bg-white border-l border-b border-blue-100 rotate-45" />
           )}
           {current.position === "left" && (
-            <div className="absolute -right-2 top-12 w-3 h-3 bg-white border-r border-t border-indigo-100 rotate-45" />
+            <div className="absolute -right-2 top-12 w-3 h-3 bg-white border-r border-t border-blue-100 rotate-45" />
           )}
 
           {/* Прогресс */}
           <div className="flex items-center justify-between mb-3">
             <div className="flex gap-1.5">
               {ONBOARDING_STEPS.map((_, i) => (
-                <div key={i} className={`h-1.5 rounded-full transition-all ${i === step ? "w-8 bg-indigo-500" : i < step ? "w-4 bg-indigo-300" : "w-4 bg-slate-200"}`} />
+                <div key={i} className={`h-1.5 rounded-full transition-all ${i === step ? "w-8 bg-blue-500" : i < step ? "w-4 bg-blue-300" : "w-4 bg-slate-200"}`} />
               ))}
             </div>
             <button
@@ -1504,20 +1564,20 @@ function TaskOnboardingGuide({ steps, onClose }) {
       <div className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-[2px]" onClick={onClose} />
       {pos && (
         <div
-          className="fixed z-[110] pointer-events-auto bg-white rounded-2xl shadow-2xl p-5 animate-fadeIn border border-indigo-100"
+          className="fixed z-[110] pointer-events-auto bg-white rounded-2xl shadow-2xl p-5 animate-fadeIn border border-blue-100"
           style={{ top: pos.top, left: pos.left, width: cardWidth }}
           onClick={(e) => e.stopPropagation()}
         >
           {current.position === "right" && (
-            <div className="absolute -left-2 top-12 w-3 h-3 bg-white border-l border-b border-indigo-100 rotate-45" />
+            <div className="absolute -left-2 top-12 w-3 h-3 bg-white border-l border-b border-blue-100 rotate-45" />
           )}
           {current.position === "left" && (
-            <div className="absolute -right-2 top-12 w-3 h-3 bg-white border-r border-t border-indigo-100 rotate-45" />
+            <div className="absolute -right-2 top-12 w-3 h-3 bg-white border-r border-t border-blue-100 rotate-45" />
           )}
           <div className="flex items-center justify-between mb-3">
             <div className="flex gap-1.5">
               {steps.map((_, i) => (
-                <div key={i} className={`h-1.5 rounded-full transition-all ${i === step ? "w-8 bg-indigo-500" : i < step ? "w-4 bg-indigo-300" : "w-4 bg-slate-200"}`} />
+                <div key={i} className={`h-1.5 rounded-full transition-all ${i === step ? "w-8 bg-blue-500" : i < step ? "w-4 bg-blue-300" : "w-4 bg-slate-200"}`} />
               ))}
             </div>
             <button type="button" onClick={onClose} className="text-xs text-slate-400 hover:text-slate-600 transition-colors">
@@ -1900,7 +1960,7 @@ function ZoneableImage({ src, alt, zones, hoveredZone, selectedZones, onZoneClic
               isSelected
                 ? "border-emerald-500 bg-emerald-500/30"
                 : isHovered
-                  ? "border-indigo-500 bg-indigo-500/20"
+                  ? "border-blue-500 bg-blue-500/20"
                   : "border-yellow-400 bg-yellow-400/10 hover:bg-yellow-400/30"
             }`}
             style={{
@@ -2551,8 +2611,8 @@ function StageTypicalTask() {
               bgClass = "bg-white opacity-60";
             }
           } else if (isSelected) {
-            borderClass = "border-indigo-500 ring-2 ring-indigo-200";
-            bgClass = "bg-indigo-50";
+            borderClass = "border-blue-500 ring-2 ring-blue-200";
+            bgClass = "bg-blue-50";
           }
 
           return (
@@ -2566,7 +2626,7 @@ function StageTypicalTask() {
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-lg
                   ${submitted && result?.is_correct && optState?.is_correct ? "bg-emerald-200 text-emerald-800" : 
                     submitted && isSelected && !optState?.is_correct ? "bg-red-200 text-red-800" :
-                    isSelected ? "bg-indigo-500 text-white" : "bg-slate-100 text-slate-600"}`}>
+                    isSelected ? "bg-blue-500 text-white" : "bg-slate-100 text-slate-600"}`}>
                   {submitted && result?.is_correct && optState?.is_correct ? "✓" : 
                    submitted && isSelected && !optState?.is_correct ? "✗" : letter}
                 </div>
@@ -2672,7 +2732,7 @@ function StageTaskPreview() {
     <div className="max-w-3xl mx-auto">
       <div className="card p-6 md:p-8">
         <div className="flex items-start gap-4 mb-6">
-          <div className="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center flex-shrink-0">
+          <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
             <span className="text-2xl">👀</span>
           </div>
           <div>
@@ -2683,9 +2743,9 @@ function StageTaskPreview() {
           </div>
         </div>
 
-        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-5 mb-6">
-          <h3 className="text-xs font-semibold text-indigo-600 uppercase tracking-wide mb-2">Задание</h3>
-          <p className="text-indigo-950 font-semibold text-lg leading-relaxed">{taskFormulation}</p>
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-5 mb-6">
+          <h3 className="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-2">Задание</h3>
+          <p className="text-blue-950 font-semibold text-lg leading-relaxed">{taskFormulation}</p>
         </div>
 
         <div className="max-h-[50vh] overflow-y-auto rounded-xl border border-slate-200 mb-6 divide-y divide-slate-200">
@@ -3723,8 +3783,8 @@ function StageTaskList() {
 
       {/* Task card */}
       <div className="card p-6 md:p-8">
-        <div className="bg-indigo-50 border border-indigo-100 rounded-xl px-4 py-3 mb-5">
-          <p className="text-indigo-900 text-sm font-medium">{DEFAULT_TASK_FORMULATION}</p>
+        <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 mb-5">
+          <p className="text-blue-900 text-sm font-medium">{DEFAULT_TASK_FORMULATION}</p>
         </div>
 
         {/* Header */}
@@ -3740,7 +3800,7 @@ function StageTaskList() {
 
         {/* Instruction hint */}
         {!result && (
-          <div className="rounded-xl border border-indigo-100 bg-indigo-50/50 p-4 text-sm text-indigo-800 mb-5 flex items-start gap-2.5">
+          <div className="rounded-xl border border-blue-100 bg-blue-50/50 p-4 text-sm text-blue-800 mb-5 flex items-start gap-2.5">
             <span className="text-lg leading-none mt-0.5">📝</span>
             <span>
               {photoRequired
@@ -3833,7 +3893,7 @@ function StageTaskList() {
                   }}
                 >
                   <span className="icon">{answerPhotos.length ? "✅" : "📷"}</span>
-                  <span className="text-sm text-slate-600 group-hover:text-indigo-700 transition-colors text-center px-2">
+                  <span className="text-sm text-slate-600 group-hover:text-blue-700 transition-colors text-center px-2">
                     Нажмите или перетащите сюда изображения
                   </span>
                   <span className="text-xs text-slate-400">Можно выбрать несколько файлов сразу</span>
@@ -3946,8 +4006,8 @@ function StageTaskList() {
                 </div>
 
                 {/* Предложение сравнить решение */}
-                <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4">
-                  <p className="text-indigo-900 font-medium mb-2">
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                  <p className="text-blue-900 font-medium mb-2">
                     Сверь своё решение с образцом и проверь, всё ли верно.
                   </p>
                   <button
@@ -3992,7 +4052,7 @@ function StageTaskList() {
                               {result.solution_steps.map((step, idx) => (
                                 <div key={idx} className="bg-white rounded-lg p-4 border border-blue-200">
                                   <div className="flex items-start gap-3 mb-2">
-                                    <div className="w-8 h-8 bg-indigo-600 text-white rounded-lg flex items-center justify-center font-bold text-sm flex-shrink-0">
+                                    <div className="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-sm flex-shrink-0">
                                       {step.order}
                                     </div>
                                     <div className="flex-1">
@@ -4555,8 +4615,8 @@ function StageSolving() {
 
       {/* Current task */}
       <div className="card p-6 md:p-8">
-        <div className="bg-indigo-50 border border-indigo-100 rounded-xl px-4 py-3 mb-5">
-          <p className="text-indigo-900 text-sm font-medium">{DEFAULT_TASK_FORMULATION}</p>
+        <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 mb-5">
+          <p className="text-blue-900 text-sm font-medium">{DEFAULT_TASK_FORMULATION}</p>
         </div>
 
         <div className="flex items-center gap-3 mb-4">
@@ -4611,7 +4671,7 @@ function StageSolving() {
             }}
           >
             <span className="icon">{answerPhotos.length ? "✅" : "📷"}</span>
-            <span className="text-sm text-slate-600 group-hover:text-indigo-700 transition-colors text-center px-2">
+            <span className="text-sm text-slate-600 group-hover:text-blue-700 transition-colors text-center px-2">
               Нажмите или перетащите изображения
             </span>
             <span className="text-xs text-slate-400">Можно выбрать несколько файлов</span>
@@ -4687,8 +4747,8 @@ function StageSolving() {
 
             {result.is_correct && (
               <>
-                <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4">
-                  <p className="text-indigo-900 font-medium mb-2">
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                  <p className="text-blue-900 font-medium mb-2">
                     Проверьте своё решение по эталонному и оцените по критериям.
                   </p>
                   <button
@@ -4700,7 +4760,7 @@ function StageSolving() {
                 </div>
 
                 {showSolution && (
-                  <div className="bg-indigo-50/50 rounded-xl p-6 border border-indigo-200">
+                  <div className="bg-blue-50/50 rounded-xl p-6 border border-blue-200">
                     <h4 className="font-semibold mb-3">Правильное решение:</h4>
                     {result.solution_summary || result.solution_detailed || (result.solution_steps && result.solution_steps.length > 0) ? (
                       <div className="space-y-4">
@@ -4717,11 +4777,11 @@ function StageSolving() {
                           </div>
                         )}
                         {result.solution_steps && result.solution_steps.length > 0 && (
-                          <div className="mt-4 pt-4 border-t border-indigo-200">
+                          <div className="mt-4 pt-4 border-t border-blue-200">
                             <p className="text-sm font-semibold text-slate-600 mb-3">По шагам:</p>
                             <div className="space-y-3">
                               {result.solution_steps.map((step, idx) => (
-                                <div key={idx} className="bg-white rounded-xl p-3 border border-indigo-100">
+                                <div key={idx} className="bg-white rounded-xl p-3 border border-blue-100">
                                   <div className="flex items-start gap-3">
                                     <div className="task-pill w-7 h-7 text-xs flex-shrink-0">
                                       {step.order}
@@ -4973,12 +5033,12 @@ function StageMethodComposition() {
         </div>
 
         {ksData.comprehension_image_url && (
-          <div className="mb-8 p-4 bg-indigo-50/50 rounded-xl border border-indigo-100">
-            <h3 className="font-semibold mb-3 text-indigo-900 text-sm">Система знаний</h3>
+          <div className="mb-8 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
+            <h3 className="font-semibold mb-3 text-blue-900 text-sm">Система знаний</h3>
             <img
               src={ksData.comprehension_image_url}
               alt="Система знаний"
-              className="max-w-full h-auto rounded-lg border border-indigo-200"
+              className="max-w-full h-auto rounded-lg border border-blue-200"
             />
           </div>
         )}
@@ -4994,7 +5054,7 @@ function StageMethodComposition() {
               {orderedSteps.map((step, idx) => (
                 <div key={`ord-${step.order}-${idx}`}>
                   {orderDragIndex !== null && orderDropBeforeIndex === idx && (
-                    <div className="h-0.5 bg-indigo-500 shadow-[0_0_6px_rgba(79,70,229,0.6)]" aria-hidden />
+                    <div className="h-0.5 bg-blue-500 shadow-[0_0_6px_rgba(79,70,229,0.6)]" aria-hidden />
                   )}
                   {(() => {
                     const isLocked = lockedOrderIndexes.has(idx);
@@ -5236,8 +5296,8 @@ function StageMethodComposition() {
 
         {!useMediumOrdering && comparisonResult && (
           <div className="mt-6">
-            <div className="bg-indigo-50 rounded-xl p-4 mb-4 border border-indigo-100">
-              <p className="text-indigo-900 font-medium">
+            <div className="bg-blue-50 rounded-xl p-4 mb-4 border border-blue-100">
+              <p className="text-blue-900 font-medium">
                 Сравните свой вариант с правильным методом решения.
               </p>
             </div>
@@ -5630,7 +5690,7 @@ function StageStepByStep() {
       <div className="max-w-7xl mx-auto px-2">
         {/* Scaffolding notice */}
         {isScaffolded && (
-          <div className="card px-5 py-3 mb-4 bg-indigo-50 border-indigo-200 text-indigo-800 text-sm">
+          <div className="card px-5 py-3 mb-4 bg-blue-50 border-blue-200 text-blue-800 text-sm">
             Ты уже знаком с методом — попробуй выполнить основные шаги сам.
           </div>
         )}
@@ -5667,7 +5727,7 @@ function StageStepByStep() {
                     onClick={() => setCurrentStepIndex(idx)}
                     className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all cursor-pointer ${
                       isCurrent
-                        ? "bg-indigo-600 text-white ring-2 ring-indigo-300 shadow-md scale-110"
+                        ? "bg-blue-600 text-white ring-2 ring-blue-300 shadow-md scale-110"
                         : isCompleted
                           ? "bg-emerald-500 text-white hover:bg-emerald-600"
                           : hasWarning
@@ -5694,8 +5754,8 @@ function StageStepByStep() {
           <div className="lg:col-span-5">
             <div className="lg:sticky lg:top-4 space-y-4">
               <div className="card p-5">
-                <div className="bg-indigo-50 border border-indigo-100 rounded-xl px-4 py-3 mb-4">
-                  <p className="text-indigo-900 text-xs font-medium">{DEFAULT_TASK_FORMULATION}</p>
+                <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 mb-4">
+                  <p className="text-blue-900 text-xs font-medium">{DEFAULT_TASK_FORMULATION}</p>
                 </div>
                 <div className="flex items-center gap-3 mb-3">
                   <span className="task-pill">{taskData.task.order || "?"}</span>
@@ -5705,7 +5765,7 @@ function StageStepByStep() {
                   <p className="text-slate-800 leading-relaxed" style={{ fontSize: "1.05rem" }}>{taskData.task.text}</p>
                 </div>
                 {taskData.method?.title && (
-                  <div className="mt-3 rounded-xl border border-indigo-100 bg-indigo-50/50 p-3 text-sm text-indigo-800 flex items-start gap-2">
+                  <div className="mt-3 rounded-xl border border-blue-100 bg-blue-50/50 p-3 text-sm text-blue-800 flex items-start gap-2">
                     <span className="text-lg leading-none mt-0.5">📋</span>
                     <span className="font-semibold">{taskData.method.title}</span>
                   </div>
@@ -5761,7 +5821,7 @@ function StageStepByStep() {
           <div className="card p-6">
           {/* Current step header */}
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-indigo-600 text-white rounded-xl flex items-center justify-center font-bold text-lg flex-shrink-0">
+            <div className="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center font-bold text-lg flex-shrink-0">
               {currentStepOrder}
             </div>
             <div>
@@ -5976,9 +6036,9 @@ function StageStepByStep() {
               return (
                 <div className="space-y-5">
                   {/* Instruction */}
-                  <div className="rounded-xl border border-indigo-200 bg-indigo-50/50 p-4">
-                    <h4 className="text-sm font-bold text-indigo-800 mb-1">Составьте краткую запись условия</h4>
-                    <p className="text-xs text-indigo-600 leading-relaxed">
+                  <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-4">
+                    <h4 className="text-sm font-bold text-blue-800 mb-1">Составьте краткую запись условия</h4>
+                    <p className="text-xs text-blue-600 leading-relaxed">
                       Выделите величину в тексте, назначьте ей обозначение, затем добавьте в «Дано» или «Найти». Повторите для всех величин.
                     </p>
                   </div>
@@ -6030,27 +6090,27 @@ function StageStepByStep() {
                         type="text"
                         value={draft.symbol || ""}
                         onChange={(e) => setDraft({ symbol: e.target.value })}
-                        className="w-24 px-3 py-2 border border-slate-300 rounded-lg font-mono text-lg focus:ring-2 focus:ring-indigo-400"
+                        className="w-24 px-3 py-2 border border-slate-300 rounded-lg font-mono text-lg focus:ring-2 focus:ring-blue-400"
                         placeholder="v₁"
                       />
                       {BASIC.map((sym) => (
                         <button key={sym} type="button"
                           onClick={() => setDraft({ symbol: (draft.symbol || "") + sym })}
-                          className="px-2.5 py-1.5 text-sm rounded-lg border bg-white text-slate-700 border-slate-200 hover:bg-indigo-50 hover:border-indigo-300 font-mono">
+                          className="px-2.5 py-1.5 text-sm rounded-lg border bg-white text-slate-700 border-slate-200 hover:bg-blue-50 hover:border-blue-300 font-mono">
                           {sym}
                         </button>
                       ))}
                       {SUBS.map((sub) => (
                         <button key={sub} type="button"
                           onClick={() => setDraft({ symbol: (draft.symbol || "") + sub })}
-                          className="px-2 py-1.5 text-sm rounded-lg border bg-slate-50 text-slate-500 border-slate-200 hover:bg-indigo-50 font-mono">
+                          className="px-2 py-1.5 text-sm rounded-lg border bg-slate-50 text-slate-500 border-slate-200 hover:bg-blue-50 font-mono">
                           {sub}
                         </button>
                       ))}
                       <div className="relative">
                         <button type="button"
                           onClick={() => setShowFullSymbolPalette(!showFullSymbolPalette)}
-                          className="px-3 py-1.5 text-sm rounded-lg border bg-slate-100 text-slate-600 border-slate-200 hover:bg-indigo-100 font-semibold">
+                          className="px-3 py-1.5 text-sm rounded-lg border bg-slate-100 text-slate-600 border-slate-200 hover:bg-blue-100 font-semibold">
                           ...
                         </button>
                         {showFullSymbolPalette && (
@@ -6062,7 +6122,7 @@ function StageStepByStep() {
                                   {g.items.map((sym) => (
                                     <button key={sym} type="button"
                                       onClick={() => { setDraft({ symbol: sym }); setShowFullSymbolPalette(false); }}
-                                      className="px-2 py-1 text-sm rounded border bg-white text-slate-700 border-slate-200 hover:bg-indigo-100 font-mono">
+                                      className="px-2 py-1 text-sm rounded border bg-white text-slate-700 border-slate-200 hover:bg-blue-100 font-mono">
                                       {sym}
                                     </button>
                                   ))}
@@ -6179,13 +6239,13 @@ function StageStepByStep() {
                 <div className="flex flex-wrap gap-1 mb-2">
                   {mathSymbols.map((s) => (
                     <button key={s} type="button" onClick={() => insertInto(field, s)}
-                      className="px-2 py-1 text-xs bg-slate-100 hover:bg-indigo-100 rounded border border-slate-200 font-mono">
+                      className="px-2 py-1 text-xs bg-slate-100 hover:bg-blue-100 rounded border border-slate-200 font-mono">
                       {s}
                     </button>
                   ))}
                   {studentFoundQuantities.map((it, i) => (
                     <button key={`s${i}`} type="button" onClick={() => insertInto(field, it.symbol)}
-                      className="px-2 py-1 text-xs bg-indigo-50 hover:bg-indigo-100 rounded border border-indigo-200 font-mono text-indigo-700">
+                      className="px-2 py-1 text-xs bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 font-mono text-blue-700">
                       {it.symbol}
                     </button>
                   ))}
@@ -6218,7 +6278,7 @@ function StageStepByStep() {
                       value={parts.formula || ""}
                       onChange={(e) => setSolutionParts((p) => ({ ...p, [currentStepOrder]: { ...p[currentStepOrder], formula: e.target.value } }))}
                       placeholder="Например: S₁ = v₁ · t"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-sm min-h-[60px] focus:ring-2 focus:ring-indigo-400"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-sm min-h-[60px] focus:ring-2 focus:ring-blue-400"
                     />
                   </div>
 
@@ -6230,7 +6290,7 @@ function StageStepByStep() {
                       value={parts.si || ""}
                       onChange={(e) => setSolutionParts((p) => ({ ...p, [currentStepOrder]: { ...p[currentStepOrder], si: e.target.value } }))}
                       placeholder="Например: v₁ = 36 км/ч = 10 м/с"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-sm min-h-[60px] focus:ring-2 focus:ring-indigo-400"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-sm min-h-[60px] focus:ring-2 focus:ring-blue-400"
                     />
                   </div>
 
@@ -6242,7 +6302,7 @@ function StageStepByStep() {
                       value={parts.calc || ""}
                       onChange={(e) => setSolutionParts((p) => ({ ...p, [currentStepOrder]: { ...p[currentStepOrder], calc: e.target.value } }))}
                       placeholder="Подставьте значения и вычислите..."
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-sm min-h-[80px] focus:ring-2 focus:ring-indigo-400"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-sm min-h-[80px] focus:ring-2 focus:ring-blue-400"
                     />
                   </div>
 
@@ -6293,14 +6353,14 @@ function StageStepByStep() {
                   {["=", "+", "−", "·", "/", "(", ")", "²", "₁", "₂", "≈"].map((s) => (
                     <button key={s} type="button"
                       onClick={() => setStudentAnswers({ ...studentAnswers, [currentStepOrder]: (studentAnswers[currentStepOrder] || "") + s })}
-                      className="px-2 py-1 text-xs bg-slate-100 hover:bg-indigo-100 rounded border border-slate-200 font-mono">
+                      className="px-2 py-1 text-xs bg-slate-100 hover:bg-blue-100 rounded border border-slate-200 font-mono">
                       {s}
                     </button>
                   ))}
                   {studentFoundQuantities.map((it, i) => (
                     <button key={`si${i}`} type="button"
                       onClick={() => setStudentAnswers({ ...studentAnswers, [currentStepOrder]: (studentAnswers[currentStepOrder] || "") + it.symbol })}
-                      className="px-2 py-1 text-xs bg-indigo-50 hover:bg-indigo-100 rounded border border-indigo-200 font-mono text-indigo-700">
+                      className="px-2 py-1 text-xs bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 font-mono text-blue-700">
                       {it.symbol}
                     </button>
                   ))}
@@ -6309,7 +6369,7 @@ function StageStepByStep() {
                   value={studentAnswers[currentStepOrder] || ""}
                   onChange={(e) => setStudentAnswers({ ...studentAnswers, [currentStepOrder]: e.target.value })}
                   placeholder="Введите результат выполнения этого шага..."
-                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 min-h-[100px] font-mono"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-blue-400 min-h-[100px] font-mono"
                   disabled={checking}
                 />
                 {currentStep.hint && (
@@ -6729,8 +6789,8 @@ function StageCompleted() {
             <div className="text-2xl font-bold text-emerald-700">{solved}</div>
             <div className="text-xs text-slate-600 mt-1">Решено задач</div>
           </div>
-          <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-center">
-            <div className="text-2xl font-bold text-indigo-700">{totalAttempts}</div>
+          <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 text-center">
+            <div className="text-2xl font-bold text-blue-700">{totalAttempts}</div>
             <div className="text-xs text-slate-600 mt-1">Всего попыток</div>
           </div>
           <div className="rounded-xl border border-teal-200 bg-teal-50 p-4 text-center">

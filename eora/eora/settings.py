@@ -176,7 +176,7 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
-    CSRF_COOKIE_HTTPONLY = True
+    CSRF_COOKIE_HTTPONLY = False  # SPA (React): JS должен читать CSRF cookie напрямую
     SECURE_SSL_REDIRECT = _env_bool("DJANGO_SECURE_SSL_REDIRECT", True)
     SECURE_HSTS_SECONDS = 31536000  # 1 год
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
@@ -193,4 +193,4 @@ if not DEBUG:
 else:
     # Development
     SESSION_COOKIE_HTTPONLY = True
-    CSRF_COOKIE_HTTPONLY = True
+    CSRF_COOKIE_HTTPONLY = False  # SPA: JS читает CSRF cookie

@@ -1,48 +1,39 @@
 /**
  * Shared CSRF + fetch utilities for EORA frontend.
  *
- * IMPORTANT: CSRF_COOKIE_HTTPONLY=True is set in Django settings, so JavaScript
- * cannot read the csrftoken cookie via document.cookie. Instead we call /api/csrf/
- * which returns {"csrfToken": "..."} in the JSON body.
- *
- * This module is an ES module singleton — _csrfToken is shared across ALL imports.
- * Portal.jsx calls ensureCSRFToken() on boot; App.jsx, TeacherApp.jsx etc. all
- * get the same cached token automatically.
+ * CSRF_COOKIE_HTTPONLY = False (settings.py) — JS читает csrftoken cookie напрямую.
+ * ensureCSRFToken() делает GET /api/csrf/ только если кука ещё не установлена.
+ * Все файлы импортируют getCSRFToken / ensureCSRFToken из этого модуля (ES-синглтон).
  */
 
-let _csrfToken = "";
-
-/** Returns the cached CSRF token (empty string if not yet fetched). */
-export const getCSRFToken = () => _csrfToken;
+/** Читает csrftoken из document.cookie. */
+export const getCSRFToken = () => {
+  const m = document.cookie.match(/(?:^|; )csrftoken=([^;]+)/);
+  return m ? decodeURIComponent(m[1]) : "";
+};
 
 /**
- * Fetches a fresh CSRF token from /api/csrf/ and caches it.
- * Always refetches — call this before any mutating request if you're unsure
- * whether the token is still valid.
+ * Убеждается что CSRF cookie установлена.
+ * Делает GET /api/csrf/ только если куки нет — единоразово при старте.
  */
 export const ensureCSRFToken = async () => {
+  if (getCSRFToken()) return;
   try {
-    const res = await fetch("/api/csrf/", { credentials: "include" });
-    const data = await res.json().catch(() => ({}));
-    if (data.csrfToken) _csrfToken = data.csrfToken;
+    await fetch("/api/csrf/", { credentials: "include" });
   } catch {
-    // ignore network errors — token stays as-is
+    // ignore network errors
   }
 };
 
 /**
- * Central fetch wrapper: always ensures CSRF token before the request,
- * attaches credentials and Content-Type automatically.
- *
- * @param {string} url - relative or absolute URL
- * @param {object} options - standard fetch options
- * @returns {Promise<Response>}
+ * Central fetch wrapper: credentials + CSRF header автоматически.
+ * Не перезапрашивает /api/csrf/ перед каждым запросом — токен берётся из куки.
  */
 export async function apiFetch(url, options = {}) {
   await ensureCSRFToken();
   const headers = {
     "Content-Type": "application/json",
-    "X-CSRFToken": _csrfToken,
+    "X-CSRFToken": getCSRFToken(),
     ...options.headers,
   };
   return fetch(url, { ...options, credentials: "include", headers });
@@ -50,11 +41,6 @@ export async function apiFetch(url, options = {}) {
 
 /**
  * apiFetch + JSON parse + error throw.
- * Throws an Error with the server's detail message on non-2xx responses.
- *
- * @param {string} url
- * @param {object} options
- * @returns {Promise<any>} parsed JSON
  */
 export async function apiCall(url, options = {}) {
   const res = await apiFetch(url, options);
@@ -66,26 +52,18 @@ export async function apiCall(url, options = {}) {
 }
 
 /**
- * FormData (file upload) variant — omits Content-Type so browser sets multipart boundary.
- *
- * @param {string} url
- * @param {FormData} formData
- * @returns {Promise<Response>}
+ * FormData (file upload) variant.
  */
 export async function apiFetchForm(url, formData) {
   await ensureCSRFToken();
   return fetch(url, {
     method: "POST",
     credentials: "include",
-    headers: { "X-CSRFToken": _csrfToken },
+    headers: { "X-CSRFToken": getCSRFToken() },
     body: formData,
   });
 }
 
-// ---------------------------------------------------------------------------
-// Legacy aliases — keep for backward compat while migrating old call sites
-// ---------------------------------------------------------------------------
-/** @deprecated use getCSRFToken() */
+// Legacy aliases
 export const getCsrfToken = getCSRFToken;
-/** @deprecated use ensureCSRFToken() */
 export const ensureCsrfToken = ensureCSRFToken;

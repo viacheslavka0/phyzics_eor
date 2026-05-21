@@ -387,21 +387,26 @@ class KnowledgeSystemViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet)
 
         ks: KnowledgeSystem = self.get_object()
         data = request.data or {}
-        mappings = data.get("mappings", [])
-        cloze_answers = data.get("cloze_answers", [])
+        mappings = data.get("mappings", {})        # dict {question_id: [zone_id, ...]}
+        cloze_answers = data.get("cloze_answers", {})  # dict {position: answer}
+        # Совместимость: фронтенд иногда шлёт список вместо словаря
+        if isinstance(mappings, list):
+            mappings = {}
+        if isinstance(cloze_answers, list):
+            cloze_answers = {}
 
         # Использование сервиса для проверки
         service = ComprehensionCheckService(ks)
         check_result = service.check_all(mappings, cloze_answers)
 
-        # Подсчёт процента
-        total_mapping_items = len(check_result["questions"]["question_results"])
-        total_cloze_items = len(check_result["cloze"]["cloze_results"])
+        # Подсчёт процента (cloze_results может отсутствовать если cloze не настроен)
+        total_mapping_items = len(check_result["questions"].get("question_results", []))
+        total_cloze_items = len(check_result["cloze"].get("cloze_results", []))
         total_items = total_mapping_items + total_cloze_items
 
         correct_items = (
-            sum(1 for q in check_result["questions"]["question_results"] if q["is_correct"])
-            + sum(1 for c in check_result["cloze"]["cloze_results"] if c["is_correct"])
+            sum(1 for q in check_result["questions"].get("question_results", []) if q["is_correct"])
+            + sum(1 for c in check_result["cloze"].get("cloze_results", []) if c["is_correct"])
         )
 
         # Если нет вопросов, считаем что пройдено

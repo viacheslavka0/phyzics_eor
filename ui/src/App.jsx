@@ -2298,17 +2298,19 @@ function StageTypicalTask() {
           onDrop={(e) => handleDropClozeWord(pos, e)}
           onDragEnter={() => !clozeResult?.passed && setActiveClozeBlank(pos)}
           disabled={clozeResult?.passed}
-          className={`inline-flex items-center mx-1 min-w-[120px] min-h-[32px] px-3 py-1.5 border-2 rounded-lg text-sm font-medium text-left transition-all ${
+          className={`inline-flex items-center mx-1 min-w-[110px] min-h-[34px] px-3 py-1 border-2 rounded-xl text-sm font-semibold text-left transition-all ${
             hasResult && isCorrectPos
               ? "bg-emerald-100 border-emerald-400 text-emerald-800"
               : hasResult && wrongInfo
-                ? "bg-red-100 border-red-400 text-red-800"
+                ? "bg-rose-100 border-rose-400 text-rose-800"
                 : activeClozeBlank === pos
-                  ? "border-blue-500 bg-blue-50 text-blue-900"
-                  : "border-blue-300 bg-white hover:border-blue-400"
+                  ? "border-indigo-500 bg-indigo-50 text-indigo-900 ring-2 ring-indigo-200"
+                  : currentVal
+                    ? "border-indigo-300 bg-white text-slate-800 hover:border-indigo-400"
+                    : "border-dashed border-slate-300 bg-slate-50 hover:border-indigo-400 hover:bg-indigo-50"
           }`}
         >
-          {currentVal ? currentVal.trim() : <span className="text-slate-300 select-none">{"\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"}</span>}
+          {currentVal ? currentVal.trim() : <span className="text-slate-300 text-xs select-none font-normal">\u043D\u0430\u0436\u043C\u0438\u0442\u0435 \u0441\u043B\u043E\u0432\u043E</span>}
         </button>
       );
       lastIndex = regex.lastIndex;
@@ -2324,67 +2326,81 @@ function StageTypicalTask() {
 
   // ====================== ШАГ 2: CLOZE ======================
   if (step === "cloze") {
-  return (
-    <div className="max-w-4xl mx-auto">
-        {/* Вводный текст */}
-        <div className="card p-6 mb-6">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
-              <span className="text-2xl">✍️</span>
-            </div>
-            <div className="flex-1">
-              <p className="text-slate-700 text-lg leading-relaxed">
-                Теперь сформулируйте типовую задачу самостоятельно, заполнив пропуски в тексте.
+    const filledCount = Object.values(clozeAnswers).filter(Boolean).length;
+    const totalBlanks = clozeData.blanks_count || 0;
+    const allFilled = filledCount >= totalBlanks;
+
+    return (
+      <div className="max-w-4xl mx-auto space-y-5">
+
+        {/* Заголовок в стиле eora-screen-header */}
+        <div className="eora-screen-header">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">✍️</span>
+            <div>
+              <h2 className="text-lg font-bold text-slate-900">Сформулируйте типовую задачу</h2>
+              <p className="text-sm text-slate-600 mt-0.5">
+                Заполните пропуски — нажмите на слово, и оно встанет в первый свободный пропуск.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Задание */}
-        <div className="card p-6 mb-6 bg-amber-50 border-amber-200">
-          <h3 className="font-bold text-lg text-amber-900 mb-1">📝 Задание</h3>
-          <p className="text-amber-800">
-            Заполните пропуски, чтобы получилась формулировка типовой задачи для данной системы знаний.
-          </p>
-        </div>
-
         {/* Результат */}
         {clozeResult && (
-          <div className={`card p-6 mb-6 ${clozeResult.passed ? "bg-emerald-50 border-emerald-200" : "bg-red-50 border-red-200"}`}>
-            <div className="flex items-center gap-4">
-              <div className={`w-14 h-14 rounded-full flex items-center justify-center ${clozeResult.passed ? "bg-emerald-100" : "bg-red-100"}`}>
-                <span className="text-3xl">{clozeResult.passed ? "✅" : "❌"}</span>
-              </div>
-              <div className="flex-1">
-                <h3 className={`text-lg font-bold ${clozeResult.passed ? "text-emerald-800" : "text-red-800"}`}>
-                  {clozeResult.passed 
-                    ? "Отлично! Формулировка заполнена верно." 
-                    : `Есть ошибки (${clozeResult.score}% правильно). Попробуйте ещё раз.`}
-            </h3>
-                {!clozeResult.passed && clozeResult.wrong_positions?.length > 0 && (
-                  <div className="mt-2 space-y-1">
-                    {clozeResult.wrong_positions.map((w, i) => (
-                      <p key={i} className="text-sm text-red-600">
-                        Пропуск {w.position + 1}: вы выбрали «{w.student || "—"}», правильно: «{w.correct}»
-                      </p>
-                    ))}
-                  </div>
-                )}
-              </div>
+          <div className={`rounded-2xl border p-5 flex items-start gap-4 ${
+            clozeResult.passed
+              ? "bg-emerald-50 border-emerald-200"
+              : "feedback-wrong"
+          }`}>
+            <span className="text-2xl flex-shrink-0">{clozeResult.passed ? "✓" : "✗"}</span>
+            <div className="flex-1">
+              <p className={`font-semibold ${clozeResult.passed ? "text-emerald-800" : "text-rose-900"}`}>
+                {clozeResult.passed
+                  ? "Отлично! Формулировка заполнена верно."
+                  : `Есть ошибки (${clozeResult.score}% правильно). Попробуйте ещё раз.`}
+              </p>
+              {!clozeResult.passed && clozeResult.wrong_positions?.length > 0 && (
+                <div className="mt-2 space-y-1">
+                  {clozeResult.wrong_positions.map((w, i) => (
+                    <p key={i} className="text-sm text-rose-700">
+                      Пропуск {w.position + 1}: вы написали «{w.student || "—"}», верно: «{w.correct}»
+                    </p>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
 
-        {/* Текст с пропусками + слова справа */}
-        <div className="card p-8 mb-6">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-5">
-            <div className="text-lg text-slate-800 leading-loose rounded-xl border border-amber-200 bg-amber-50 p-4">
-              {renderClozeText()}
+        {/* Основная рабочая область */}
+        <div className="card overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
+
+            {/* Левая — текст с пропусками */}
+            <div className="p-6">
+              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">
+                Текст с пропусками
+              </div>
+              <div className="text-[1.1rem] text-slate-800 leading-[2.6rem]">
+                {renderClozeText()}
+              </div>
+              {/* Прогресс заполнения */}
+              <div className="mt-5 pt-4 border-t border-slate-100 flex items-center gap-3">
+                <div className="flex-1 progress-bar">
+                  <div className="progress-fill" style={{ width: `${totalBlanks ? (filledCount / totalBlanks) * 100 : 0}%` }} />
+                </div>
+                <span className="text-xs text-slate-500 whitespace-nowrap">
+                  {filledCount} / {totalBlanks} заполнено
+                </span>
+              </div>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-              <p className="text-xs uppercase text-slate-500 mb-2">Слова</p>
-              <p className="text-xs text-slate-600 mb-3">
-                Перетащите слово в пропуск или нажмите на слово после выбора пропуска.
+
+            {/* Правая — слова */}
+            <div className="p-6 bg-slate-50/60">
+              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Слова</div>
+              <p className="text-xs text-slate-500 mb-4 leading-relaxed">
+                Нажмите — слово встанет в первый свободный пропуск. Или перетащите в нужный.
               </p>
               <div className="flex flex-wrap gap-2">
                 {remainingClozeOptionWords.map((opt, i) => (
@@ -2397,38 +2413,41 @@ function StageTypicalTask() {
                       e.dataTransfer.effectAllowed = "copy";
                     }}
                     onClick={() => handlePickClozeWord(opt)}
-                    className="relative px-3 py-1.5 pr-7 rounded-full bg-white border border-slate-300 text-sm hover:border-blue-400"
                     disabled={clozeResult?.passed}
+                    className="relative px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-sm text-slate-700 font-medium shadow-sm hover:border-indigo-400 hover:bg-indigo-50 hover:text-indigo-800 active:scale-95 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-default"
                   >
                     {opt.trim()}
                     {remainingClozeOptionCounts[opt] > 1 && (
-                      <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-blue-600 text-white text-[10px] font-semibold flex items-center justify-center">
+                      <span className="absolute -top-1.5 -right-1.5 min-w-5 h-5 px-1 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">
                         {remainingClozeOptionCounts[opt]}
                       </span>
                     )}
                   </button>
                 ))}
+                {remainingClozeOptionWords.length === 0 && !clozeResult && (
+                  <p className="text-sm text-emerald-600 font-medium">Все слова расставлены ✓</p>
+                )}
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  if (activeClozeBlank === null || activeClozeBlank === undefined) return;
-                  handleClozeAnswer(activeClozeBlank, "");
-                }}
-                className="mt-4 text-xs text-slate-600 hover:text-slate-900 underline"
-                disabled={clozeResult?.passed}
-              >
-                Очистить выбранный пропуск
-              </button>
+
+              {/* Очистить активный пропуск */}
+              {activeClozeBlank !== null && activeClozeBlank !== undefined && !clozeResult?.passed && (
+                <button
+                  type="button"
+                  onClick={() => { handleClozeAnswer(activeClozeBlank, ""); setActiveClozeBlank(null); }}
+                  className="mt-5 text-xs text-slate-400 hover:text-rose-500 transition-colors flex items-center gap-1"
+                >
+                  ✕ Очистить выбранный пропуск
+                </button>
+              )}
             </div>
           </div>
         </div>
 
         {/* Кнопки */}
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center pb-4">
           <div>
             {clozeResult && !clozeResult.passed && (
-              <button onClick={handleClozeRetry} className="btn-outline">
+              <button onClick={handleClozeRetry} className="btn-secondary">
                 Попробовать ещё раз
               </button>
             )}
@@ -2437,10 +2456,10 @@ function StageTypicalTask() {
             {!clozeResult?.passed ? (
               <button
                 onClick={handleClozeCheck}
-                disabled={clozeChecking || Object.keys(clozeAnswers).length < (clozeData.blanks_count || 0)}
-                className="btn-primary btn-lg"
+                disabled={clozeChecking || !allFilled}
+                className="btn-primary btn-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {clozeChecking ? "Проверка..." : "Проверить"}
+                {clozeChecking ? "Проверка..." : allFilled ? "Проверить →" : `Заполните все пропуски (${filledCount}/${totalBlanks})`}
               </button>
             ) : (
               <button onClick={handleContinue} className="btn-primary btn-lg">

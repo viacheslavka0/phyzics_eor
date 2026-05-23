@@ -5733,9 +5733,9 @@ function StageStepByStep() {
                             ? "bg-amber-100 text-amber-700 ring-2 ring-amber-300 hover:bg-amber-200"
                             : "bg-slate-200 text-slate-600 hover:bg-slate-300"
                     }`}
-                    title={`Шаг ${step.order}: ${step.title}${hasWarning ? ` (ошибок ранее: ${stepErrCount})` : ""}`}
+                    title={`Шаг ${idx + 1}: ${step.title}${hasWarning ? ` (ошибок ранее: ${stepErrCount})` : ""}`}
                   >
-                    {isCompleted && !isCurrent ? "✓" : step.order}
+                    {isCompleted && !isCurrent ? "✓" : idx + 1}
                   </button>
                   {hasWarning && (
                     <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">!</span>
@@ -6065,143 +6065,24 @@ function StageStepByStep() {
                 setSymbolEntries({ ...symbolEntries, [currentStepOrder]: updated });
               };
 
-              const hasDraft = !!(draft.fragment || draft.symbol);
+              // Прогресс: какие из 3 шагов выполнены
+              const hasFragment = !!draft.fragment;
+              const hasSymbol = !!draft.symbol;
+              const readyToAdd = hasFragment && hasSymbol;
 
               return (
-                <div className="space-y-5">
-                  {/* Instruction */}
-                  <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-4">
-                    <h4 className="text-sm font-bold text-blue-800 mb-1">Составьте краткую запись условия</h4>
-                    <p className="text-xs text-blue-600 leading-relaxed">
-                      Выделите величину в тексте, назначьте ей обозначение, затем добавьте в «Дано» или «Найти». Повторите для всех величин.
-                    </p>
-                  </div>
-
-                  {/* 1. Text selection */}
-                  <div>
-                    <div className="text-sm font-medium text-slate-700 mb-1">
-                      1. Выделите величину в тексте задачи
-                    </div>
-                    <p className="text-xs text-slate-400 mb-2">👆 Нажмите на первое слово, потом на последнее — диапазон выделится</p>
-                    <div className="rounded-xl border border-slate-200 bg-white p-4">
-                      <div className="leading-8 text-slate-800 text-sm">
-                        {selectableTokens.map((token) => {
-                          if (token.isSpace) return <span key={token.id}>{token.text}</span>;
-                          const isInRange = selectedRange.includes(token.id);
-                          return (
-                            <button
-                              key={token.id}
-                              type="button"
-                              onClick={() => handleSymbolRangeSelect(currentStepOrder, token.id, selectableTokens)}
-                              className={`mx-[1px] inline rounded px-1 py-0.5 transition-colors cursor-pointer ${
-                                isInRange
-                                  ? "bg-amber-500 text-white font-medium"
-                                  : "underline decoration-dashed decoration-amber-300 underline-offset-2 hover:bg-amber-100"
-                              }`}
-                            >
-                              {token.text}
-                            </button>
-                          );
-                        })}
-                      </div>
-                      {draft.fragment && (
-                        <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between">
-                          <span className="text-sm text-slate-600">
-                            Выделено: <span className="font-semibold text-amber-800">{draft.fragment}</span>
-                          </span>
-                          <button type="button" onClick={clearSelection}
-                            className="text-xs text-slate-400 hover:text-red-500 flex items-center gap-1 px-2 py-1 rounded hover:bg-red-50">
-                            ✕ Очистить
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* 2. Symbol picker */}
-                  <div>
-                    <div className="text-sm font-medium text-slate-700 mb-2">2. Назначьте обозначение</div>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <input
-                        type="text"
-                        value={draft.symbol || ""}
-                        onChange={(e) => setDraft({ symbol: e.target.value })}
-                        className="w-24 px-3 py-2 border border-slate-300 rounded-lg font-mono text-lg focus:ring-2 focus:ring-blue-400"
-                        placeholder="v₁"
-                      />
-                      {BASIC.map((sym) => (
-                        <button key={sym} type="button"
-                          onClick={() => setDraft({ symbol: (draft.symbol || "") + sym })}
-                          className="px-2.5 py-1.5 text-sm rounded-lg border bg-white text-slate-700 border-slate-200 hover:bg-blue-50 hover:border-blue-300 font-mono">
-                          {sym}
-                        </button>
-                      ))}
-                      {SUBS.map((sub) => (
-                        <button key={sub} type="button"
-                          onClick={() => setDraft({ symbol: (draft.symbol || "") + sub })}
-                          className="px-2 py-1.5 text-sm rounded-lg border bg-slate-50 text-slate-500 border-slate-200 hover:bg-blue-50 font-mono">
-                          {sub}
-                        </button>
-                      ))}
-                      <div className="relative">
-                        <button type="button"
-                          onClick={() => setShowFullSymbolPalette(!showFullSymbolPalette)}
-                          className="px-3 py-1.5 text-sm rounded-lg border bg-slate-100 text-slate-600 border-slate-200 hover:bg-blue-100 font-semibold">
-                          ...
-                        </button>
-                        {showFullSymbolPalette && (
-                          <div className="absolute right-0 top-full mt-1 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-4 w-72 max-h-64 overflow-y-auto">
-                            {FULL_GROUPS.map((g) => (
-                              <div key={g.group} className="mb-3 last:mb-0">
-                                <div className="text-xs font-semibold text-slate-500 mb-1">{g.group}</div>
-                                <div className="flex flex-wrap gap-1">
-                                  {g.items.map((sym) => (
-                                    <button key={sym} type="button"
-                                      onClick={() => { setDraft({ symbol: sym }); setShowFullSymbolPalette(false); }}
-                                      className="px-2 py-1 text-sm rounded border bg-white text-slate-700 border-slate-200 hover:bg-blue-100 font-mono">
-                                      {sym}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                      {draft.symbol && (
-                        <button type="button" onClick={() => setDraft({ symbol: "" })}
-                          className="text-xs text-slate-400 hover:text-red-500 px-2 py-1 rounded hover:bg-red-50">✕</button>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* 3. Add buttons — appear when both fragment and symbol are set */}
-                  {hasDraft && (
-                    <div className="flex gap-3 animate-in fade-in">
-                      <button type="button" onClick={() => addEntry(false)}
-                        disabled={!draft.fragment || !draft.symbol}
-                        className="flex-1 px-4 py-2.5 rounded-xl border-2 border-dashed border-emerald-300 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 text-sm font-medium transition-colors disabled:opacity-40">
-                        + Добавить в Дано
-                      </button>
-                      <button type="button" onClick={() => addEntry(true)}
-                        disabled={!draft.fragment || !draft.symbol}
-                        className="flex-1 px-4 py-2.5 rounded-xl border-2 border-dashed border-amber-300 text-amber-700 bg-amber-50 hover:bg-amber-100 text-sm font-medium transition-colors disabled:opacity-40">
-                        + Это искомое (Найти)
-                      </button>
-                    </div>
-                  )}
-
-                  {/* 4. Built table */}
+                <div className="space-y-4">
+                  {/* Краткая запись — показывается всегда (растёт по мере добавления) */}
                   {entries.length > 0 && (
                     <div className="rounded-xl border border-slate-200 bg-white p-4">
-                      <div className="text-sm font-bold text-slate-800 mb-3">Ваша краткая запись:</div>
+                      <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">Ваша краткая запись</div>
                       {givenEntries.length > 0 && (
                         <div className="mb-3">
-                          <div className="text-xs font-semibold text-emerald-600 mb-1.5 uppercase tracking-wide">Дано:</div>
+                          <div className="text-xs font-semibold text-emerald-600 mb-1.5">ДАНО:</div>
                           <div className="space-y-1.5">
                             {givenEntries.map((e, i) => (
                               <div key={i} className="flex items-center gap-2 bg-emerald-50 rounded-lg px-3 py-2 border border-emerald-100 group">
-                                <span className="font-mono font-semibold text-emerald-700 min-w-[50px]">{e.symbol}</span>
+                                <span className="font-mono font-semibold text-emerald-700 min-w-[3rem]">{e.symbol}</span>
                                 <span className="text-slate-400">=</span>
                                 <span className="text-slate-700 flex-1 text-sm">{e.fragment}</span>
                                 <button type="button" onClick={() => removeEntry(entries.indexOf(e))}
@@ -6213,9 +6094,9 @@ function StageStepByStep() {
                       )}
                       {targetEntry && (
                         <div>
-                          <div className="text-xs font-semibold text-amber-600 mb-1.5 uppercase tracking-wide">Найти:</div>
+                          <div className="text-xs font-semibold text-amber-600 mb-1.5">НАЙТИ:</div>
                           <div className="flex items-center gap-2 bg-amber-50 rounded-lg px-3 py-2 border border-amber-200 group">
-                            <span className="font-mono font-semibold text-amber-700 min-w-[50px]">{targetEntry.symbol}</span>
+                            <span className="font-mono font-semibold text-amber-700 min-w-[3rem]">{targetEntry.symbol}</span>
                             <span className="text-slate-400">— ?</span>
                             <span className="text-slate-700 flex-1 text-sm">{targetEntry.fragment}</span>
                             <button type="button" onClick={() => removeEntry(entries.indexOf(targetEntry))}
@@ -6223,6 +6104,147 @@ function StageStepByStep() {
                           </div>
                         </div>
                       )}
+                      {/* Приглашение добавить следующую величину */}
+                      {!hasFragment && (
+                        <p className="text-xs text-blue-600 mt-3 pt-2 border-t border-slate-100">
+                          ↓ Выделите следующую величину в тексте ниже
+                        </p>
+                      )}
+                    </div>
+                  )}
+
+                  {/* ШАГ А: Выделение текста — всегда показан */}
+                  <div className={`rounded-xl border p-4 transition-colors ${hasFragment ? "border-emerald-200 bg-emerald-50/30" : "border-blue-200 bg-blue-50/30"}`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className={`w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center flex-shrink-0 ${hasFragment ? "bg-emerald-500 text-white" : "bg-blue-500 text-white"}`}>
+                        {hasFragment ? "✓" : "1"}
+                      </span>
+                      <span className="text-sm font-semibold text-slate-700">
+                        {hasFragment ? `Выделено: «${draft.fragment}»` : "Выделите величину в тексте задачи"}
+                      </span>
+                      {hasFragment && (
+                        <button type="button" onClick={clearSelection}
+                          className="ml-auto text-xs text-slate-400 hover:text-red-500 px-2 py-0.5 rounded hover:bg-red-50">
+                          изменить
+                        </button>
+                      )}
+                    </div>
+                    {!hasFragment && (
+                      <>
+                        <p className="text-xs text-slate-400 mb-2">👆 Нажмите на первое слово, потом на последнее — диапазон выделится</p>
+                        <div className="rounded-lg border border-slate-200 bg-white p-3">
+                          <div className="leading-8 text-slate-800 text-sm">
+                            {selectableTokens.map((token) => {
+                              if (token.isSpace) return <span key={token.id}>{token.text}</span>;
+                              const isInRange = selectedRange.includes(token.id);
+                              return (
+                                <button
+                                  key={token.id}
+                                  type="button"
+                                  onClick={() => handleSymbolRangeSelect(currentStepOrder, token.id, selectableTokens)}
+                                  className={`mx-[1px] inline rounded px-1 py-0.5 transition-colors cursor-pointer ${
+                                    isInRange
+                                      ? "bg-amber-500 text-white font-medium"
+                                      : "underline decoration-dashed decoration-amber-300 underline-offset-2 hover:bg-amber-100"
+                                  }`}
+                                >
+                                  {token.text}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  {/* ШАГ Б: Символ — появляется только после выделения текста */}
+                  {hasFragment && (
+                    <div className={`rounded-xl border p-4 transition-colors ${hasSymbol ? "border-emerald-200 bg-emerald-50/30" : "border-blue-200 bg-blue-50/30"}`}>
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className={`w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center flex-shrink-0 ${hasSymbol ? "bg-emerald-500 text-white" : "bg-blue-500 text-white"}`}>
+                          {hasSymbol ? "✓" : "2"}
+                        </span>
+                        <span className="text-sm font-semibold text-slate-700">Назначьте обозначение</span>
+                      </div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <input
+                          type="text"
+                          value={draft.symbol || ""}
+                          onChange={(e) => setDraft({ symbol: e.target.value })}
+                          className="w-20 px-3 py-2 border border-slate-300 rounded-lg font-mono text-base focus:ring-2 focus:ring-blue-400"
+                          placeholder="v₁"
+                          autoFocus
+                        />
+                        {/* Основные буквы */}
+                        {BASIC.map((sym) => (
+                          <button key={sym} type="button"
+                            onClick={() => setDraft({ symbol: (draft.symbol || "") + sym })}
+                            className="px-2.5 py-1.5 text-sm rounded-lg border bg-white text-slate-700 border-slate-200 hover:bg-blue-50 hover:border-blue-300 font-mono">
+                            {sym}
+                          </button>
+                        ))}
+                        {/* Индексы — отделены визуально */}
+                        <span className="text-xs text-slate-400 ml-1">индекс:</span>
+                        {SUBS.map((sub) => (
+                          <button key={sub} type="button"
+                            onClick={() => setDraft({ symbol: (draft.symbol || "") + sub })}
+                            className="px-2 py-1.5 text-xs rounded-lg border bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100 font-mono font-bold">
+                            {sub}
+                          </button>
+                        ))}
+                        <div className="relative">
+                          <button type="button"
+                            onClick={() => setShowFullSymbolPalette(!showFullSymbolPalette)}
+                            className="px-3 py-1.5 text-sm rounded-lg border bg-slate-100 text-slate-600 border-slate-200 hover:bg-blue-100">
+                            ещё…
+                          </button>
+                          {showFullSymbolPalette && (
+                            <div className="absolute left-0 top-full mt-1 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-4 w-72 max-h-64 overflow-y-auto">
+                              {FULL_GROUPS.map((g) => (
+                                <div key={g.group} className="mb-3 last:mb-0">
+                                  <div className="text-xs font-semibold text-slate-500 mb-1">{g.group}</div>
+                                  <div className="flex flex-wrap gap-1">
+                                    {g.items.map((sym) => (
+                                      <button key={sym} type="button"
+                                        onClick={() => { setDraft({ symbol: sym }); setShowFullSymbolPalette(false); }}
+                                        className="px-2 py-1 text-sm rounded border bg-white text-slate-700 border-slate-200 hover:bg-blue-100 font-mono">
+                                        {sym}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                        {draft.symbol && (
+                          <button type="button" onClick={() => setDraft({ symbol: "" })}
+                            className="text-xs text-slate-400 hover:text-red-500 px-2 py-1 rounded hover:bg-red-50">✕</button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ШАГ В: Куда добавить — только когда и фрагмент и символ готовы */}
+                  {readyToAdd && (
+                    <div className="rounded-xl border border-blue-200 bg-blue-50/30 p-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="w-6 h-6 rounded-full bg-blue-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">3</span>
+                        <span className="text-sm font-semibold text-slate-700">
+                          Куда добавить <span className="font-mono text-blue-700">{draft.symbol}</span> = «{draft.fragment}»?
+                        </span>
+                      </div>
+                      <div className="flex gap-3">
+                        <button type="button" onClick={() => addEntry(false)}
+                          className="flex-1 px-4 py-3 rounded-xl border-2 border-emerald-300 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 text-sm font-semibold transition-colors">
+                          📋 В «Дано» (известно)
+                        </button>
+                        <button type="button" onClick={() => addEntry(true)}
+                          className="flex-1 px-4 py-3 rounded-xl border-2 border-amber-300 text-amber-700 bg-amber-50 hover:bg-amber-100 text-sm font-semibold transition-colors">
+                          ❓ В «Найти» (ищем)
+                        </button>
+                      </div>
                     </div>
                   )}
 

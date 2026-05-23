@@ -5287,6 +5287,8 @@ function StageStepByStep() {
   const [solutionParts, setSolutionParts] = useState({});
   const [symbolEntries, setSymbolEntries] = useState({});
   const [showFullSymbolPalette, setShowFullSymbolPalette] = useState(false);
+  const [activeSolutionField, setActiveSolutionField] = useState("formula");
+  const [showSiField, setShowSiField] = useState(false);
 
   useEffect(() => {
     const storedTaskId = window.localStorage.getItem(STEP_BY_STEP_TASK_KEY);
@@ -5934,15 +5936,18 @@ function StageStepByStep() {
               const givenEntries = entries.filter((e) => !e.isTarget);
               const targetEntry = entries.find((e) => e.isTarget);
               const draft = symbolDrafts[currentStepOrder] || {};
-              const selectedRange = textSelections[currentStepOrder] || [];
 
-              const BASIC = ["S", "v", "t", "a", "m", "F", "N", "L", "d"];
-              const SUBS = ["₁", "₂", "₃", "₀"];
-              const FULL_GROUPS = [
-                { group: "Основные", items: ["S", "v", "t", "a", "m", "F", "N", "L", "d", "P", "E", "W", "g", "h", "R", "p"] },
-                { group: "С индексами", items: ["v₁", "v₂", "S₁", "S₂", "t₁", "t₂", "v₀", "S₀", "a₁", "a₂", "t₀"] },
-                { group: "Специальные", items: ["Δ", "ΔS", "Δt", "Δv", "ω", "ρ", "μ", "π", "v_ср", "v_теч", "v_плав", "v_бег", "v_пл", "v_ваг", "v_п"] },
+              const QUANTITY_HINTS = [
+                { sym: "v", label: "скорость" },
+                { sym: "t", label: "время" },
+                { sym: "S", label: "путь" },
+                { sym: "a", label: "ускорение" },
+                { sym: "h", label: "высота" },
+                { sym: "m", label: "масса" },
+                { sym: "g", label: "g (9,8 м/с²)" },
+                { sym: "L", label: "длина" },
               ];
+              const SUBS = ["₁", "₂", "₀"];
 
               const setDraft = (patch) =>
                 setSymbolDrafts((prev) => ({
@@ -5950,34 +5955,30 @@ function StageStepByStep() {
                   [currentStepOrder]: { ...(prev[currentStepOrder] || {}), ...patch },
                 }));
 
-              const clearSelection = () => {
-                setTextSelections({ ...textSelections, [currentStepOrder]: [] });
-                setDraft({ fragment: "" });
-              };
-
-              const addEntry = (isTarget) => {
-                const fragment = (draft.fragment || "").trim();
-                const symbol = (draft.symbol || "").trim();
-                if (!fragment || !symbol) return;
-                const updated = [...entries];
-                if (isTarget) {
-                  const idx = updated.findIndex((e) => e.isTarget);
-                  if (idx >= 0) updated.splice(idx, 1);
-                }
-                updated.push({ fragment, symbol, isTarget });
-                setSymbolEntries({ ...symbolEntries, [currentStepOrder]: updated });
-                setTextSelections({ ...textSelections, [currentStepOrder]: [] });
-                setSymbolDrafts({ ...symbolDrafts, [currentStepOrder]: {} });
-                setShowFullSymbolPalette(false);
-              };
-
               const removeEntry = (idx) => {
                 const updated = [...entries];
                 updated.splice(idx, 1);
                 setSymbolEntries({ ...symbolEntries, [currentStepOrder]: updated });
               };
 
-              const hasDraft = !!(draft.fragment || draft.symbol);
+              const addGiven = () => {
+                const symbol = (draft.symbol || "").trim();
+                const value = (draft.value || "").trim();
+                if (!symbol || !value) return;
+                const updated = [...entries, { symbol, fragment: value, isTarget: false }];
+                setSymbolEntries({ ...symbolEntries, [currentStepOrder]: updated });
+                setSymbolDrafts({ ...symbolDrafts, [currentStepOrder]: { ...draft, symbol: "", value: "" } });
+              };
+
+              const setTarget = () => {
+                const symbol = (draft.tSymbol || "").trim();
+                const text = (draft.tText || "").trim();
+                if (!symbol || !text) return;
+                const updated = entries.filter((e) => !e.isTarget);
+                updated.push({ symbol, fragment: text, isTarget: true });
+                setSymbolEntries({ ...symbolEntries, [currentStepOrder]: updated });
+                setSymbolDrafts({ ...symbolDrafts, [currentStepOrder]: { ...draft, tSymbol: "", tText: "" } });
+              };
 
               return (
                 <div className="space-y-5">
@@ -5985,123 +5986,91 @@ function StageStepByStep() {
                   <div className="rounded-xl border border-indigo-200 bg-indigo-50/50 p-4">
                     <h4 className="text-sm font-bold text-indigo-800 mb-1">Составьте краткую запись условия</h4>
                     <p className="text-xs text-indigo-600 leading-relaxed">
-                      Выделите величину в тексте, назначьте ей обозначение, затем добавьте в «Дано» или «Найти». Повторите для всех величин.
+                      Запишите известные величины в «Дано» (обозначение и значение), затем укажите, что нужно «Найти». Значения берите из условия задачи слева.
                     </p>
                   </div>
 
-                  {/* 1. Text selection */}
+                  {/* ===== ДАНО ===== */}
                   <div>
-                    <div className="text-sm font-medium text-slate-700 mb-2">
-                      1. Выделите величину в тексте задачи
-                      <span className="text-xs text-slate-400 ml-1">(первое и последнее слово)</span>
+                    <div className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                      <span className="w-5 h-5 rounded-md bg-emerald-100 text-emerald-700 text-xs font-bold flex items-center justify-center">Д</span>
+                      Известные величины (Дано)
                     </div>
-                    <div className="rounded-xl border border-indigo-200 bg-indigo-50/30 p-4">
-                      <div className="leading-9 text-slate-800 text-sm">
-                        {selectableTokens.map((token) => {
-                          if (token.isSpace) return <span key={token.id}>{token.text}</span>;
-                          const isInRange = selectedRange.includes(token.id);
-                          return (
-                            <button
-                              key={token.id}
-                              type="button"
-                              onClick={() => handleSymbolRangeSelect(currentStepOrder, token.id, selectableTokens)}
-                              className={`mx-[1px] inline rounded px-1 py-0.5 transition-all cursor-pointer ${
-                                isInRange
-                                  ? "bg-indigo-600 text-white font-medium shadow-sm"
-                                  : "underline decoration-dashed decoration-indigo-300 underline-offset-2 hover:bg-indigo-100 hover:text-indigo-900"
-                              }`}
-                            >
-                              {token.text}
-                            </button>
-                          );
-                        })}
-                      </div>
-                      {draft.fragment && (
-                        <div className="mt-3 pt-2 border-t border-indigo-100 flex items-center justify-between">
-                          <span className="text-sm text-slate-600">
-                            Выделено: <span className="font-semibold text-indigo-800 bg-indigo-100 px-2 py-0.5 rounded-lg">{draft.fragment}</span>
-                          </span>
-                          <button type="button" onClick={clearSelection}
-                            className="text-xs text-slate-400 hover:text-red-500 flex items-center gap-1 px-2 py-1 rounded hover:bg-red-50">
-                            ✕ Сбросить
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* 2. Symbol picker */}
-                  <div>
-                    <div className="text-sm font-medium text-slate-700 mb-2">2. Назначьте обозначение</div>
-                    <div className="flex items-center gap-2 flex-wrap">
+                    <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white p-2.5">
                       <input
                         type="text"
                         value={draft.symbol || ""}
                         onChange={(e) => setDraft({ symbol: e.target.value })}
-                        className="w-24 px-3 py-2 border border-slate-300 rounded-lg font-mono text-lg focus:ring-2 focus:ring-indigo-400"
+                        onKeyDown={(e) => { if (e.key === "Enter") addGiven(); }}
                         placeholder="v₁"
+                        className="w-20 px-2 py-2 border border-slate-300 rounded-lg font-mono text-center text-base focus:ring-2 focus:ring-indigo-400"
                       />
-                      {BASIC.map((sym) => (
-                        <button key={sym} type="button"
-                          onClick={() => setDraft({ symbol: (draft.symbol || "") + sym })}
-                          className="px-2.5 py-1.5 text-sm rounded-lg border bg-white text-slate-700 border-slate-200 hover:bg-indigo-50 hover:border-indigo-300 font-mono">
-                          {sym}
+                      <span className="text-slate-400 font-bold text-lg">=</span>
+                      <input
+                        type="text"
+                        value={draft.value || ""}
+                        onChange={(e) => setDraft({ value: e.target.value })}
+                        onKeyDown={(e) => { if (e.key === "Enter") addGiven(); }}
+                        placeholder="5 м/с"
+                        className="flex-1 min-w-0 px-3 py-2 border border-slate-300 rounded-lg text-base focus:ring-2 focus:ring-indigo-400"
+                      />
+                      <button type="button" onClick={addGiven}
+                        disabled={!draft.symbol?.trim() || !draft.value?.trim()}
+                        className="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap">
+                        Добавить
+                      </button>
+                    </div>
+                    {/* Подсказки обозначений */}
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                      {QUANTITY_HINTS.map((q) => (
+                        <button key={q.sym} type="button"
+                          onClick={() => setDraft({ symbol: q.sym })}
+                          className="px-2 py-1 text-xs rounded-lg border bg-white text-slate-600 border-slate-200 hover:bg-indigo-50 hover:border-indigo-300 transition-colors">
+                          <span className="font-mono font-bold text-slate-800">{q.sym}</span>
+                          <span className="text-slate-400 ml-1">{q.label}</span>
                         </button>
                       ))}
-                      {SUBS.map((sub) => (
-                        <button key={sub} type="button"
-                          onClick={() => setDraft({ symbol: (draft.symbol || "") + sub })}
-                          className="px-2 py-1.5 text-sm rounded-lg border bg-slate-50 text-slate-500 border-slate-200 hover:bg-indigo-50 font-mono">
-                          {sub}
+                      {SUBS.map((s) => (
+                        <button key={s} type="button"
+                          onClick={() => setDraft({ symbol: (draft.symbol || "") + s })}
+                          className="px-2.5 py-1 text-xs rounded-lg border bg-slate-50 text-slate-500 border-slate-200 hover:bg-indigo-50 font-mono">
+                          {s}
                         </button>
                       ))}
-                      <div className="relative">
-                        <button type="button"
-                          onClick={() => setShowFullSymbolPalette(!showFullSymbolPalette)}
-                          className="px-3 py-1.5 text-sm rounded-lg border bg-slate-100 text-slate-600 border-slate-200 hover:bg-indigo-100 font-semibold">
-                          ...
-                        </button>
-                        {showFullSymbolPalette && (
-                          <div className="absolute right-0 top-full mt-1 z-50 bg-white rounded-xl shadow-xl border border-slate-200 p-4 w-72 max-h-64 overflow-y-auto">
-                            {FULL_GROUPS.map((g) => (
-                              <div key={g.group} className="mb-3 last:mb-0">
-                                <div className="text-xs font-semibold text-slate-500 mb-1">{g.group}</div>
-                                <div className="flex flex-wrap gap-1">
-                                  {g.items.map((sym) => (
-                                    <button key={sym} type="button"
-                                      onClick={() => { setDraft({ symbol: sym }); setShowFullSymbolPalette(false); }}
-                                      className="px-2 py-1 text-sm rounded border bg-white text-slate-700 border-slate-200 hover:bg-indigo-100 font-mono">
-                                      {sym}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                      {draft.symbol && (
-                        <button type="button" onClick={() => setDraft({ symbol: "" })}
-                          className="text-xs text-slate-400 hover:text-red-500 px-2 py-1 rounded hover:bg-red-50">✕</button>
-                      )}
                     </div>
                   </div>
 
-                  {/* 3. Add buttons — appear when both fragment and symbol are set */}
-                  {hasDraft && (
-                    <div className="flex gap-3 animate-in fade-in">
-                      <button type="button" onClick={() => addEntry(false)}
-                        disabled={!draft.fragment || !draft.symbol}
-                        className="flex-1 px-4 py-2.5 rounded-xl border-2 border-dashed border-emerald-300 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 text-sm font-medium transition-colors disabled:opacity-40">
-                        + Добавить в Дано
-                      </button>
-                      <button type="button" onClick={() => addEntry(true)}
-                        disabled={!draft.fragment || !draft.symbol}
-                        className="flex-1 px-4 py-2.5 rounded-xl border-2 border-dashed border-amber-300 text-amber-700 bg-amber-50 hover:bg-amber-100 text-sm font-medium transition-colors disabled:opacity-40">
-                        + Это искомое (Найти)
+                  {/* ===== НАЙТИ ===== */}
+                  <div>
+                    <div className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                      <span className="w-5 h-5 rounded-md bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center">?</span>
+                      Что нужно найти
+                    </div>
+                    <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white p-2.5">
+                      <input
+                        type="text"
+                        value={draft.tSymbol || ""}
+                        onChange={(e) => setDraft({ tSymbol: e.target.value })}
+                        onKeyDown={(e) => { if (e.key === "Enter") setTarget(); }}
+                        placeholder="S"
+                        className="w-20 px-2 py-2 border border-slate-300 rounded-lg font-mono text-center text-base focus:ring-2 focus:ring-indigo-400"
+                      />
+                      <span className="text-slate-400 font-bold text-lg whitespace-nowrap">— ?</span>
+                      <input
+                        type="text"
+                        value={draft.tText || ""}
+                        onChange={(e) => setDraft({ tText: e.target.value })}
+                        onKeyDown={(e) => { if (e.key === "Enter") setTarget(); }}
+                        placeholder="что ищем (например: расстояние)"
+                        className="flex-1 min-w-0 px-3 py-2 border border-slate-300 rounded-lg text-base focus:ring-2 focus:ring-indigo-400"
+                      />
+                      <button type="button" onClick={setTarget}
+                        disabled={!draft.tSymbol?.trim() || !draft.tText?.trim()}
+                        className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap">
+                        {targetEntry ? "Заменить" : "Указать"}
                       </button>
                     </div>
-                  )}
+                  </div>
 
                   {/* 4. Built table */}
                   {entries.length > 0 && (
@@ -6125,9 +6094,9 @@ function StageStepByStep() {
                       )}
                       {targetEntry && (
                         <div>
-                          <div className="text-xs font-semibold text-amber-600 mb-1.5 uppercase tracking-wide">Найти:</div>
-                          <div className="flex items-center gap-2 bg-amber-50 rounded-lg px-3 py-2 border border-amber-200 group">
-                            <span className="font-mono font-semibold text-amber-700 min-w-[50px]">{targetEntry.symbol}</span>
+                          <div className="text-xs font-semibold text-indigo-600 mb-1.5 uppercase tracking-wide">Найти:</div>
+                          <div className="flex items-center gap-2 bg-indigo-50 rounded-lg px-3 py-2 border border-indigo-200 group">
+                            <span className="font-mono font-semibold text-indigo-700 min-w-[50px]">{targetEntry.symbol}</span>
                             <span className="text-slate-400">— ?</span>
                             <span className="text-slate-700 flex-1 text-sm">{targetEntry.fragment}</span>
                             <button type="button" onClick={() => removeEntry(entries.indexOf(targetEntry))}
@@ -6173,47 +6142,57 @@ function StageStepByStep() {
               const parts = solutionParts[currentStepOrder] || {};
               const givenItems = studentFoundQuantities.filter((it) => !it.isTarget);
               const mathSymbols = ["=", "+", "−", "·", "/", "(", ")", "²", "₁", "₂", "π", "√", "≈"];
+              const fieldLabels = { formula: "Формула", si: "Перевод в СИ", calc: "Расчёт", reasoning: "Проверка" };
+              const siVisible = showSiField || !!parts.si;
 
-              const insertInto = (field, text) => {
+              const insertActive = (text) => {
                 setSolutionParts((prev) => ({
                   ...prev,
                   [currentStepOrder]: {
                     ...(prev[currentStepOrder] || {}),
-                    [field]: ((prev[currentStepOrder] || {})[field] || "") + text,
+                    [activeSolutionField]: ((prev[currentStepOrder] || {})[activeSolutionField] || "") + text,
                   },
                 }));
               };
-
-              const MathPalette = ({ field }) => (
-                <div className="flex flex-wrap gap-1 mb-2">
-                  {mathSymbols.map((s) => (
-                    <button key={s} type="button" onClick={() => insertInto(field, s)}
-                      className="px-2 py-1 text-xs bg-slate-100 hover:bg-indigo-100 rounded border border-slate-200 font-mono">
-                      {s}
-                    </button>
-                  ))}
-                  {studentFoundQuantities.map((it, i) => (
-                    <button key={`s${i}`} type="button" onClick={() => insertInto(field, it.symbol)}
-                      className="px-2 py-1 text-xs bg-indigo-50 hover:bg-indigo-100 rounded border border-indigo-200 font-mono text-indigo-700">
-                      {it.symbol}
-                    </button>
-                  ))}
-                </div>
-              );
+              const setPart = (field, val) =>
+                setSolutionParts((p) => ({ ...p, [currentStepOrder]: { ...p[currentStepOrder], [field]: val } }));
 
               return (
                 <div className="space-y-4">
-                  {/* Previously found quantities */}
+                  {/* Единая прилипающая палитра */}
+                  <div className="sticky top-2 z-10 rounded-xl border border-slate-200 bg-white/95 backdrop-blur-sm p-2.5 shadow-sm">
+                    <div className="text-[11px] text-slate-400 mb-1.5">
+                      Вставить в поле: <span className="font-semibold text-indigo-600">«{fieldLabels[activeSolutionField]}»</span>
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {mathSymbols.map((s) => (
+                        <button key={s} type="button" onClick={() => insertActive(s)}
+                          className="px-2.5 py-1.5 text-sm bg-slate-100 hover:bg-indigo-100 rounded-lg border border-slate-200 font-mono">
+                          {s}
+                        </button>
+                      ))}
+                      {givenItems.map((it, i) => (
+                        <button key={`s${i}`} type="button" onClick={() => insertActive(it.symbol)}
+                          title={`${it.symbol} = ${it.fragment}`}
+                          className="px-2.5 py-1.5 text-sm bg-indigo-50 hover:bg-indigo-100 rounded-lg border border-indigo-200 font-mono text-indigo-700">
+                          {it.symbol}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Подстановка значений из «Дано» */}
                   {givenItems.length > 0 && (
                     <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-3">
-                      <div className="text-xs font-semibold text-emerald-700 mb-2">Ваши найденные величины (из шага «Дано»)</div>
+                      <div className="text-xs font-semibold text-emerald-700 mb-2">Из вашего «Дано» — нажмите, чтобы подставить значение</div>
                       <div className="flex flex-wrap gap-2">
                         {givenItems.map((item, i) => (
-                          <span key={i} className="inline-flex items-center gap-1 bg-white px-2.5 py-1 rounded-lg border border-emerald-100 text-sm">
+                          <button key={i} type="button" onClick={() => insertActive(item.fragment)}
+                            className="inline-flex items-center gap-1 bg-white px-2.5 py-1 rounded-lg border border-emerald-100 text-sm hover:border-emerald-300 hover:bg-emerald-50 transition-colors">
                             <span className="font-mono font-semibold text-emerald-700">{item.symbol}</span>
                             <span className="text-slate-400">=</span>
                             <span className="text-slate-600">{item.fragment}</span>
-                          </span>
+                          </button>
                         ))}
                       </div>
                     </div>
@@ -6222,48 +6201,55 @@ function StageStepByStep() {
                   {/* 1. Formula */}
                   <div>
                     <label className="block text-sm font-semibold text-slate-800 mb-1">1. Формула</label>
-                    <MathPalette field="formula" />
                     <textarea
                       value={parts.formula || ""}
-                      onChange={(e) => setSolutionParts((p) => ({ ...p, [currentStepOrder]: { ...p[currentStepOrder], formula: e.target.value } }))}
-                      placeholder="Например: S₁ = v₁ · t"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-sm min-h-[60px] focus:ring-2 focus:ring-indigo-400"
+                      onFocus={() => setActiveSolutionField("formula")}
+                      onChange={(e) => setPart("formula", e.target.value)}
+                      placeholder="Например: S = v · t"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-base min-h-[52px] focus:ring-2 focus:ring-indigo-400"
                     />
                   </div>
 
-                  {/* 2. SI conversion */}
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-800 mb-1">2. Перевод в СИ (если нужно)</label>
-                    <MathPalette field="si" />
-                    <textarea
-                      value={parts.si || ""}
-                      onChange={(e) => setSolutionParts((p) => ({ ...p, [currentStepOrder]: { ...p[currentStepOrder], si: e.target.value } }))}
-                      placeholder="Например: v₁ = 36 км/ч = 10 м/с"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-sm min-h-[60px] focus:ring-2 focus:ring-indigo-400"
-                    />
-                  </div>
+                  {/* 2. SI conversion — сворачиваемое */}
+                  {!siVisible ? (
+                    <button type="button" onClick={() => { setShowSiField(true); setActiveSolutionField("si"); }}
+                      className="text-sm text-slate-500 hover:text-indigo-600 flex items-center gap-1.5 transition-colors">
+                      <span className="text-base leading-none">+</span> Нужен перевод единиц в СИ?
+                    </button>
+                  ) : (
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-800 mb-1">2. Перевод в СИ</label>
+                      <textarea
+                        value={parts.si || ""}
+                        onFocus={() => setActiveSolutionField("si")}
+                        onChange={(e) => setPart("si", e.target.value)}
+                        placeholder="Например: v = 36 км/ч = 10 м/с"
+                        className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-base min-h-[52px] focus:ring-2 focus:ring-indigo-400"
+                      />
+                    </div>
+                  )}
 
                   {/* 3. Calculation */}
                   <div>
-                    <label className="block text-sm font-semibold text-slate-800 mb-1">3. Расчёт</label>
-                    <MathPalette field="calc" />
+                    <label className="block text-sm font-semibold text-slate-800 mb-1">{siVisible ? "3" : "2"}. Расчёт</label>
                     <textarea
                       value={parts.calc || ""}
-                      onChange={(e) => setSolutionParts((p) => ({ ...p, [currentStepOrder]: { ...p[currentStepOrder], calc: e.target.value } }))}
+                      onFocus={() => setActiveSolutionField("calc")}
+                      onChange={(e) => setPart("calc", e.target.value)}
                       placeholder="Подставьте значения и вычислите..."
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-sm min-h-[80px] focus:ring-2 focus:ring-indigo-400"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-base min-h-[64px] focus:ring-2 focus:ring-indigo-400"
                     />
                   </div>
 
                   {/* 4. Reasoning */}
-                  <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-4">
-                    <label className="block text-sm font-semibold text-blue-800 mb-1">4. Оценка достоверности</label>
-                    <p className="text-xs text-blue-600 mb-2">Реалистичен ли полученный ответ?</p>
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                    <label className="block text-sm font-semibold text-slate-700 mb-1">{siVisible ? "4" : "3"}. Проверка ответа <span className="text-xs font-normal text-slate-400">(необязательно)</span></label>
                     <textarea
                       value={parts.reasoning || ""}
-                      onChange={(e) => setSolutionParts((p) => ({ ...p, [currentStepOrder]: { ...p[currentStepOrder], reasoning: e.target.value } }))}
-                      placeholder="Например: 8 км/с — типичная скорость спутника..."
-                      className="w-full px-3 py-2 border border-blue-200 rounded-lg text-sm min-h-[50px] focus:ring-2 focus:ring-blue-400"
+                      onFocus={() => setActiveSolutionField("reasoning")}
+                      onChange={(e) => setPart("reasoning", e.target.value)}
+                      placeholder="Реалистичен ли результат? Например: значение правдоподобно для этой задачи"
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm min-h-[44px] focus:ring-2 focus:ring-indigo-400"
                     />
                   </div>
 

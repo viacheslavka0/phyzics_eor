@@ -6113,49 +6113,51 @@ function StageStepByStep() {
                     </div>
                   )}
 
-                  {/* ШАГ А: Выделение текста — всегда показан */}
-                  <div className={`rounded-xl border p-4 transition-colors ${hasFragment ? "border-emerald-200 bg-emerald-50/30" : "border-blue-200 bg-blue-50/30"}`}>
+                  {/* ШАГ А: Выделение текста — текст ВСЕГДА виден, диапазон расширяется кликами */}
+                  <div className={`rounded-xl border p-4 transition-colors ${hasFragment ? "border-emerald-200 bg-emerald-50/20" : "border-blue-200 bg-blue-50/30"}`}>
                     <div className="flex items-center gap-2 mb-2">
                       <span className={`w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center flex-shrink-0 ${hasFragment ? "bg-emerald-500 text-white" : "bg-blue-500 text-white"}`}>
                         {hasFragment ? "✓" : "1"}
                       </span>
-                      <span className="text-sm font-semibold text-slate-700">
-                        {hasFragment ? `Выделено: «${draft.fragment}»` : "Выделите величину в тексте задачи"}
-                      </span>
+                      <span className="text-sm font-semibold text-slate-700">Выделите величину в тексте задачи</span>
+                    </div>
+                    <p className="text-xs text-slate-400 mb-2">
+                      👆 Кликните на <strong>первое</strong> слово, затем на <strong>последнее</strong> — весь диапазон выделится (число + единица)
+                    </p>
+                    <div className="rounded-lg border border-slate-200 bg-white p-3">
+                      <div className="leading-8 text-slate-800 text-sm">
+                        {selectableTokens.map((token) => {
+                          if (token.isSpace) return <span key={token.id}>{token.text}</span>;
+                          const isInRange = selectedRange.includes(token.id);
+                          return (
+                            <button
+                              key={token.id}
+                              type="button"
+                              onClick={() => handleSymbolRangeSelect(currentStepOrder, token.id, selectableTokens)}
+                              className={`mx-[1px] inline rounded px-1 py-0.5 transition-colors cursor-pointer ${
+                                isInRange
+                                  ? "bg-amber-500 text-white font-medium"
+                                  : "underline decoration-dashed decoration-amber-300 underline-offset-2 hover:bg-amber-100"
+                              }`}
+                            >
+                              {token.text}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      {/* Итог выделения — показывается внутри блока, текст остаётся */}
                       {hasFragment && (
-                        <button type="button" onClick={clearSelection}
-                          className="ml-auto text-xs text-slate-400 hover:text-red-500 px-2 py-0.5 rounded hover:bg-red-50">
-                          изменить
-                        </button>
+                        <div className="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between">
+                          <span className="text-sm text-emerald-700 font-medium">
+                            ✓ Выделено: «{draft.fragment}»
+                          </span>
+                          <button type="button" onClick={clearSelection}
+                            className="text-xs text-slate-400 hover:text-red-500 px-2 py-0.5 rounded hover:bg-red-50 ml-3 flex-shrink-0">
+                            ✕ сбросить
+                          </button>
+                        </div>
                       )}
                     </div>
-                    {!hasFragment && (
-                      <>
-                        <p className="text-xs text-slate-400 mb-2">👆 Нажмите на первое слово, потом на последнее — диапазон выделится</p>
-                        <div className="rounded-lg border border-slate-200 bg-white p-3">
-                          <div className="leading-8 text-slate-800 text-sm">
-                            {selectableTokens.map((token) => {
-                              if (token.isSpace) return <span key={token.id}>{token.text}</span>;
-                              const isInRange = selectedRange.includes(token.id);
-                              return (
-                                <button
-                                  key={token.id}
-                                  type="button"
-                                  onClick={() => handleSymbolRangeSelect(currentStepOrder, token.id, selectableTokens)}
-                                  className={`mx-[1px] inline rounded px-1 py-0.5 transition-colors cursor-pointer ${
-                                    isInRange
-                                      ? "bg-amber-500 text-white font-medium"
-                                      : "underline decoration-dashed decoration-amber-300 underline-offset-2 hover:bg-amber-100"
-                                  }`}
-                                >
-                                  {token.text}
-                                </button>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      </>
-                    )}
                   </div>
 
                   {/* ШАГ Б: Символ — появляется только после выделения текста */}

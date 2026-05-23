@@ -5973,8 +5973,7 @@ function StageStepByStep() {
             {currentStep.step_type === "schema" && (
               <div className="space-y-4">
                 <div className="text-sm text-slate-700">
-                  На этом шаге построй свою схему ситуации. Когда закончишь, нажми кнопку ниже — система покажет эталонную
-                  схему для сравнения, и ты сможешь выбрать: перейти дальше или доработать свою схему.
+                  Построй схему ситуации. Нажми «Сравнить с эталоном» — увидишь схему учителя и сможешь перейти дальше или доработать свою.
                 </div>
 
                 {/* Схема ученика (живой редактор, сохраняется в сессию) */}
@@ -5987,6 +5986,20 @@ function StageStepByStep() {
                 {currentStep.hint && (
                   <p className="text-xs text-slate-500 mt-1 italic">💡 {currentStep.hint}</p>
                 )}
+
+                {/* Памятка самопроверки */}
+                <details className="rounded-xl border border-amber-200 bg-amber-50/60 text-sm">
+                  <summary className="px-4 py-2.5 font-medium text-amber-800 cursor-pointer select-none list-none flex items-center gap-2">
+                    <span>📋</span> Памятка — что проверить перед сравнением
+                    <span className="ml-auto text-amber-400 text-xs">▼</span>
+                  </summary>
+                  <ul className="px-5 pb-3 pt-1 space-y-1.5 text-amber-900">
+                    <li className="flex items-start gap-2"><span className="text-emerald-500 font-bold mt-0.5">✓</span> Все тела из условия задачи изображены</li>
+                    <li className="flex items-start gap-2"><span className="text-emerald-500 font-bold mt-0.5">✓</span> Векторы скоростей показаны стрелками</li>
+                    <li className="flex items-start gap-2"><span className="text-emerald-500 font-bold mt-0.5">✓</span> Начальное положение тел обозначено</li>
+                    <li className="flex items-start gap-2"><span className="text-emerald-500 font-bold mt-0.5">✓</span> Обозначения (v₁, v₂…) подписаны</li>
+                  </ul>
+                </details>
 
                 <div className="mt-2 flex justify-end">
                   <button
@@ -6414,54 +6427,79 @@ function StageStepByStep() {
 
           {/* Результат проверки — сравнение с эталоном */}
           {attempt && !attempt.final_answer && (
-            <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-5 mb-5">
-              <h4 className="font-semibold text-slate-900 mb-3">Сравните варианты:</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="p-4 bg-white rounded-xl border border-blue-200 shadow-sm">
-                  <div className="text-sm font-semibold text-blue-700 mb-2">Ваш ответ</div>
-                  <div className="text-sm text-slate-700 whitespace-pre-line">
-                    {isBooleanStep
-                      ? (studentAnswers[currentStepOrder] === "yes"
-                          ? "Да"
-                          : studentAnswers[currentStepOrder] === "no"
-                            ? "Нет"
-                            : "(пусто)")
-                      : isSymbolStep
-                        ? (() => {
-                            try {
-                              const d = JSON.parse(studentAnswers[currentStepOrder] || "{}");
-                              return d.symbol && d.fragment
-                                ? `${d.symbol} — ${d.fragment}`
-                                : "(пусто)";
-                            } catch { return studentAnswers[currentStepOrder] || "(пусто)"; }
-                          })()
-                        : (studentAnswers[currentStepOrder] || "(пусто)")}
+            <div className="rounded-2xl border mb-5 overflow-hidden shadow-sm">
+              {/* Явный вердикт — ученик сразу видит, прав он или нет */}
+              {attempt.is_correct && !attempt.needs_choice ? (
+                <div className="flex items-center gap-3 px-5 py-4 bg-emerald-50 border-b border-emerald-200">
+                  <span className="w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center text-lg font-bold flex-shrink-0">✓</span>
+                  <div>
+                    <p className="font-bold text-emerald-800">Верно!</p>
+                    <p className="text-xs text-emerald-600 mt-0.5">Твой ответ совпадает с эталоном. Можешь сравнить формулировки ниже.</p>
                   </div>
                 </div>
-                <div className="p-4 bg-white rounded-xl border border-emerald-200 shadow-sm">
-                  <div className="text-sm font-semibold text-emerald-700 mb-2">Эталонный ответ</div>
-                  <div className="text-sm text-slate-700 whitespace-pre-line">
-                    {attempt.reference_answer}
+              ) : attempt.is_correct ? (
+                <div className="flex items-center gap-3 px-5 py-4 bg-blue-50 border-b border-blue-200">
+                  <span className="w-9 h-9 rounded-full bg-blue-500 text-white flex items-center justify-center text-lg flex-shrink-0">≈</span>
+                  <div>
+                    <p className="font-bold text-blue-800">Близко к верному</p>
+                    <p className="text-xs text-blue-600 mt-0.5">Сравни свою запись с эталоном — можно оставить свой вариант или взять точнее.</p>
                   </div>
-                  {attempt.reference_image_url && (
-                    <img src={attempt.reference_image_url} alt="Эталон" className="mt-3 max-w-full rounded-lg" />
-                  )}
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 px-5 py-4 bg-rose-50 border-b border-rose-200">
+                  <span className="w-9 h-9 rounded-full bg-rose-500 text-white flex items-center justify-center text-lg font-bold flex-shrink-0">✗</span>
+                  <div>
+                    <p className="font-bold text-rose-800">Не совпадает</p>
+                    <p className="text-xs text-rose-600 mt-0.5">Посмотри на эталонный ответ ниже — рекомендуем принять его.</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Сравнение двух ответов */}
+              <div className="p-5 bg-white">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className={`p-4 rounded-xl border shadow-sm ${attempt.is_correct ? "border-emerald-200 bg-emerald-50/30" : "border-slate-200 bg-slate-50"}`}>
+                    <div className={`text-xs font-semibold uppercase tracking-wide mb-2 ${attempt.is_correct ? "text-emerald-600" : "text-slate-500"}`}>Твой ответ</div>
+                    <div className="text-sm text-slate-700 whitespace-pre-line">
+                      {isBooleanStep
+                        ? (studentAnswers[currentStepOrder] === "yes" ? "Да" : studentAnswers[currentStepOrder] === "no" ? "Нет" : "(пусто)")
+                        : isSymbolStep
+                          ? (() => {
+                              try {
+                                const d = JSON.parse(studentAnswers[currentStepOrder] || "{}");
+                                return d.symbol && d.fragment ? `${d.symbol} — ${d.fragment}` : "(пусто)";
+                              } catch { return studentAnswers[currentStepOrder] || "(пусто)"; }
+                            })()
+                          : (studentAnswers[currentStepOrder] || "(пусто)")}
+                    </div>
+                  </div>
+                  <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/50 shadow-sm">
+                    <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wide mb-2">Эталонный ответ</div>
+                    <div className="text-sm text-slate-700 whitespace-pre-line">{attempt.reference_answer}</div>
+                    {attempt.reference_image_url && (
+                      <img src={attempt.reference_image_url} alt="Эталон" className="mt-3 max-w-full rounded-lg" />
+                    )}
+                  </div>
                 </div>
               </div>
-              <p className="text-sm text-slate-600 mt-4 mb-3">Какой вариант вы принимаете?</p>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => handleChooseVariant(currentStepOrder, false)}
-                  className="btn-secondary flex-1"
-                >
-                  Оставить мой
-                </button>
-                <button
-                  onClick={() => handleChooseVariant(currentStepOrder, true)}
-                  className="btn-primary flex-1"
-                >
-                  Принять эталон
-                </button>
+
+              {/* Выбор варианта — визуально отражает рекомендацию */}
+              <div className="px-5 py-4 bg-slate-50 border-t border-slate-100">
+                <p className="text-xs text-slate-500 mb-3">Какой вариант записываем в решение?</p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => handleChooseVariant(currentStepOrder, false)}
+                    className={`flex-1 ${attempt.is_correct && !attempt.needs_choice ? "btn-primary" : "btn-secondary"}`}
+                  >
+                    Оставить мой
+                  </button>
+                  <button
+                    onClick={() => handleChooseVariant(currentStepOrder, true)}
+                    className={`flex-1 ${!attempt.is_correct ? "btn-primary" : "btn-secondary"}`}
+                  >
+                    {!attempt.is_correct ? "✓ Принять эталон" : "Принять эталон"}
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -6605,36 +6643,35 @@ function StageStepByStep() {
                 </div>
               </div>
             </div>
-            <div className="px-6 py-4 border-t border-slate-100 flex flex-col md:flex-row gap-3 md:justify-end">
-              <button
-                type="button"
-                onClick={() => {
-                  // Оставляем шаг незавершённым и закрываем модалку для доработки схемы
-                  setShowSchemaCompareModal(false);
-                }}
-                className="btn-secondary w-full md:w-auto"
-              >
-                Нет, хочу ещё поправить схему
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  // Подтверждаем корректность схемы, отмечаем шаг завершённым и идём дальше
-                  setStepAttempts({
-                    ...stepAttempts,
-                    [currentStepOrder]: {
-                      ...(stepAttempts[currentStepOrder] || {}),
-                      final_answer: "(схема построена и подтверждена)",
-                      is_correct: true,
-                    },
-                  });
-                  setShowSchemaCompareModal(false);
-                  handleNextStep();
-                }}
-                className="btn-primary w-full md:w-auto"
-              >
-                Да, схема правильная →
-              </button>
+            <div className="px-6 py-4 border-t border-slate-100 bg-slate-50">
+              <p className="text-sm text-slate-600 mb-3 text-center">Схема передаёт ту же ситуацию, что и эталон?</p>
+              <div className="flex flex-col md:flex-row gap-3 md:justify-end">
+                <button
+                  type="button"
+                  onClick={() => setShowSchemaCompareModal(false)}
+                  className="btn-secondary w-full md:w-auto"
+                >
+                  ← Нет, доработаю схему
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setStepAttempts({
+                      ...stepAttempts,
+                      [currentStepOrder]: {
+                        ...(stepAttempts[currentStepOrder] || {}),
+                        final_answer: "(схема построена и подтверждена)",
+                        is_correct: true,
+                      },
+                    });
+                    setShowSchemaCompareModal(false);
+                    handleNextStep();
+                  }}
+                  className="btn-primary w-full md:w-auto"
+                >
+                  Да, схема верная → Следующий шаг
+                </button>
+              </div>
             </div>
           </div>
         </FullScreenModal>

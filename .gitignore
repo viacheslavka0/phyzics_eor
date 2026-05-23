@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Django
+db.sqlite3
+media/
+static_collected/
+*.log
+
+# Секреты
+.env
+*.env
+eora.env
+
+# Frontend build artifacts
+ui/node_modules/
+ui/dist/
+static/app/assets/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Временные файлы
+*.tmp
+*.bak
+all_sessions.txt
+sessions.txt
+attempts84.txt
+step_attempts84.txt
+scenario_extracted.txt
+tasks_list.txt

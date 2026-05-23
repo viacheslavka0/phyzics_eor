@@ -5334,7 +5334,9 @@ function StageStepByStep() {
   const [checking, setChecking] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [showIntroModal, setShowIntroModal] = useState(true);
+  const [showIntroModal, setShowIntroModal] = useState(() => {
+    try { return !localStorage.getItem("eora_sbystep_intro_seen"); } catch { return true; }
+  });
   // Для шага со схемой
   const [schemaStudentSnapshot, setSchemaStudentSnapshot] = useState(null);
   const [showSchemaCompareModal, setShowSchemaCompareModal] = useState(false);
@@ -5631,9 +5633,17 @@ function StageStepByStep() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto text-center py-12">
-        <div className="animate-spin w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
-        <p className="text-slate-600">Загрузка задачи...</p>
+      <div className="max-w-7xl mx-auto px-2">
+        <div className="skeleton h-28 mb-4 rounded-2xl" />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          <div className="lg:col-span-5 space-y-3">
+            <div className="skeleton h-48 rounded-2xl" />
+            <div className="skeleton h-16 rounded-2xl" />
+          </div>
+          <div className="lg:col-span-7">
+            <div className="skeleton h-80 rounded-2xl" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -5680,7 +5690,10 @@ function StageStepByStep() {
               </ol>
             </div>
             <button
-              onClick={() => setShowIntroModal(false)}
+              onClick={() => {
+                setShowIntroModal(false);
+                try { localStorage.setItem("eora_sbystep_intro_seen", "1"); } catch {}
+              }}
               className="btn-primary btn-lg w-full"
             >
               Начать разбор
@@ -5697,25 +5710,9 @@ function StageStepByStep() {
           </div>
         )}
 
-        {/* Progress strip */}
-        <div className="card px-5 py-3 mb-4 flex items-center gap-4">
-          <span className="text-sm font-semibold text-slate-700">
-            Шаг {currentStepIndex + 1} из {activeSteps.length}
-          </span>
-          <div className="flex-1 progress-bar">
-            <div
-              className="progress-fill"
-              style={{ width: `${Math.min(100, (activeSteps.filter(s => stepAttempts[s.order]?.final_answer).length / Math.max(1, activeSteps.length)) * 100)}%` }}
-            />
-          </div>
-          <span className="text-xs text-emerald-600 font-semibold whitespace-nowrap">
-            {activeSteps.filter(s => stepAttempts[s.order]?.final_answer).length} из {activeSteps.length}
-          </span>
-        </div>
-
-        {/* Clickable step navigation circles */}
-        <div className="card px-5 py-3 mb-4">
-          <div className="flex gap-2 justify-center flex-wrap">
+        {/* Progress + навигация по шагам — одна карточка */}
+        <div className="card px-5 py-4 mb-4">
+          <div className="flex gap-2 justify-center flex-wrap mb-3">
             {activeSteps.map((step, idx) => {
               const isCurrent = idx === currentStepIndex;
               const attemptForStep = stepAttempts[step.order];
@@ -5747,6 +5744,20 @@ function StageStepByStep() {
               );
             })}
           </div>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-slate-500 whitespace-nowrap">
+              Шаг {currentStepIndex + 1} из {activeSteps.length}
+            </span>
+            <div className="flex-1 progress-bar">
+              <div
+                className="progress-fill"
+                style={{ width: `${Math.min(100, (activeSteps.filter(s => stepAttempts[s.order]?.final_answer).length / Math.max(1, activeSteps.length)) * 100)}%` }}
+              />
+            </div>
+            <span className="text-xs text-emerald-600 font-semibold whitespace-nowrap">
+              {activeSteps.filter(s => stepAttempts[s.order]?.final_answer).length} из {activeSteps.length} готово
+            </span>
+          </div>
         </div>
 
         {/* ===== TWO-COLUMN LAYOUT ===== */}
@@ -5756,16 +5767,17 @@ function StageStepByStep() {
           <div className="lg:col-span-5">
             <div className="lg:sticky lg:top-4 space-y-4">
               <div className="card p-5">
-                <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 mb-4">
-                  <p className="text-blue-900 text-xs font-medium">{DEFAULT_TASK_FORMULATION}</p>
-                </div>
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="task-pill">{taskData.task.order || "?"}</span>
-                  <h3 className="text-lg font-bold tracking-tight">Условие задачи</h3>
-                </div>
-                <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
-                  <p className="text-slate-800 leading-relaxed" style={{ fontSize: "1.05rem" }}>{taskData.task.text}</p>
-                </div>
+                <h3 className="text-base font-bold tracking-tight text-slate-800 mb-3">Условие задачи</h3>
+                {/* Текст скрываем только там, где он же показан в правой колонке (text_pick, symbol) */}
+                {currentStep.step_type !== "text_pick" && currentStep.step_type !== "symbol" ? (
+                  <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                    <p className="text-slate-800 leading-relaxed" style={{ fontSize: "1.05rem" }}>{taskData.task.text}</p>
+                  </div>
+                ) : (
+                  <div className="rounded-xl bg-blue-50 border border-blue-100 px-4 py-2.5 text-xs text-blue-700">
+                    📄 Текст задачи — справа, нажимайте на слова
+                  </div>
+                )}
                 {taskData.method?.title && (
                   <div className="mt-3 rounded-xl border border-blue-100 bg-blue-50/50 p-3 text-sm text-blue-800 flex items-start gap-2">
                     <span className="text-lg leading-none mt-0.5">📋</span>
@@ -5822,16 +5834,14 @@ function StageStepByStep() {
           <div className="lg:col-span-7">
           <div className="card p-6">
           {/* Current step header */}
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center font-bold text-lg flex-shrink-0">
-              {currentStepOrder}
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-slate-900">{currentStep.title}</h3>
-              {currentStep.description && (
-                <p className="text-sm text-slate-600 mt-1">{currentStep.description}</p>
-              )}
-            </div>
+          <div className="mb-5">
+            <span className="inline-block text-xs font-semibold text-blue-600 bg-blue-50 border border-blue-200 rounded-full px-3 py-1 mb-2">
+              Шаг {currentStepIndex + 1} из {activeSteps.length}
+            </span>
+            <h3 className="text-xl font-bold text-slate-900">{currentStep.title}</h3>
+            {currentStep.description && (
+              <p className="text-sm text-slate-500 mt-1">{currentStep.description}</p>
+            )}
           </div>
 
           {/* Per-step error history hint */}
@@ -5853,9 +5863,10 @@ function StageStepByStep() {
             {/* text_pick — выбор слов из текста */}
             {currentStep.step_type === "text_pick" && (
               <>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Выберите ответ прямо из текста задачи:
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Найдите ответ в тексте задачи:
                 </label>
+                <p className="text-xs text-slate-400 mb-2">👆 Нажимайте на слова, чтобы выделить нужное</p>
                 <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
                   <div className="leading-8 text-slate-800">
                     {selectableTokens.map((token) => {
@@ -5866,19 +5877,27 @@ function StageStepByStep() {
                           key={token.id}
                           type="button"
                           onClick={() => handleTextPickToggle(currentStepOrder, token.id, selectableTokens)}
-                          className={`mx-[2px] inline rounded px-1 py-0.5 transition-colors ${isSelected ? "bg-blue-600 text-white" : "hover:bg-blue-100"}`}
+                          className={`mx-[2px] inline rounded px-1 py-0.5 transition-colors cursor-pointer ${
+                            isSelected
+                              ? "bg-blue-600 text-white"
+                              : "underline decoration-dashed decoration-blue-300 underline-offset-2 hover:bg-blue-100"
+                          }`}
                         >
                           {token.text}
                         </button>
                       );
                     })}
                   </div>
-                  <div className="mt-3 text-sm text-slate-600">
-                    Ваш выбор:{" "}
-                    <span className="font-medium text-slate-900">
-                      {studentAnswers[currentStepOrder] || "пока ничего не выбрано"}
-                    </span>
-                  </div>
+                  {studentAnswers[currentStepOrder] ? (
+                    <div className="mt-3 pt-2 border-t border-slate-200 flex items-center gap-2">
+                      <span className="text-xs text-slate-500">Выбрано:</span>
+                      <span className="font-semibold text-blue-700 text-sm">{studentAnswers[currentStepOrder]}</span>
+                    </div>
+                  ) : (
+                    <div className="mt-3 pt-2 border-t border-slate-200 text-xs text-slate-400 italic">
+                      Ничего не выбрано — нажмите на слова выше
+                    </div>
+                  )}
                 </div>
                 {currentStep.hint && (
                   <p className="text-xs text-slate-500 mt-2 italic">💡 {currentStep.hint}</p>
@@ -6047,10 +6066,10 @@ function StageStepByStep() {
 
                   {/* 1. Text selection */}
                   <div>
-                    <div className="text-sm font-medium text-slate-700 mb-2">
+                    <div className="text-sm font-medium text-slate-700 mb-1">
                       1. Выделите величину в тексте задачи
-                      <span className="text-xs text-slate-400 ml-1">(нажмите на первое и последнее слово)</span>
                     </div>
+                    <p className="text-xs text-slate-400 mb-2">👆 Нажмите на первое слово, потом на последнее — диапазон выделится</p>
                     <div className="rounded-xl border border-slate-200 bg-white p-4">
                       <div className="leading-8 text-slate-800 text-sm">
                         {selectableTokens.map((token) => {
@@ -6061,8 +6080,10 @@ function StageStepByStep() {
                               key={token.id}
                               type="button"
                               onClick={() => handleSymbolRangeSelect(currentStepOrder, token.id, selectableTokens)}
-                              className={`mx-[1px] inline rounded px-1 py-0.5 transition-colors ${
-                                isInRange ? "bg-amber-500 text-white font-medium" : "hover:bg-amber-100"
+                              className={`mx-[1px] inline rounded px-1 py-0.5 transition-colors cursor-pointer ${
+                                isInRange
+                                  ? "bg-amber-500 text-white font-medium"
+                                  : "underline decoration-dashed decoration-amber-300 underline-offset-2 hover:bg-amber-100"
                               }`}
                             >
                               {token.text}

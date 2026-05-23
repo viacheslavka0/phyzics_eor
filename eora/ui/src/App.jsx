@@ -1861,62 +1861,6 @@ function StageComprehension() {
       </div>
     </div>
 
-      {/* Cloze секция — заполни пропуски в тексте */}
-      {(ksData.clozes || []).map((cloze) => {
-        // Разбиваем marked_text по {{n}} плейсхолдерам
-        const parts = [];
-        let remaining = cloze.marked_text || "";
-        const placeholder = /\{\{(\d+)\}\}/g;
-        let lastIdx = 0, match;
-        const regex = new RegExp(/\{\{(\d+)\}\}/, "g");
-        let m;
-        while ((m = regex.exec(remaining)) !== null) {
-          parts.push({ type: "text", content: remaining.slice(lastIdx === 0 ? 0 : parts.reduce((a,p)=>a+(p.content?.length||0),0), m.index + (lastIdx === 0 ? 0 : 0)) });
-          parts.push({ type: "blank", position: parseInt(m[1]) });
-          lastIdx = m.index + m[0].length;
-        }
-        parts.push({ type: "text", content: remaining.slice(lastIdx) });
-
-        // Проще: split по {{n}}
-        const rawParts = (cloze.marked_text || "").split(/(\{\{\d+\}\})/);
-
-        return (
-          <div key={cloze.id} className="card p-6 mt-6">
-            <h3 className="font-bold text-base text-slate-800 mb-3">
-              ✏️ Заполни пропуски в тексте
-            </h3>
-            <p className="text-slate-500 text-sm mb-4">
-              Вставьте пропущенные слова в правильных формах
-            </p>
-            <div className="text-slate-800 leading-relaxed text-base">
-              {rawParts.map((part, i) => {
-                const blankMatch = part.match(/^\{\{(\d+)\}\}$/);
-                if (blankMatch) {
-                  const pos = blankMatch[1];
-                  const val = clozeAnswers[pos] || "";
-                  const feedback = results?.cloze_feedback?.find(f => String(f.gap_id) === pos);
-                  const borderClass = feedback
-                    ? (feedback.ok ? "border-emerald-400 bg-emerald-50" : "border-red-400 bg-red-50")
-                    : "border-blue-300 bg-blue-50 focus:border-blue-500";
-                  return (
-                    <input
-                      key={i}
-                      type="text"
-                      value={val}
-                      onChange={e => setClozeAnswers(prev => ({ ...prev, [pos]: e.target.value }))}
-                      disabled={!!results}
-                      placeholder="..."
-                      className={`inline-block mx-1 px-2 py-0.5 border-b-2 rounded text-sm font-medium w-28 text-center outline-none transition-all ${borderClass}`}
-                    />
-                  );
-                }
-                return <span key={i}>{part}</span>;
-              })}
-            </div>
-          </div>
-        );
-      })}
-
       {/* Кнопки действий */}
       <div id="comprehension-submit" className="flex justify-between items-center mt-8">
         {isPilotMode ? (

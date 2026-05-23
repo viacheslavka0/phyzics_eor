@@ -6143,22 +6143,23 @@ function StageStepByStep() {
                   )}
 
                   {/* Check button */}
-                  <div className="flex justify-end">
+                  <div className="flex flex-col items-end gap-2">
+                    {(givenEntries.length === 0 || !targetEntry) && (
+                      <p className="text-xs text-slate-500">
+                        {givenEntries.length === 0 && !targetEntry
+                          ? "Добавьте величины в «Дано» и отметьте искомую в «Найти»"
+                          : givenEntries.length === 0
+                            ? "Добавьте хотя бы одну величину в «Дано»"
+                            : "Отметьте, что нужно найти — добавьте величину в «Найти»"}
+                      </p>
+                    )}
                     <button type="button"
                       onClick={() => {
-                        if (!targetEntry) {
-                          alert("Укажите, что нужно найти — добавьте хотя бы одну величину как «Найти»");
-                          return;
-                        }
-                        if (givenEntries.length === 0) {
-                          alert("Добавьте хотя бы одну величину в «Дано»");
-                          return;
-                        }
                         const payload = JSON.stringify({ fragment: targetEntry.fragment, symbol: targetEntry.symbol });
                         setStudentAnswers({ ...studentAnswers, [currentStepOrder]: payload });
                         handleCheckStep(currentStepOrder, payload);
                       }}
-                      disabled={checking || entries.length === 0 || !targetEntry}
+                      disabled={checking || givenEntries.length === 0 || !targetEntry}
                       className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
                       {checking ? "Проверка..." : `Проверить краткую запись`}
                     </button>
@@ -6266,7 +6267,10 @@ function StageStepByStep() {
                     />
                   </div>
 
-                  <div className="flex justify-end">
+                  <div className="flex flex-col items-end gap-2">
+                    {!(parts.formula?.trim() && parts.calc?.trim()) && (
+                      <p className="text-xs text-slate-500">Заполните хотя бы «Формулу» и «Расчёт»</p>
+                    )}
                     <button
                       type="button"
                       onClick={() => {
@@ -6276,11 +6280,10 @@ function StageStepByStep() {
                           parts.calc && `Расчёт: ${parts.calc}`,
                           parts.reasoning && `Оценка: ${parts.reasoning}`,
                         ].filter(Boolean).join("\n");
-                        if (!combined.trim()) { alert("Заполните хотя бы формулу и расчёт"); return; }
                         setStudentAnswers({ ...studentAnswers, [currentStepOrder]: combined });
                         handleCheckStep(currentStepOrder, combined);
                       }}
-                      disabled={checking}
+                      disabled={checking || !(parts.formula?.trim() && parts.calc?.trim())}
                       className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {checking ? "Проверка..." : "Проверить решение"}

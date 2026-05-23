@@ -1660,17 +1660,19 @@ function StageComprehension() {
     setChecking(true);
     try {
       // Формируем данные для проверки
-      const mappings = ksData.questions
-        ?.filter(q => q.type === "match")
-        .map(q => ({
-          question_id: q.id,
-          selected_zone_ids: selectedZones[q.id] || []
-        })) || [];
+      // mappings: dict {question_id: [zone_id, ...]} — бэкенд ждёт именно dict
+      const mappings = {};
+      (ksData.questions || [])
+        .filter(q => q.type === "match")
+        .forEach(q => {
+          mappings[String(q.id)] = selectedZones[q.id] || [];
+        });
 
-      const clozeAnswersArray = Object.entries(clozeAnswers).map(([key, value]) => ({
-        gap_id: key,
-        answer: value
-      }));
+      // cloze_answers: dict {position: answer}
+      const clozeAnswersDict = {};
+      Object.entries(clozeAnswers).forEach(([key, value]) => {
+        clozeAnswersDict[key] = value;
+      });
 
       const res = await fetch(`/api/ks/${ksData.id}/check/`, {
         method: "POST",
@@ -1680,7 +1682,7 @@ function StageComprehension() {
         },
         body: JSON.stringify({
           mappings,
-          cloze_answers: clozeAnswersArray,
+          cloze_answers: clozeAnswersDict,
           answers // Для других типов вопросов
         })
       });

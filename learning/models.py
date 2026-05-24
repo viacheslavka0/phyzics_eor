@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
+from typing import Optional
 
 from .unit_catalog import convert_unit_value, sanitize_allowed_units
 
@@ -764,7 +765,7 @@ class Task(models.Model):
         self.allowed_answer_units = sanitize_allowed_units(self.answer_unit, self.allowed_answer_units)
         super().save(*args, **kwargs)
 
-    def check_answer(self, student_answer: float, student_unit: str | None = None) -> bool:
+    def check_answer(self, student_answer: float, student_unit: Optional[str] = None) -> bool:
         """Проверка числового ответа с учётом погрешности и выбранной единицы."""
         if self.correct_answer is None:
             return False

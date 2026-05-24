@@ -67,42 +67,79 @@ function UnifiedLogin({ onLoggedIn }) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-      <div className="card p-8 max-w-md w-full animate-fadeIn">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-emerald-500 rounded-xl flex items-center justify-center shadow-md shadow-indigo-200">
-            <span className="text-white font-bold text-lg">⚛</span>
+    <div className="min-h-screen flex bg-white">
+      {/* Left panel - Branding (hidden on mobile) */}
+      <div className="hidden md:flex md:w-1/2 items-center justify-center p-8 bg-gradient-to-br from-indigo-600 via-indigo-500 to-emerald-600">
+        <div className="max-w-sm text-center text-white animate-fadeIn">
+          <div className="w-20 h-20 mx-auto mb-8 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+            <span className="text-4xl">⚛</span>
           </div>
-          <h2 className="text-xl font-bold text-slate-900 mb-6">Вход</h2>
+          <h1 className="text-4xl font-bold mb-2">ЭОРА</h1>
+          <p className="text-lg text-indigo-100 mb-6">Физика · 7–9 класс</p>
+          <div className="border-t border-white/30 pt-6">
+            <p className="text-sm italic text-indigo-200">
+              "Физика — это не просто формулы. Это язык, на котором говорит вселенная."
+            </p>
+          </div>
         </div>
-        <form className="space-y-4" onSubmit={submit}>
-          <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">Логин</label>
-            <input
-              type="text"
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              autoComplete="username"
-              required
-            />
+      </div>
+
+      {/* Right panel - Login form */}
+      <div className="w-full md:w-1/2 flex items-center justify-center p-4 sm:p-6">
+        <div className="w-full max-w-sm animate-fadeIn">
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold text-slate-900 mb-1">Добро пожаловать</h2>
+            <p className="text-slate-600 text-sm">Введите учетные данные для входа</p>
           </div>
-          <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">Пароль</label>
-            <input
-              type="password"
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              required
-            />
-          </div>
-          {msg && <p className="text-sm text-red-600">{msg}</p>}
-          <button type="submit" className="btn-primary btn-lg w-full" disabled={busy}>
-            {busy ? "Вход…" : "Войти"}
-          </button>
-        </form>
+
+          <form className="space-y-5" onSubmit={submit}>
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Логин</label>
+              <input
+                type="text"
+                className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                autoComplete="username"
+                required
+                placeholder="Ваш логин"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Пароль</label>
+              <input
+                type="password"
+                className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+                required
+                placeholder="Пароль"
+              />
+            </div>
+
+            {msg && (
+              <div className="rounded-xl border border-red-200 bg-red-50 p-4">
+                <p className="text-sm text-red-800">{msg}</p>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="w-full px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all duration-200 flex items-center justify-center gap-2"
+              disabled={busy}
+            >
+              {busy && (
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              )}
+              {busy ? "Вход…" : "Войти"}
+            </button>
+          </form>
+
+          <p className="text-center text-xs text-slate-500 mt-6">
+            Система адаптивного обучения физике для учеников 7–9 класса
+          </p>
+        </div>
       </div>
     </div>
   );

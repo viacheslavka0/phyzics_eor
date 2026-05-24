@@ -5,6 +5,7 @@ Django settings for eora project.
 from pathlib import Path
 import os
 from urllib.parse import urlparse
+from typing import Optional, List
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -16,7 +17,7 @@ def _env_bool(name: str, default: bool) -> bool:
     return str(v).strip().lower() in ("1", "true", "yes", "on")
 
 
-def _env_list(name: str, default: list[str] | None = None) -> list[str]:
+def _env_list(name: str, default: Optional[List[str]] = None) -> List[str]:
     raw = os.environ.get(name, "").strip()
     if not raw:
         return list(default or [])
@@ -46,7 +47,7 @@ if not SECRET_KEY:
         )
 
 DEBUG = _env_bool("DJANGO_DEBUG", True)
-ALLOWED_HOSTS: list[str] = _env_list("DJANGO_ALLOWED_HOSTS")
+ALLOWED_HOSTS: List[str] = _env_list("DJANGO_ALLOWED_HOSTS")
 if not ALLOWED_HOSTS and DEBUG:
     ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]"]
 

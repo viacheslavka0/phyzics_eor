@@ -174,8 +174,12 @@ class ComprehensionCheckService:
     def __init__(self, ks: KnowledgeSystem):
         self.ks = ks
 
-    def check_questions(self, mappings: list) -> dict:
-        """Проверить маппинги зон на вопросы."""
+    def check_questions(self, mappings: dict) -> dict:
+        """Проверить маппинги зон на вопросы.
+
+        Args:
+            mappings: dict like {"question_id": [zone_id1, zone_id2, ...], ...}
+        """
         questions = KSQuestion.objects.filter(ks=self.ks).prefetch_related("correct_zones")
 
         result = {

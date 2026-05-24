@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Bash(git status)",
+      "Bash(git log *)",
+      "Bash(git diff *)",
+      "Bash(git show *)",
+      "Bash(ls)",
+      "Bash(find)",
+      "Bash(grep *)",
+      "Bash(python manage.py check)",
+      "Bash(python manage.py runserver *)",
+      "Bash(npm run dev)",
+      "Bash(npm run build)",
+      "Bash(npm run lint)",
+      "Edit",
+      "Write"
+    ]
+  },
+  "env": {
+    "DEBUG": "true"
+  },
+  "respectGitignore": true
+}

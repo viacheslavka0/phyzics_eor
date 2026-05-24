@@ -388,8 +388,28 @@ class KnowledgeSystemViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet)
 
         ks: KnowledgeSystem = self.get_object()
         data = request.data or {}
-        mappings = data.get("mappings", [])
-        cloze_answers = data.get("cloze_answers", [])
+
+        # Преобразуем mappings из списка в словарь
+        mappings_raw = data.get("mappings", [])
+        mappings = {}
+        if isinstance(mappings_raw, list):
+            for item in mappings_raw:
+                if isinstance(item, dict):
+                    q_id = item.get("question_id")
+                    zones = item.get("selected_zone_ids", [])
+                    if q_id is not None:
+                        mappings[str(q_id)] = zones
+
+        # Преобразуем cloze_answers из списка в словарь
+        cloze_answers_raw = data.get("cloze_answers", [])
+        cloze_answers = {}
+        if isinstance(cloze_answers_raw, list):
+            for item in cloze_answers_raw:
+                if isinstance(item, dict):
+                    gap_id = item.get("gap_id") or item.get("position")
+                    answer = item.get("answer", "")
+                    if gap_id is not None:
+                        cloze_answers[str(gap_id)] = answer
 
         # Использование сервиса для проверки
         service = ComprehensionCheckService(ks)
@@ -441,8 +461,14 @@ class KnowledgeSystemViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet)
         )
 
         # --- Ответ
-        mapping_feedback = [{"question_id": qid, "ok": ok} for qid, ok in q_map_correct.items()]
-        cloze_feedback = [{"gap_id": gid, "ok": ok} for gid, ok in cloze_correct.items()]
+        mapping_feedback = [
+            {"question_id": q["question_id"], "ok": q["is_correct"]}
+            for q in check_result["questions"]["question_results"]
+        ]
+        cloze_feedback = [
+            {"position": c["position"], "ok": c["is_correct"]}
+            for c in check_result["cloze"]["cloze_results"]
+        ]
 
         return Response({
                 "passed": passed,

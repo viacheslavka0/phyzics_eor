@@ -100,24 +100,23 @@ function effectiveTaskTrackTarget(taskProgress, session) {
  * Колёсико: только addEventListener(..., { passive: false }) реально блокирует шаг number в Chrome.
  */
 function NumericAnswerInput({ value, onChange, disabled, className, placeholder, id, "aria-label": ariaLabel }) {
-  const ref = useRef(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const handler = (e) => {
-      e.preventDefault();
-    };
-    el.addEventListener("wheel", handler, { passive: false });
-    return () => el.removeEventListener("wheel", handler);
-  }, []);
+  // Принимаем и запятую, и точку (русские дети пишут «0,3»), нормализуем в точку.
+  const handleChange = (e) => {
+    let v = e.target.value.replace(/,/g, ".").replace(/[^0-9.\-]/g, "");
+    const firstDot = v.indexOf(".");
+    if (firstDot !== -1) {
+      v = v.slice(0, firstDot + 1) + v.slice(firstDot + 1).replace(/\./g, "");
+    }
+    e.target.value = v;
+    onChange(e);
+  };
   return (
     <input
-      ref={ref}
       id={id}
-      type="number"
-      step="any"
+      type="text"
+      inputMode="decimal"
       value={value}
-      onChange={onChange}
+      onChange={handleChange}
       placeholder={placeholder}
       className={className}
       disabled={disabled}
@@ -986,7 +985,7 @@ function LearningView() {
       <aside
         className={`sidebar-desktop bg-white/95 backdrop-blur-sm border-r border-slate-200/60 text-slate-900 flex flex-col fixed h-screen z-[310] transition-all duration-300 group ${
           sidebarCollapsed ? "w-16 hover:w-72" : "w-72"
-        } ${sidebarOpen ? "translate-x-0" : ""}`}
+        } ${sidebarOpen ? "translate-x-0 open" : ""}`}
       >
         {/* Close on mobile */}
         <button
@@ -2843,6 +2842,7 @@ function ErrorBranchingBlock({
   handleStartStepByStep,
   onAlgorithmViewed,
 }) {
+  const feedbackRef = useRef(null);
   const [showScenario631, setShowScenario631] = useState(false);
   const [scenarioAnswers, setScenarioAnswers] = useState({});
   const [activeBlank, setActiveBlank] = useState(null);
@@ -2926,6 +2926,15 @@ function ErrorBranchingBlock({
   // Модель ветвления:
   // 2 ошибки: ветка зависит от уровня сложности и номера такого случая за сессию.
   // 3 ошибки -> пооперационный контроль.
+  // Auto-scroll к обратной связи на маленьких экранах
+  useEffect(() => {
+    if (feedbackRef.current && wrongCount >= 1) {
+      setTimeout(() => {
+        feedbackRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+  }, [wrongCount]);
+
   useEffect(() => {
     if (wrongCount < 2) {
       setShowScenario631(false);
@@ -2976,7 +2985,7 @@ function ErrorBranchingBlock({
   if (wrongCount >= 3) {
     return (
       <div className="space-y-3">
-        <div className="feedback-wrong animate-shake">
+        <div ref={feedbackRef} className="feedback-wrong animate-shake">
           <div className="flex items-center gap-2.5">
             <span className="text-xl">✗</span>
             <p className="text-rose-900 font-semibold text-sm">Неверно.</p>
@@ -6724,19 +6733,19 @@ function StageCompleted() {
         )}
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 mb-8">
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-center">
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-center animate-slideUp" style={{ animationDelay: "0.4s" }}>
             <div className="text-2xl font-bold text-emerald-700">{solved}</div>
             <div className="text-xs text-slate-600 mt-1">Решено задач</div>
           </div>
-          <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-center">
+          <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-center animate-slideUp" style={{ animationDelay: "0.5s" }}>
             <div className="text-2xl font-bold text-indigo-700">{totalAttempts}</div>
             <div className="text-xs text-slate-600 mt-1">Всего попыток</div>
           </div>
-          <div className="rounded-xl border border-teal-200 bg-teal-50 p-4 text-center">
+          <div className="rounded-xl border border-teal-200 bg-teal-50 p-4 text-center animate-slideUp" style={{ animationDelay: "0.6s" }}>
             <div className="text-2xl font-bold text-teal-700">{firstTry}</div>
             <div className="text-xs text-slate-600 mt-1">С 1-й попытки</div>
           </div>
-          <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-center">
+          <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-center animate-slideUp" style={{ animationDelay: "0.7s" }}>
             <div className="text-2xl font-bold text-rose-700">{wrongAttempts}</div>
             <div className="text-xs text-slate-600 mt-1">Ошибок</div>
           </div>

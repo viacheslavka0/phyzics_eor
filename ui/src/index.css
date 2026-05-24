@@ -20,7 +20,7 @@
   --color-primary-800: #3730a3;
   --color-primary-900: #312e81;
 
-  --font-family-sans: 'Inter', 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-family-sans: 'Inter', 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
 
   --animate-fadeIn:    fadeIn    0.4s ease-out;
   --animate-slideIn:   slideIn   0.3s ease-out;
@@ -529,3 +529,18 @@ input[type="number"].no-number-spin::-webkit-inner-spin-button {
 .toast-item--warning { background: #fffbeb; border: 1px solid #fde68a; }
 .toast-item--success { background: #f0fdf4; border: 1px solid #bbf7d0; }
 .toast-item--info    { background: #eff6ff; border: 1px solid #bfdbfe; }
+
+/* ---------- Responsive: Hide sidebar on screens < 1200px ---------- */
+@media (max-width: 1199px) {
+  .sidebar-desktop {
+    /* Sidebar остается fixed, но скрыт по умолчанию */
+    transform: translateX(-100%) !important;
+  }
+  .sidebar-desktop.open {
+    transform: translateX(0) !important;
+  }
+  .main-with-sidebar {
+    /* На малых экранах контент занимает весь экран */
+    margin-left: 0 !important;
+  }
+}

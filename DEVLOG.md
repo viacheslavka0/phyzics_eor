@@ -5,49 +5,47 @@
 
 ---
 
-## 2026-05-23 — Текущее состояние (после initial commit)
+## 2026-05-26 — UX/UI Session 2 завершён + документация
 
 ### Задеплоено на сервер ✅
+- Commit: `dac6609` — UX/UI Session 2: sidebar redesign, stage transitions, completion screen
 - Сервер: `root@5.129.199.23`, сервис `eora.service`
 - Deploy: `rsync static/app/ → /srv/eora-repo/eora/static/app/` + `collectstatic`
 - Python: `/srv/eora-repo/eora/.venv`, env: `/etc/eora.env`
 
-### Что сделано (хронологически)
+### Что сделано (Session 2 завершение)
 
-#### Модель и API
-- `learning/models.py` — добавлено поле `Task.illustration` (ImageField, `tasks/illustrations/`)
-- `learning/migrations/0023_task_illustration.py` — миграция применена на сервере
-- `learning/views.py` — добавлен `illustration_url` в ответ `next_task` API
-- `learning/views.py` — добавлены экшены `upload_illustration` и `delete_illustration` в `TeacherTaskViewSet`
-- `learning/serializers.py` — добавлено поле `illustration_url` в `TaskDetailSerializer` и `TaskListSerializer`
+#### Фронтенд (App.jsx + index.css)
+- **Сайдбар:** тёмный (bg-slate-900) → светлый (bg-white/95 backdrop-blur-sm border-r border-slate-200/60)
+  - Все тексты: `text-white` → `text-slate-900`, `text-slate-300` → `text-slate-500`
+  - Hover: `hover:bg-slate-700` → `hover:bg-slate-100`
+  - Изумруд акценты: `text-emerald-400` → `text-emerald-600`
+- **Мобильный топбар:** тёмный → светлый (same theme)
+- **Смена этапов:** добавлен `key={stage}` + `.stage-container` animation → плавный slide-up
+- **Неверный ответ:** `.feedback-wrong.animate-shake` карточка с вибрацией
+- **StageCompleted:** `.celebration-ring` + `animate-bounceIn` + staggered текст
+- **Portal.jsx:** двухколоночный layout (левая: branding, правая: форма)
 
-#### Панель учителя (TeacherApp.jsx)
-- Редактор зон: drag-to-move + 8 ручек resize + числовые поля X/Y/W/H
-- Компонент `TaskIllustrationUploader` — загрузка/удаление иллюстрации к задаче
+#### Backend (services.py, views.py)
+- **Bug fix:** исправлена проверка cloze — использование `ks.clozes` вместо `ks.ks_cloze_blanks`
+- **Bug fix:** конвертация `mappings` из списка в dict перед передачей в сервис
 
-#### Студенческий интерфейс (App.jsx + index.css)
-- **Дизайн (index.css):** новые keyframes (shake, bounceIn, slideUp, stageEnter, toastIn/Out)
-  анимации-классы (.animate-shake, .animate-bounceIn, .animate-slideUp, .stage-container)
-  прогресс-бар: height 0.55rem → 0.85rem, spring easing
-  `.eora-screen-header` — карточный стиль вместо левой границы
-  `.feedback-wrong`, `.feedback-correct`, `.celebration-ring` — новые утилиты
-- **Сайдбар:** тёмный (bg-slate-900) → светлый (bg-white/95 backdrop-blur)
-- **Мобильный топбар:** тёмный → светлый
-- **StageProgress:** bg-slate-800 → bg-slate-50, все тексты обновлены
-- **Смена этапа:** `key={stage}` + `.stage-container` → плавный slide-up
-- **Неверный ответ:** `.feedback-wrong.animate-shake` вместо простого bg-red-50
-- **StageCompleted:** `.celebration-ring` + `animate-bounceIn` + staggered `animate-slideUp`
-- **Карточка задачи (StageTaskList):** вписана иллюстрация справа/снизу, убраны дубли
-- **Пооперационный контроль (StageStepByStep):**
-  - Три нумерации → одна (кружки + полоса в одном блоке, убран синий квадрат)
-  - Аффорданс: пунктирное подчёркивание на кликабельных словах
-  - Унификация: text_pick и symbol — один indigo цвет
-  - Вердикт: «Совпадает ли ваш ответ с эталоном?» вместо «Какой вариант принимаете?»
+#### Документация (CLAUDE.md)
+- Добавлены разделы с известными багами (Bug #1-#4):
+  - `KSCloze` структура и правильный способ получить blanks
+  - Mismatch формата `mappings` (list vs dict)
+  - Python 3.9 совместимость (`Optional` вместо `|`)
+  - Unicode escape в JSX placeholder
 
-### Что НЕ сделано (из плана rustling-weaving-moore.md)
-- ❌ `Toast.jsx` — замена alert() на всплывающие уведомления
-- ❌ `Portal.jsx` — двухколоночный экран входа
-- ❌ `tailwind.config.js` — keyframes для JIT purge
+### Полный чеклист Session 2 ✅
+- [x] Сайдбар светлый (не тёмный)
+- [x] Плавные переходы между этапами
+- [x] Анимация неправильного ответа (shake)
+- [x] Экран завершения с celebration
+- [x] Portal.jsx двухколоночный
+- [x] Документация багов в CLAUDE.md
+- [x] Backend fixes (cloze, mappings)
+- [x] Git commit + push на GitHub
 
 ---
 

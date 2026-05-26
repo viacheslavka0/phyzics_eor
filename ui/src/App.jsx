@@ -3070,7 +3070,7 @@ function ErrorBranchingBlock({
                   : "border-dashed border-amber-300 bg-white text-slate-400 hover:border-indigo-400 hover:bg-indigo-50/40"
             }`}
           >
-            {selectedValue ? selectedValue.trim() : <span className="text-slate-300 select-none">{"\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"}</span>}
+            {selectedValue ? selectedValue.trim() : <span className="text-slate-300 select-none text-xs">{"\u0432\u0441\u0442\u0430\u0432\u044C \u0441\u043B\u043E\u0432\u043E"}</span>}
           </button>
         );
         cursor = regex.lastIndex;

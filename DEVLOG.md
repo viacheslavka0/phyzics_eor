@@ -5,6 +5,34 @@
 
 ---
 
+## 2026-05-26 — Сессия 3: CSRF fix, placeholder fix, MathLive в пооперационном контроле
+
+### Задеплоено на сервер ✅ (домен www.phyzics-eor.ru, IP 5.129.199.23)
+
+**1. CSRF в проде**
+- Причина: `CSRF_COOKIE_HTTPONLY = True` запрещал JS читать `csrftoken` → пустой `X-CSRFToken` → 403.
+- Фикс: `settings.py` → `CSRF_COOKIE_HTTPONLY = False` (сессионная кука осталась HttpOnly).
+
+**2. Сырые escape-последовательности в модалке «Собери метод решения» (2 ошибки)**
+- Причина: задеплоенный бандл содержал `\uXXXX` в JSX-тексте (Bug #4) — рендерилось дословно.
+- Фикс: `App.jsx:3073` placeholder дроп-зоны → `{"вставь слово"}` (строка в `{}`), пересборка + rsync.
+
+**3. MathLive (Photomath-style ввод формул) в `step_by_step`**
+- Новый `ui/src/components/FormulaField.jsx`: `FormulaField` (редактируемое `<math-field>`, вывод LaTeX,
+  вставка по курсору через ref, экранная матклавиатура на тач) + `FormulaDisplay` (read-only `convertLatexToMarkup`).
+  Лениво грузится отдельным чанком (~226 КБ gzip), graceful-фолбэк на textarea.
+- `App.jsx`: шаги `solution` (Формула/СИ/Расчёт) и `text` → `FormulaField`; палитра вставляет LaTeX-шаблоны
+  (дробь/степень/корень) по курсору; ответ solution хранится JSON с LaTeX. Блоки «Твоё решение»,
+  «Сверьте с эталоном», финальный ответ рендерят формулы через `StudentAnswerView`/`FormulaDisplay`.
+- Бэкенд НЕ менялся: проверка шага — самооценка (`needs_choice`), машинного сравнения формул нет.
+- Шрифты MathLive скопированы в `ui/public/mathlive-fonts/` → отдаются с `/static/app/` (прод-CSP `font-src 'self'`, без CDN).
+- Проверено в браузере (desktop + mobile 375px) изолированным харнессом; реальный поток step_by_step на живой задаче не прогонялся.
+
+### Не сделано / на будущее
+- Системы тостов в проекте НЕТ (`useToast`/`Toast.jsx` отсутствуют, вопреки записи в CLAUDE.md). `alert()` в ~22 местах App.jsx.
+
+---
+
 ## 2026-05-26 — UX/UI Session 2 завершён + документация
 
 ### Задеплоено на сервер ✅

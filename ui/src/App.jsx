@@ -5,6 +5,8 @@ import { createPortal } from "react-dom";
 const SchemaEditor = lazy(() => import("./components/SchemaEditor"));
 const ElementCreatorVisual = lazy(() => import("./components/ElementCreatorVisual"));
 
+import FormulaField, { FormulaDisplay } from "./components/FormulaField";
+
 /**
  * EORA Learning Platform - Student Interface
  * Современный интерфейс для изучения систем знаний
@@ -5332,6 +5334,81 @@ function StageMethodComposition() {
 // STAGE: STEP BY STEP
 // ============================================================================
 
+const tryParseJSON = (s) => {
+  try {
+    return JSON.parse(s);
+  } catch {
+    return null;
+  }
+};
+
+// Кодируем структурированное решение (шаг solution) в строку student_answer.
+// Части формул хранятся как LaTeX (из MathLive), reasoning — обычный текст.
+const encodeSolutionAnswer = (parts) =>
+  JSON.stringify({
+    type: "solution",
+    formula: parts.formula || "",
+    si: parts.si || "",
+    calc: parts.calc || "",
+    reasoning: parts.reasoning || "",
+  });
+
+// Единый рендер ответа ученика для блоков «Твоё решение», «Сверьте с эталоном»,
+// «финальный ответ». Формульные части показываем как настоящую математику (FormulaDisplay),
+// эталон учителя НЕ трогаем (его формат произволен) — он рендерится отдельно как текст.
+function StudentAnswerView({ stepType, value }) {
+  const raw = value == null ? "" : String(value);
+  if (!raw.trim()) return <span className="text-slate-400">—</span>;
+
+  if (stepType === "solution") {
+    const d = tryParseJSON(raw);
+    if (d && d.type === "solution") {
+      const rows = [
+        ["Формула", d.formula, true],
+        ["Перевод в СИ", d.si, true],
+        ["Расчёт", d.calc, true],
+        ["Проверка", d.reasoning, false],
+      ].filter(([, v]) => v && String(v).trim());
+      if (rows.length === 0) return <span className="text-slate-400">—</span>;
+      return (
+        <div className="space-y-1.5">
+          {rows.map(([label, v, isMath]) => (
+            <div key={label} className="flex gap-2 items-baseline flex-wrap">
+              <span className="text-[11px] text-slate-400 shrink-0">{label}:</span>
+              {isMath ? (
+                <FormulaDisplay value={v} className="text-slate-800" />
+              ) : (
+                <span className="text-sm text-slate-700">{v}</span>
+              )}
+            </div>
+          ))}
+        </div>
+      );
+    }
+  }
+
+  if (stepType === "symbol") {
+    const d = tryParseJSON(raw);
+    if (d && (d.symbol || d.fragment)) {
+      return (
+        <span className="font-mono">
+          {d.symbol} {d.fragment ? `— ${d.fragment}` : ""}
+        </span>
+      );
+    }
+  }
+
+  if (stepType === "boolean") {
+    return <span>{raw === "yes" ? "Да" : raw === "no" ? "Нет" : raw}</span>;
+  }
+
+  if (stepType === "text" || !stepType) {
+    return <FormulaDisplay value={raw} />;
+  }
+
+  return <span className="whitespace-pre-line">{raw}</span>;
+}
+
 function StageStepByStep() {
   const { ksData, session, updateSession } = useApp();
   const [taskData, setTaskData] = useState(null);
@@ -5350,10 +5427,13 @@ function StageStepByStep() {
   const [showMySchema, setShowMySchema] = useState(false);
   const [solutionParts, setSolutionParts] = useState({});
   const [symbolEntries, setSymbolEntries] = useState({});
-  const [showFullSymbolPalette, setShowFullSymbolPalette] = useState(false);
   const [activeSolutionField, setActiveSolutionField] = useState("formula");
   const [showSiField, setShowSiField] = useState(false);
   const [showRecap, setShowRecap] = useState(true);
+  // Рефы на MathLive-поля шага solution — для вставки символов/значений по курсору.
+  const formulaFieldRefs = useRef({ formula: null, si: null, calc: null });
+  // Реф на поле формулы шага text.
+  const textFieldRef = useRef(null);
 
   useEffect(() => {
     const storedTaskId = window.localStorage.getItem(STEP_BY_STEP_TASK_KEY);
@@ -5689,8 +5769,6 @@ function StageStepByStep() {
   const currentStepOrder = currentStep.order;
   const attempt = stepAttempts[currentStepOrder];
   const selectableTokens = tokenizeSelectableText(taskData.task.text);
-  const isBooleanStep = currentStep.step_type === "boolean";
-  const isSymbolStep = currentStep.step_type === "symbol";
 
   return (
     <>
@@ -5877,9 +5955,9 @@ function StageStepByStep() {
                                 ))}
                               </div>
                             ) : (
-                              <p className="pl-7 text-[11px] text-slate-600 whitespace-pre-line font-mono leading-snug break-words">
-                                {att.final_answer}
-                              </p>
+                              <div className="pl-7 text-[11px] text-slate-600 leading-snug break-words">
+                                <StudentAnswerView stepType={s.step_type} value={att.final_answer} />
+                              </div>
                             )}
                           </button>
                         </li>
@@ -6314,19 +6392,30 @@ function StageStepByStep() {
             {currentStep.step_type === "solution" && (() => {
               const parts = solutionParts[currentStepOrder] || {};
               const givenItems = studentFoundQuantities.filter((it) => !it.isTarget);
-              const mathSymbols = ["=", "+", "−", "·", "/", "(", ")", "²", "₁", "₂", "π", "√", "≈"];
-              const fieldLabels = { formula: "Формула", si: "Перевод в СИ", calc: "Расчёт", reasoning: "Проверка" };
+              // Палитра вставляет LaTeX по курсору активного поля. #? — плейсхолдер MathLive.
+              const mathPalette = [
+                { label: "·", latex: "\\cdot" },
+                { label: "÷", latex: "\\div" },
+                { label: "a/b", latex: "\\frac{#?}{#?}" },
+                { label: "xⁿ", latex: "^{#?}" },
+                { label: "x²", latex: "^2" },
+                { label: "√", latex: "\\sqrt{#?}" },
+                { label: "( )", latex: "(#?)" },
+                { label: "π", latex: "\\pi" },
+                { label: "≈", latex: "\\approx" },
+                { label: "Δ", latex: "\\Delta" },
+                { label: "°", latex: "\\degree" },
+                { label: "₁", latex: "_1" },
+                { label: "₂", latex: "_2" },
+              ];
+              const fieldLabels = { formula: "Формула", si: "Перевод в СИ", calc: "Расчёт" };
               const siVisible = showSiField || !!parts.si;
 
-              const insertActive = (text) => {
-                setSolutionParts((prev) => ({
-                  ...prev,
-                  [currentStepOrder]: {
-                    ...(prev[currentStepOrder] || {}),
-                    [activeSolutionField]: ((prev[currentStepOrder] || {})[activeSolutionField] || "") + text,
-                  },
-                }));
-              };
+              // Активное math-поле (formula/si/calc); reasoning — обычный textarea, в ротации не участвует.
+              const activeRef = () => formulaFieldRefs.current[activeSolutionField];
+              const insertLatex = (latex) => activeRef()?.insert(latex);
+              // Значения с единицами вставляем как текст, чтобы «5 м/с» не стало дробью.
+              const insertText = (s) => activeRef()?.insert(`\\text{${s}}`);
               const setPart = (field, val) =>
                 setSolutionParts((p) => ({ ...p, [currentStepOrder]: { ...p[currentStepOrder], [field]: val } }));
 
@@ -6335,17 +6424,17 @@ function StageStepByStep() {
                   {/* Единая прилипающая палитра */}
                   <div className="sticky top-2 z-10 rounded-xl border border-slate-200 bg-white/95 backdrop-blur-sm p-2.5 shadow-sm">
                     <div className="text-[11px] text-slate-400 mb-1.5">
-                      Вставить в поле: <span className="font-semibold text-indigo-600">«{fieldLabels[activeSolutionField]}»</span>
+                      Вставить в поле: <span className="font-semibold text-indigo-600">«{fieldLabels[activeSolutionField] || "Формула"}»</span>
                     </div>
                     <div className="flex flex-wrap gap-1">
-                      {mathSymbols.map((s) => (
-                        <button key={s} type="button" onClick={() => insertActive(s)}
+                      {mathPalette.map((s) => (
+                        <button key={s.label} type="button" onClick={() => insertLatex(s.latex)}
                           className="px-2.5 py-1.5 text-sm bg-slate-100 hover:bg-indigo-100 rounded-lg border border-slate-200 font-mono">
-                          {s}
+                          {s.label}
                         </button>
                       ))}
                       {givenItems.map((it, i) => (
-                        <button key={`s${i}`} type="button" onClick={() => insertActive(it.symbol)}
+                        <button key={`s${i}`} type="button" onClick={() => insertLatex(it.symbol)}
                           title={`${it.symbol} = ${it.fragment}`}
                           className="px-2.5 py-1.5 text-sm bg-indigo-50 hover:bg-indigo-100 rounded-lg border border-indigo-200 font-mono text-indigo-700">
                           {it.symbol}
@@ -6357,10 +6446,10 @@ function StageStepByStep() {
                   {/* Подстановка значений из «Дано» */}
                   {givenItems.length > 0 && (
                     <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-3">
-                      <div className="text-xs font-semibold text-emerald-700 mb-2">Из вашего «Дано» — нажмите, чтобы подставить значение</div>
+                      <div className="text-xs font-semibold text-emerald-700 mb-2">Из вашего «Дано» — нажмите, чтобы подставить значение в активное поле</div>
                       <div className="flex flex-wrap gap-2">
                         {givenItems.map((item, i) => (
-                          <button key={i} type="button" onClick={() => insertActive(item.fragment)}
+                          <button key={i} type="button" onClick={() => insertText(item.fragment)}
                             className="inline-flex items-center gap-1 bg-white px-2.5 py-1 rounded-lg border border-emerald-100 text-sm hover:border-emerald-300 hover:bg-emerald-50 transition-colors">
                             <span className="font-mono font-semibold text-emerald-700">{item.symbol}</span>
                             <span className="text-slate-400">=</span>
@@ -6374,12 +6463,14 @@ function StageStepByStep() {
                   {/* 1. Formula */}
                   <div>
                     <label className="block text-sm font-semibold text-slate-800 mb-1">1. Формула</label>
-                    <textarea
+                    <FormulaField
+                      key={`formula-${currentStepOrder}`}
+                      ref={(r) => { formulaFieldRefs.current.formula = r; }}
                       value={parts.formula || ""}
                       onFocus={() => setActiveSolutionField("formula")}
-                      onChange={(e) => setPart("formula", e.target.value)}
+                      onChange={(val) => setPart("formula", val)}
                       placeholder="Например: S = v · t"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-base min-h-[52px] focus:ring-2 focus:ring-indigo-400"
+                      ariaLabel="Формула"
                     />
                   </div>
 
@@ -6392,12 +6483,14 @@ function StageStepByStep() {
                   ) : (
                     <div>
                       <label className="block text-sm font-semibold text-slate-800 mb-1">2. Перевод в СИ</label>
-                      <textarea
+                      <FormulaField
+                        key={`si-${currentStepOrder}`}
+                        ref={(r) => { formulaFieldRefs.current.si = r; }}
                         value={parts.si || ""}
                         onFocus={() => setActiveSolutionField("si")}
-                        onChange={(e) => setPart("si", e.target.value)}
+                        onChange={(val) => setPart("si", val)}
                         placeholder="Например: v = 36 км/ч = 10 м/с"
-                        className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-base min-h-[52px] focus:ring-2 focus:ring-indigo-400"
+                        ariaLabel="Перевод в СИ"
                       />
                     </div>
                   )}
@@ -6405,21 +6498,23 @@ function StageStepByStep() {
                   {/* 3. Calculation */}
                   <div>
                     <label className="block text-sm font-semibold text-slate-800 mb-1">{siVisible ? "3" : "2"}. Расчёт</label>
-                    <textarea
+                    <FormulaField
+                      key={`calc-${currentStepOrder}`}
+                      ref={(r) => { formulaFieldRefs.current.calc = r; }}
                       value={parts.calc || ""}
                       onFocus={() => setActiveSolutionField("calc")}
-                      onChange={(e) => setPart("calc", e.target.value)}
-                      placeholder="Подставьте значения и вычислите..."
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg font-mono text-base min-h-[64px] focus:ring-2 focus:ring-indigo-400"
+                      onChange={(val) => setPart("calc", val)}
+                      placeholder="Подставьте значения и вычислите…"
+                      minHeight="64px"
+                      ariaLabel="Расчёт"
                     />
                   </div>
 
-                  {/* 4. Reasoning */}
+                  {/* 4. Reasoning — обычный текст (прозаическая проверка результата) */}
                   <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
                     <label className="block text-sm font-semibold text-slate-700 mb-1">{siVisible ? "4" : "3"}. Проверка ответа <span className="text-xs font-normal text-slate-400">(необязательно)</span></label>
                     <textarea
                       value={parts.reasoning || ""}
-                      onFocus={() => setActiveSolutionField("reasoning")}
                       onChange={(e) => setPart("reasoning", e.target.value)}
                       placeholder="Реалистичен ли результат? Например: значение правдоподобно для этой задачи"
                       className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm min-h-[44px] focus:ring-2 focus:ring-indigo-400"
@@ -6433,12 +6528,7 @@ function StageStepByStep() {
                     <button
                       type="button"
                       onClick={() => {
-                        const combined = [
-                          parts.formula && `Формула: ${parts.formula}`,
-                          parts.si && `СИ: ${parts.si}`,
-                          parts.calc && `Расчёт: ${parts.calc}`,
-                          parts.reasoning && `Оценка: ${parts.reasoning}`,
-                        ].filter(Boolean).join("\n");
+                        const combined = encodeSolutionAnswer(parts);
                         setStudentAnswers({ ...studentAnswers, [currentStepOrder]: combined });
                         handleCheckStep(currentStepOrder, combined);
                       }}
@@ -6452,35 +6542,48 @@ function StageStepByStep() {
               );
             })()}
 
-            {/* text — текстовый ответ с палитрой формул */}
+            {/* text — ответ-формула с MathLive */}
             {(currentStep.step_type === "text" || !currentStep.step_type) && (
               <>
                 <label className="block text-sm font-medium text-slate-700 mb-2">
                   Выполните это действие и запишите результат:
                 </label>
-                {/* Formula palette */}
+                {/* Formula palette — вставка LaTeX по курсору */}
                 <div className="flex flex-wrap gap-1 mb-2">
-                  {["=", "+", "−", "·", "/", "(", ")", "²", "₁", "₂", "≈"].map((s) => (
-                    <button key={s} type="button"
-                      onClick={() => setStudentAnswers({ ...studentAnswers, [currentStepOrder]: (studentAnswers[currentStepOrder] || "") + s })}
+                  {[
+                    { label: "·", latex: "\\cdot" },
+                    { label: "÷", latex: "\\div" },
+                    { label: "a/b", latex: "\\frac{#?}{#?}" },
+                    { label: "x²", latex: "^2" },
+                    { label: "xⁿ", latex: "^{#?}" },
+                    { label: "√", latex: "\\sqrt{#?}" },
+                    { label: "( )", latex: "(#?)" },
+                    { label: "≈", latex: "\\approx" },
+                    { label: "₁", latex: "_1" },
+                    { label: "₂", latex: "_2" },
+                  ].map((s) => (
+                    <button key={s.label} type="button"
+                      onClick={() => textFieldRef.current?.insert(s.latex)}
                       className="px-2 py-1 text-xs bg-slate-100 hover:bg-indigo-100 rounded border border-slate-200 font-mono">
-                      {s}
+                      {s.label}
                     </button>
                   ))}
                   {studentFoundQuantities.map((it, i) => (
                     <button key={`si${i}`} type="button"
-                      onClick={() => setStudentAnswers({ ...studentAnswers, [currentStepOrder]: (studentAnswers[currentStepOrder] || "") + it.symbol })}
+                      onClick={() => textFieldRef.current?.insert(it.symbol)}
                       className="px-2 py-1 text-xs bg-indigo-50 hover:bg-indigo-100 rounded border border-indigo-200 font-mono text-indigo-700">
                       {it.symbol}
                     </button>
                   ))}
                 </div>
-                <textarea
+                <FormulaField
+                  key={`text-${currentStepOrder}`}
+                  ref={textFieldRef}
                   value={studentAnswers[currentStepOrder] || ""}
-                  onChange={(e) => setStudentAnswers({ ...studentAnswers, [currentStepOrder]: e.target.value })}
-                  placeholder="Введите результат выполнения этого шага..."
-                  className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 min-h-[100px] font-mono"
-                  disabled={checking}
+                  onChange={(val) => setStudentAnswers({ ...studentAnswers, [currentStepOrder]: val })}
+                  placeholder="Запишите результат этого шага…"
+                  minHeight="64px"
+                  ariaLabel="Результат шага"
                 />
                 {currentStep.hint && (
                   <p className="text-xs text-slate-500 mt-2 italic">💡 {currentStep.hint}</p>
@@ -6511,17 +6614,8 @@ function StageStepByStep() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
                 <div className="p-4">
                   <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Ваш ответ</div>
-                  <div className="text-sm text-slate-800 whitespace-pre-line font-medium">
-                    {isBooleanStep
-                      ? (studentAnswers[currentStepOrder] === "yes" ? "Да" : studentAnswers[currentStepOrder] === "no" ? "Нет" : "—")
-                      : isSymbolStep
-                        ? (() => {
-                            try {
-                              const d = JSON.parse(studentAnswers[currentStepOrder] || "{}");
-                              return d.symbol && d.fragment ? `${d.symbol} — ${d.fragment}` : "—";
-                            } catch { return studentAnswers[currentStepOrder] || "—"; }
-                          })()
-                        : (studentAnswers[currentStepOrder] || "—")}
+                  <div className="text-sm text-slate-800 font-medium">
+                    <StudentAnswerView stepType={currentStep.step_type} value={studentAnswers[currentStepOrder]} />
                   </div>
                 </div>
                 <div className="p-4 bg-emerald-50/40">
@@ -6568,8 +6662,12 @@ function StageStepByStep() {
                       ? "Принят эталонный вариант"
                       : "Принят ваш вариант"}
                 </div>
-                <div className="text-sm text-slate-700 whitespace-pre-line">
-                  {attempt.final_answer}
+                <div className="text-sm text-slate-700">
+                  {attempt.chose_system_variant ? (
+                    <span className="whitespace-pre-line">{attempt.final_answer}</span>
+                  ) : (
+                    <StudentAnswerView stepType={currentStep.step_type} value={attempt.final_answer} />
+                  )}
                 </div>
               </div>
             </div>

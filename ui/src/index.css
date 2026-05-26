@@ -544,3 +544,32 @@ input[type="number"].no-number-spin::-webkit-inner-spin-button {
     margin-left: 0 !important;
   }
 }
+
+/* ===== MathLive: поле ввода и read-only рендер формул ===== */
+math-field {
+  --primary: #4f46e5;            /* индиго-акцент курсора/выделения */
+  --selection-background-color: #e0e7ff;
+  --caret-color: #4f46e5;
+  font-family: inherit;
+}
+.formula-display {
+  font-size: 1.05em;
+  line-height: 1.4;
+}
+
+/* ===== MathLive: виртуальная матклавиатура (тема под приложение) ===== */
+body {
+  --keyboard-background: #ffffff;
+  --keyboard-border: #e2e8f0;
+  --keyboard-text: #1e293b;
+  --keyboard-accent-color: #4f46e5;
+  --keycap-background: #f8fafc;
+  --keycap-background-active: #e0e7ff;
+  --keycap-background-pressed: #c7d2fe;
+  --keycap-border: #e2e8f0;
+  --keycap-text: #1e293b;
+  --keycap-text-active: #4f46e5;
+  --keycap-secondary-background: #eef2ff;
+  --keycap-secondary-text: #4f46e5;
+  --keyboard-zindex: 10000;
+}

@@ -5353,9 +5353,36 @@ const encodeSolutionAnswer = (parts) =>
     reasoning: parts.reasoning || "",
   });
 
+// Построчный рендер: строка с обратным слешем (LaTeX) → настоящая математика,
+// иначе — обычный текст. Так один и тот же контент может смешивать формулы и прозу
+// (формульные строки эталона/ответа авторятся как LaTeX, прозаические — как есть).
+function MathText({ value, className = "" }) {
+  const raw = value == null ? "" : String(value);
+  const lines = raw.replace(/\r\n/g, "\n").split("\n");
+  return (
+    <div className={className}>
+      {lines.map((line, i) =>
+        line.includes("\\") ? (
+          <div key={i}>
+            <FormulaDisplay value={line} />
+          </div>
+        ) : (
+          <div key={i} className="whitespace-pre-wrap">{line || " "}</div>
+        )
+      )}
+    </div>
+  );
+}
+
+// Эталон учителя: тот же построчный рендер (формульные строки → математика).
+function ReferenceAnswerView({ value }) {
+  const raw = value == null ? "" : String(value);
+  if (!raw.trim()) return <span className="text-slate-400">—</span>;
+  return <MathText value={raw} />;
+}
+
 // Единый рендер ответа ученика для блоков «Твоё решение», «Сверьте с эталоном»,
-// «финальный ответ». Формульные части показываем как настоящую математику (FormulaDisplay),
-// эталон учителя НЕ трогаем (его формат произволен) — он рендерится отдельно как текст.
+// «финальный ответ». Формульные части показываем как настоящую математику.
 function StudentAnswerView({ stepType, value }) {
   const raw = value == null ? "" : String(value);
   if (!raw.trim()) return <span className="text-slate-400">—</span>;
@@ -5402,11 +5429,8 @@ function StudentAnswerView({ stepType, value }) {
     return <span>{raw === "yes" ? "Да" : raw === "no" ? "Нет" : raw}</span>;
   }
 
-  if (stepType === "text" || !stepType) {
-    return <FormulaDisplay value={raw} />;
-  }
-
-  return <span className="whitespace-pre-line">{raw}</span>;
+  // text / solution-как-эталон / прочее — построчно (формулы как математика).
+  return <MathText value={raw} />;
 }
 
 function StageStepByStep() {
@@ -6620,8 +6644,8 @@ function StageStepByStep() {
                 </div>
                 <div className="p-4 bg-emerald-50/40">
                   <div className="text-xs font-semibold text-emerald-600 uppercase tracking-wider mb-2">Эталон</div>
-                  <div className="text-sm text-slate-800 whitespace-pre-line font-medium">
-                    {attempt.reference_answer}
+                  <div className="text-sm text-slate-800 font-medium">
+                    <ReferenceAnswerView value={attempt.reference_answer} />
                   </div>
                   {attempt.reference_image_url && (
                     <img src={attempt.reference_image_url} alt="Эталон" className="mt-3 max-w-full rounded-lg" />
@@ -6664,7 +6688,7 @@ function StageStepByStep() {
                 </div>
                 <div className="text-sm text-slate-700">
                   {attempt.chose_system_variant ? (
-                    <span className="whitespace-pre-line">{attempt.final_answer}</span>
+                    <ReferenceAnswerView value={attempt.final_answer} />
                   ) : (
                     <StudentAnswerView stepType={currentStep.step_type} value={attempt.final_answer} />
                   )}

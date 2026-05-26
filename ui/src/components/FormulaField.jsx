@@ -26,6 +26,14 @@ function loadMathlive() {
           customElements.define("math-field", El);
         }
       }
+      // Упрощённая школьная клавиатура: только числовая раскладка
+      // (без вкладок sin/ln/∫, ∞≠∈, αβγ — лишних для 7–9 класса).
+      try {
+        const vk = (typeof window !== "undefined" && window.mathVirtualKeyboard) || ml.mathVirtualKeyboard;
+        if (vk) vk.layouts = ["numeric"];
+      } catch {
+        // не критично — останется раскладка по умолчанию
+      }
       return ml;
     });
   }

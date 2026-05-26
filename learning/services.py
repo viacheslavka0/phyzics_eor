@@ -205,29 +205,35 @@ class ComprehensionCheckService:
         return result
 
     def check_cloze(self, answers: dict) -> dict:
-        """Проверить заполнение пропусков."""
-        clozes = KSCloze.objects.filter(ks=self.ks).prefetch_related("blanks")
-        blanks = self.ks.ks_cloze_blanks or []
+        """Проверить заполнение пропусков (KSCloze модель)."""
+        clozes = KSCloze.objects.filter(ks=self.ks).order_by("order")
 
-        if not blanks:
-            return {"all_correct": False, "message": "Cloze не настроен"}
+        # Собираем все blanks из всех cloze-объектов
+        all_blanks = []
+        for cloze in clozes:
+            for blank in (cloze.blanks or []):
+                all_blanks.append(blank)
+
+        # Если cloze не настроен — считаем пройденным (не блокируем)
+        if not all_blanks:
+            return {"all_correct": True, "cloze_results": []}
 
         result = {
             "all_correct": True,
             "cloze_results": []
         }
 
-        for blank in blanks:
-            pos = str(blank["position"])
+        for blank in all_blanks:
+            pos = str(blank.get("position", ""))
             student = answers.get(pos, "").strip()
-            expected = blank["correct"].strip()
+            expected = blank.get("correct", "").strip()
 
-            is_correct = student.lower() == expected.lower()
+            is_correct = student.lower() == expected.lower() if expected else True
             if not is_correct:
                 result["all_correct"] = False
 
             result["cloze_results"].append({
-                "position": blank["position"],
+                "position": blank.get("position"),
                 "is_correct": is_correct,
                 "student_answer": student,
                 "correct_answer": expected if not is_correct else None,

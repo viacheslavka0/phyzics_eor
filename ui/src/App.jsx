@@ -2309,7 +2309,7 @@ function StageTypicalTask() {
                     : "border-dashed border-slate-300 bg-slate-50 hover:border-indigo-400 hover:bg-indigo-50"
           }`}
         >
-          {currentVal ? currentVal.trim() : <span className="text-slate-300 text-xs select-none font-normal">\u043D\u0430\u0436\u043C\u0438\u0442\u0435 \u0441\u043B\u043E\u0432\u043E</span>}
+          {currentVal ? currentVal.trim() : <span className="text-slate-300 text-xs select-none font-normal">нажмите слово</span>}
         </button>
       );
       lastIndex = regex.lastIndex;
@@ -3006,6 +3006,9 @@ function ErrorBranchingBlock({
       )
     );
     const isComplete = renderedPositions.every((pos) => !!scenarioAnswers[String(pos)]);
+    const totalBlanks = renderedPositions.length;
+    const filledBlanks = renderedPositions.filter((pos) => !!scenarioAnswers[String(pos)]).length;
+    const fillPercent = totalBlanks > 0 ? Math.round((filledBlanks / totalBlanks) * 100) : 0;
     const selectedScenarioWords = Object.values(scenarioAnswers).filter(Boolean);
     const scenarioWordUsage = selectedScenarioWords.reduce((acc, word) => {
       acc[word] = (acc[word] || 0) + 1;
@@ -3054,18 +3057,20 @@ function ErrorBranchingBlock({
             key={`slot-${pos}`}
             type="button"
             onClick={() => setActiveBlank(pos)}
+            onDoubleClick={() => setScenarioAnswers((prev) => ({ ...prev, [String(pos)]: "" }))}
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => handleDropWord(pos, e)}
             onDragEnter={() => setActiveBlank(pos)}
-            className={`inline-flex items-center mx-1 my-1 min-w-[120px] min-h-[32px] px-3 py-1.5 rounded-lg border text-sm text-left transition-colors ${
+            title="Двойной клик — очистить пропуск"
+            className={`inline-flex items-center justify-center gap-1 mx-1 my-1 min-w-[92px] min-h-[34px] px-3 py-1 rounded-lg border text-sm font-semibold text-center transition-all ${
               activeBlank === pos
-                ? "border-blue-500 bg-blue-50 text-blue-900"
+                ? "border-indigo-500 bg-indigo-50 text-indigo-900 ring-2 ring-indigo-200"
                 : selectedValue
                   ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-                  : "border-amber-300 bg-white text-slate-500"
+                  : "border-dashed border-amber-300 bg-white text-slate-400 hover:border-indigo-400 hover:bg-indigo-50/40"
             }`}
           >
-            {selectedValue ? selectedValue.trim() : <span className="text-slate-300 select-none">{"\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"}</span>}
+            {selectedValue ? selectedValue.trim() : <span className="text-slate-300 select-none">{"\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0"}</span>}
           </button>
         );
         cursor = regex.lastIndex;
@@ -3079,64 +3084,102 @@ function ErrorBranchingBlock({
     return (
       <FullScreenModal>
         <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-          <div className="p-6 border-b border-slate-100">
-            <h3 className="text-lg font-bold text-slate-900">Задание непростое. Нужно обдумать метод решения</h3>
-            <p className="text-sm text-slate-600 mt-2">
-              Вставьте слова из облака в шаги типового метода, затем вернитесь к задаче.
-            </p>
+          <div className="p-6 border-b border-slate-100 bg-gradient-to-br from-indigo-50 to-emerald-50/60">
+            <div className="flex items-start gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl flex-shrink-0">🧩</div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-bold text-slate-900">Собери метод решения</h3>
+                <p className="text-sm text-slate-600 mt-1">
+                  Перетащи слова из облака в пропуски — восстанови порядок действий, и снова за дело!
+                </p>
+              </div>
+            </div>
+            {/* Игровой прогресс сборки */}
+            <div className="mt-4 flex items-center gap-3">
+              <div className="flex-1 progress-bar">
+                <div className="progress-fill" style={{ width: `${fillPercent}%` }} />
+              </div>
+              <span className={`text-xs font-bold whitespace-nowrap ${isComplete ? "text-emerald-600" : "text-indigo-600"}`}>
+                {isComplete ? "Готово! 🎉" : `${filledBlanks} / ${totalBlanks} собрано`}
+              </span>
+            </div>
           </div>
           <div className="p-6 space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-4">
-              <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 leading-8 whitespace-pre-line">
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 leading-[2.4] whitespace-pre-line text-slate-800">
                 {renderScenarioText()}
               </div>
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                <p className="text-xs uppercase text-slate-500 mb-2">Слова справа</p>
-                <p className="text-xs text-slate-600 mb-3">
-                  Перетащите слово в пропуск слева или вставьте по клику.
+              <div className="rounded-xl border border-indigo-100 bg-gradient-to-b from-indigo-50/60 to-white p-4">
+                <p className="text-xs uppercase text-indigo-500 font-bold mb-2 flex items-center gap-1.5">
+                  <span className="text-sm">☁️</span> Облако слов
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  {remainingScenarioOptionWords.map((opt, idx) => (
-                    <button
-                      key={`${opt}-${idx}`}
-                      type="button"
-                      draggable
-                      onDragStart={(e) => {
-                        e.dataTransfer.setData("text/plain", opt.trim());
-                        e.dataTransfer.effectAllowed = "copy";
-                      }}
-                      onClick={() => handlePickWord(opt)}
-                      className="relative px-3 py-1.5 pr-7 rounded-full bg-white border border-slate-300 text-sm hover:border-blue-400"
-                    >
-                      {opt.trim()}
-                      {remainingScenarioOptionCounts[opt] > 1 && (
-                        <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-blue-600 text-white text-[10px] font-semibold flex items-center justify-center">
-                          {remainingScenarioOptionCounts[opt]}
-                        </span>
-                      )}
-                    </button>
-                  ))}
+                <p className="text-xs text-slate-500 mb-3">
+                  Перетащи слово в пропуск или вставь по клику. Двойной клик по пропуску — очистить.
+                </p>
+                {remainingScenarioOptionWords.length === 0 ? (
+                  <div className="text-center py-6 text-emerald-600 text-sm font-semibold">
+                    ✓ Все слова расставлены!
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-2">
+                    {remainingScenarioOptionWords.map((opt, idx) => (
+                      <button
+                        key={`${opt}-${idx}`}
+                        type="button"
+                        draggable
+                        onDragStart={(e) => {
+                          e.dataTransfer.setData("text/plain", opt.trim());
+                          e.dataTransfer.effectAllowed = "copy";
+                        }}
+                        onClick={() => handlePickWord(opt)}
+                        className="relative px-3.5 py-2 pr-7 rounded-full bg-white border border-slate-200 text-sm font-medium text-slate-700 shadow-sm cursor-grab active:cursor-grabbing hover:border-indigo-400 hover:bg-indigo-50 hover:-translate-y-0.5 hover:shadow-md transition-all"
+                      >
+                        {opt.trim()}
+                        {remainingScenarioOptionCounts[opt] > 1 && (
+                          <span className="absolute -top-1.5 -right-1.5 min-w-5 h-5 px-1 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center shadow">
+                            {remainingScenarioOptionCounts[opt]}
+                          </span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <div className="mt-4 flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (activeBlank === null || activeBlank === undefined) return;
+                      setScenarioAnswers((prev) => ({ ...prev, [String(activeBlank)]: "" }));
+                    }}
+                    className="text-xs text-slate-600 hover:text-slate-900 underline"
+                  >
+                    Очистить выбранный
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setScenarioAnswers({})}
+                    className="text-xs text-rose-600 hover:text-rose-800 underline"
+                  >
+                    Очистить все
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (activeBlank === null || activeBlank === undefined) return;
-                    setScenarioAnswers((prev) => ({ ...prev, [String(activeBlank)]: "" }));
-                  }}
-                  className="mt-4 text-xs text-slate-600 hover:text-slate-900 underline"
-                >
-                  Очистить выбранный пропуск
-                </button>
               </div>
             </div>
             {scenarioChecked && (
-              <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-emerald-800 text-sm">
-                Отлично! Метод восстановлен, можно продолжить решение.
+              <div className="rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-emerald-50 to-teal-50 p-5 flex items-center gap-4 animate-bounceIn">
+                <div className="celebration-ring !w-14 !h-14 flex-shrink-0">
+                  <span className="text-2xl">🎉</span>
+                </div>
+                <div>
+                  <p className="font-bold text-emerald-800">Метод собран верно!</p>
+                  <p className="text-sm text-emerald-700 mt-0.5">Отличная работа — теперь ты знаешь порядок действий. Возвращаемся к задаче!</p>
+                </div>
               </div>
             )}
             {!!scenarioCheckMessage && !scenarioChecked && (
-              <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-red-700 text-sm">
-                {scenarioCheckMessage}
+              <div className="feedback-wrong animate-shake flex items-center gap-2.5">
+                <span className="text-xl">🤔</span>
+                <p className="text-rose-800 text-sm font-medium">{scenarioCheckMessage}</p>
               </div>
             )}
           </div>
@@ -3305,6 +3348,7 @@ function StageTaskList() {
   const [pendingDifficulty, setPendingDifficulty] = useState("");
   const [savingDifficulty, setSavingDifficulty] = useState(false);
   const [result, setResult] = useState(null);
+  const resultRef = useRef(null);
   const [showSolution, setShowSolution] = useState(false);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -3388,6 +3432,17 @@ function StageTaskList() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.id]);
+
+  // Автоскролл к обратной связи и кнопке «Далее» после проверки ответа
+  // (на маленьких экранах ученик не видел, что ответ принят и нужно нажать кнопку)
+  useEffect(() => {
+    if (result && resultRef.current) {
+      const t = setTimeout(() => {
+        resultRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 120);
+      return () => clearTimeout(t);
+    }
+  }, [result]);
 
   const handleSubmit = async () => {
     if (!currentTask || !answer?.trim()) return;
@@ -3920,7 +3975,7 @@ function StageTaskList() {
                       : "Отправить ответ"}
                 </button>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-4" ref={resultRef}>
             {result?.is_final_grade_task ? (
               <>
                 <div className="rounded-xl p-6 bg-blue-50 border-2 border-blue-200">
@@ -5298,6 +5353,7 @@ function StageStepByStep() {
   const [showFullSymbolPalette, setShowFullSymbolPalette] = useState(false);
   const [activeSolutionField, setActiveSolutionField] = useState("formula");
   const [showSiField, setShowSiField] = useState(false);
+  const [showRecap, setShowRecap] = useState(true);
 
   useEffect(() => {
     const storedTaskId = window.localStorage.getItem(STEP_BY_STEP_TASK_KEY);
@@ -5578,6 +5634,28 @@ function StageStepByStep() {
     return !!stepAttempt?.final_answer;
   }) || false;
 
+  // Накопленное решение: все завершённые шаги с их финальными ответами,
+  // чтобы ученик мог в любой момент посмотреть составленные ранее уравнения,
+  // «Дано/Найти» и схему, не возвращаясь назад.
+  const completedStepsRecap = activeSteps.filter(
+    (s) => stepAttempts[s.order]?.final_answer
+  );
+
+  // Автоскролл к результату проверки шага (сравнение с эталоном),
+  // чтобы на маленьком экране ученик сразу видел обратную связь.
+  const stepResultRef = useRef(null);
+  useEffect(() => {
+    const step = activeSteps[currentStepIndex];
+    if (!step) return;
+    const att = stepAttempts[step.order];
+    if (att && stepResultRef.current) {
+      const t = setTimeout(() => {
+        stepResultRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 120);
+      return () => clearTimeout(t);
+    }
+  }, [stepAttempts, currentStepIndex, activeSteps]);
+
   const hasCompletedSchemaSteps = taskData?.steps?.some(
     (s) => s.step_type === "schema" && stepAttempts[s.order]?.final_answer
   ) || false;
@@ -5722,6 +5800,92 @@ function StageStepByStep() {
                     <span className="text-lg leading-none mt-0.5">📋</span>
                     <span className="font-semibold">{taskData.method.title}</span>
                   </div>
+                )}
+              </div>
+
+              {/* Накопленное решение — всё, что ученик уже собрал по шагам */}
+              <div className="card p-4">
+                <button
+                  type="button"
+                  onClick={() => setShowRecap((v) => !v)}
+                  className="w-full flex items-center justify-between mb-3"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">🧩</span>
+                    <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Твоё решение</h3>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                      {completedStepsRecap.length} / {activeSteps.length}
+                    </span>
+                    <svg
+                      className={`w-4 h-4 text-slate-400 transition-transform ${showRecap ? "rotate-180" : ""}`}
+                      fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </button>
+
+                {!showRecap ? null : completedStepsRecap.length === 0 ? (
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    Здесь будут собираться твои ответы — уравнения, «Дано/Найти», расчёты.
+                    Они останутся на виду, когда перейдёшь к следующим шагам.
+                  </p>
+                ) : (
+                  <ol className="space-y-2">
+                    {completedStepsRecap.map((s) => {
+                      const att = stepAttempts[s.order];
+                      const isCurrentRecap = s.order === currentStepOrder;
+                      const symbolEntriesForStep = symbolEntries[s.order] || [];
+                      const isSymbolRecap = s.step_type === "symbol" && symbolEntriesForStep.length > 0;
+                      return (
+                        <li key={s.order}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const idx = activeSteps.findIndex((x) => x.order === s.order);
+                              if (idx >= 0) setCurrentStepIndex(idx);
+                            }}
+                            className={`w-full text-left rounded-xl border px-3 py-2.5 transition-colors ${
+                              isCurrentRecap
+                                ? "border-indigo-300 bg-indigo-50/60"
+                                : "border-slate-200 bg-white hover:border-indigo-200 hover:bg-slate-50"
+                            }`}
+                          >
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="flex h-5 w-5 items-center justify-center rounded-md bg-emerald-500 text-white text-[10px] font-bold flex-shrink-0">
+                                {s.order}
+                              </span>
+                              <span className="text-xs font-semibold text-slate-700 leading-tight">{s.title}</span>
+                            </div>
+                            {isSymbolRecap ? (
+                              <div className="pl-7 flex flex-wrap gap-1">
+                                {symbolEntriesForStep.map((e, i) => (
+                                  <span
+                                    key={i}
+                                    className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-mono ${
+                                      e.isTarget
+                                        ? "bg-indigo-50 text-indigo-700 border border-indigo-200"
+                                        : "bg-emerald-50 text-emerald-700 border border-emerald-100"
+                                    }`}
+                                  >
+                                    <span className="font-semibold">{e.symbol}</span>
+                                    <span className="text-slate-400">{e.isTarget ? "— ?" : "="}</span>
+                                    {!e.isTarget && <span className="text-slate-600">{e.fragment}</span>}
+                                  </span>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="pl-7 text-[11px] text-slate-600 whitespace-pre-line font-mono leading-snug break-words">
+                                {att.final_answer}
+                              </p>
+                            )}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ol>
                 )}
               </div>
 
@@ -6337,7 +6501,7 @@ function StageStepByStep() {
 
           {/* Результат проверки — сравнение с эталоном */}
           {attempt && !attempt.final_answer && (
-            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm mb-5 overflow-hidden">
+            <div ref={stepResultRef} className="rounded-2xl border border-slate-200 bg-white shadow-sm mb-5 overflow-hidden">
               {/* Заголовок */}
               <div className="px-5 py-3 bg-slate-50 border-b border-slate-200">
                 <p className="text-sm font-semibold text-slate-800">Сверьте свой ответ с эталоном</p>

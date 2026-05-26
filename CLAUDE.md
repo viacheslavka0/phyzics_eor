@@ -321,6 +321,90 @@ This logic is in `services.py` and **must not be changed** without careful testi
 
 ---
 
+## Известные баги (не повторять!)
+
+### ❌ BUG #1: `KnowledgeSystem` не имеет поля `ks_cloze_blanks`
+
+**Что случилось:** В `services.py` метод `check_cloze` обращался к `self.ks.ks_cloze_blanks` — несуществующему полю модели. Это давало `AttributeError` → `HTTP 500`.
+
+**Правило:** Данные cloze (пропуски) хранятся **не в поле KnowledgeSystem**, а в **отдельной модели `KSCloze`** (FK → KnowledgeSystem, related_name="clozes"). Структура:
+```python
+KSCloze:
+  ks          → ForeignKey(KnowledgeSystem, related_name="clozes")
+  marked_text → TextField  # текст с маркерами {{0}}, {{1}}, ...
+  blanks      → JSONField  # [{"position": 0, "correct": "слово"}, ...]
+  distractors → JSONField  # ["лишнее1", "лишнее2"]
+```
+
+**Правильный способ получить blanks:**
+```python
+clozes = KSCloze.objects.filter(ks=self.ks).order_by("order")
+all_blanks = [blank for cloze in clozes for blank in (cloze.blanks or [])]
+```
+
+**Никогда не писать:** `self.ks.ks_cloze_blanks` — такого поля не существует.
+
+---
+
+### ❌ BUG #2: Mismatch формата mappings между frontend и backend
+
+**Что случилось:** Frontend отправлял `mappings` как список объектов, а backend ожидал словарь.
+
+**Frontend отправляет:**
+```json
+[{"question_id": 1, "selected_zone_ids": [2, 3]}, ...]
+```
+
+**Backend (services.py) ожидает:**
+```python
+{"1": [2, 3], ...}  # dict вида {str(question_id): [zone_ids]}
+```
+
+**Правило:** В `views.py` в методе `check` всегда конвертировать перед передачей в сервис:
+```python
+mappings = {}
+for item in mappings_raw:  # mappings_raw — список от фронтенда
+    q_id = item.get("question_id")
+    if q_id is not None:
+        mappings[str(q_id)] = item.get("selected_zone_ids", [])
+```
+
+---
+
+### ❌ BUG #3: Python 3.9 не поддерживает `X | Y` type union синтаксис
+
+**Что случилось:** На продакшн сервере Python 3.12, но локально Python 3.9. Код `str | None` и `list[str] | None` — это синтаксис Python 3.10+.
+
+**Правило:** Всегда использовать `Optional[X]` из `typing`:
+```python
+from typing import Optional, List
+def foo(x: Optional[str] = None) -> List[str]: ...
+# НЕ: def foo(x: str | None = None) -> list[str]: ...
+```
+
+### ❌ BUG #4: Unicode-escape последовательности (`н...`) в JSX как placeholder-текст
+
+**Что случилось:** В `App.jsx` placeholder для пустого cloze-пропуска был написан как `нажмите слово` прямо в JSX-разметке (не внутри `{}`). В JSX `\uXXXX` — это НЕ Unicode escape, это буквально обратный слеш + u + цифры. Пользователи видели сырые escape-коды вместо текста.
+
+**Правило:** В JSX-строках (не в `{}`) нельзя использовать `\uXXXX` для Unicode. Варианты:
+```jsx
+// ✅ Правильно — кириллица напрямую:
+<span>нажмите слово</span>
+
+// ✅ Правильно — через JS-выражение:
+<span>{"нажмите слово"}</span>
+
+// ✅ Правильно — HTML entity:
+<span>&#x043D;&#x0430;&#x0436;&#x043C;&#x0438;&#x0442;&#x0435; &#x0441;&#x043B;&#x043E;&#x0432;&#x043E;</span>
+
+// ❌ Неправильно — в JSX это литеральный текст:
+<span>нажмите слово</span>
+```
+
+**Файл:** `ui/src/App.jsx` (~строка 2312, placeholder в `renderClozeText`)
+
+---
+
 ## Common Pitfalls & How to Avoid Them
 
 1. **Changing `STAGES` constant** → Breaks backend routing

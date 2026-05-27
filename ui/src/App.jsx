@@ -4054,7 +4054,7 @@ function StageTaskList() {
                         )}
                         {result.solution_image_url && (
                           <div>
-                            <p className="text-sm font-medium text-slate-600 mb-2">Схема решения:</p>
+                            <p className="text-sm font-medium text-slate-600 mb-2">Рисунок к решению:</p>
                             <img 
                               src={result.solution_image_url} 
                               alt="Решение" 
@@ -4079,7 +4079,7 @@ function StageTaskList() {
                                       )}
                                       {step.step_type === "schema" && step.schema_data && (
                                         <div className="mt-3">
-                                          <Suspense fallback={<div className="text-sm text-slate-500">Загрузка схемы...</div>}>
+                                          <Suspense fallback={<div className="text-sm text-slate-500">Загрузка модели ситуации...</div>}>
                                             <div className="border border-slate-300 rounded-lg overflow-hidden bg-white">
                                               <SchemaEditor
                                                 initialData={step.schema_data}
@@ -6000,7 +6000,7 @@ function StageStepByStep() {
                   >
                     <div className="flex items-center gap-2">
                       <span className="text-xl">📐</span>
-                      <span className="font-semibold text-purple-900 text-sm">Моя схема</span>
+                      <span className="font-semibold text-purple-900 text-sm">Моя модель ситуации</span>
                     </div>
                     <svg
                       className={`w-5 h-5 text-purple-400 transition-transform ${showMySchema ? "rotate-180" : ""}`}
@@ -6025,7 +6025,7 @@ function StageStepByStep() {
                         </Suspense>
                       ) : (
                         <div className="text-center py-6 text-slate-400 text-sm">
-                          Схема ещё не сохранена. Постройте её на шагах 2–4.
+                          Модель ситуации ещё не сохранена. Постройте её на шагах 2–4.
                         </div>
                       )}
                     </div>
@@ -6175,8 +6175,8 @@ function StageStepByStep() {
             {currentStep.step_type === "schema" && (
               <div className="space-y-4">
                 <div className="text-sm text-slate-700">
-                  На этом шаге построй свою схему ситуации. Когда закончишь, нажми кнопку ниже — система покажет эталонную
-                  схему для сравнения, и ты сможешь выбрать: перейти дальше или доработать свою схему.
+                  На этом шаге построй свою модель ситуации. Когда закончишь, нажми кнопку ниже — система покажет эталонную
+                  модель для сравнения, и ты сможешь выбрать: перейти дальше или доработать свою.
                 </div>
 
                 {/* Схема ученика (живой редактор, сохраняется в сессию) */}
@@ -6753,15 +6753,15 @@ function StageStepByStep() {
         <FullScreenModal>
           <div className="bg-white rounded-2xl shadow-2xl max-w-5xl w-full mx-4 max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-slate-100">
-              <h3 className="text-lg font-bold text-slate-900 mb-1">Сравните схему с эталоном</h3>
+              <h3 className="text-lg font-bold text-slate-900 mb-1">Сравните модель ситуации с эталоном</h3>
               <p className="text-sm text-slate-600">
-                Слева — схема, которую вы построили. Справа — эталонная схема учителя. Если схемы передают одну и ту же
-                ситуацию, можете перейти к следующему шагу. Если нет — вернитесь и поправьте свою схему.
+                Слева — модель, которую вы построили. Справа — эталонная модель учителя. Если они передают одну и ту же
+                ситуацию, можете перейти к следующему шагу. Если нет — вернитесь и поправьте свою.
               </p>
             </div>
             <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <div className="text-xs text-slate-500 mb-2">Ваша схема</div>
+                <div className="text-xs text-slate-500 mb-2">Ваша модель ситуации</div>
                 <div className="border border-slate-200 rounded-xl bg-slate-50 p-3">
                   {schemaStudentSnapshot && schemaStudentSnapshot.elements && schemaStudentSnapshot.elements.length > 0 ? (
                     <Suspense
@@ -6783,13 +6783,13 @@ function StageStepByStep() {
                     </Suspense>
                   ) : (
                     <div className="flex items-center justify-center h-64 text-slate-400 text-sm">
-                      Вы ещё не сохранили свою схему. Нажмите «Сохранить» в редакторе схемы.
+                      Вы ещё не сохранили свою модель ситуации. Нажмите «Сохранить» в редакторе.
                     </div>
                   )}
                 </div>
               </div>
               <div>
-                <div className="text-xs text-slate-500 mb-2">Эталонная схема учителя</div>
+                <div className="text-xs text-slate-500 mb-2">Эталонная модель ситуации учителя</div>
                 <div className="border border-slate-200 rounded-xl bg-slate-50 p-3">
                   {currentStep.reference_solution?.schema_data?.elements?.length > 0 ? (
                     <Suspense
@@ -6811,7 +6811,7 @@ function StageStepByStep() {
                     </Suspense>
                   ) : (
                     <div className="flex items-center justify-center h-64 text-slate-400 text-sm">
-                      Эталонная схема не заполнена учителем
+                      Эталонная модель ситуации не заполнена учителем
                     </div>
                   )}
                 </div>
@@ -6826,7 +6826,7 @@ function StageStepByStep() {
                 }}
                 className="btn-secondary w-full md:w-auto"
               >
-                Нет, хочу ещё поправить схему
+                Нет, хочу ещё поправить модель
               </button>
               <button
                 type="button"
@@ -6836,7 +6836,7 @@ function StageStepByStep() {
                     ...stepAttempts,
                     [currentStepOrder]: {
                       ...(stepAttempts[currentStepOrder] || {}),
-                      final_answer: "(схема построена и подтверждена)",
+                      final_answer: "(модель ситуации построена и подтверждена)",
                       is_correct: true,
                     },
                   });
@@ -6845,7 +6845,7 @@ function StageStepByStep() {
                 }}
                 className="btn-primary w-full md:w-auto"
               >
-                Да, схема правильная →
+                Да, модель ситуации верна
               </button>
             </div>
           </div>
@@ -7143,7 +7143,7 @@ function SchemaEditorSection({ taskId, sessionId, onSchemaSaved }) {
       setSaved(true);
     } catch (e) {
       console.error("Failed to save schema:", e);
-      alert("Ошибка сохранения схемы");
+      alert("Ошибка сохранения модели ситуации");
     } finally {
       setSaving(false);
     }
@@ -7160,7 +7160,7 @@ function SchemaEditorSection({ taskId, sessionId, onSchemaSaved }) {
           <span className="text-2xl">📐</span>
           <div className="text-left">
             <span className="font-semibold text-purple-900">Модель ситуации</span>
-            <p className="text-xs text-purple-600">Постройте схему к задаче перед решением</p>
+            <p className="text-xs text-purple-600">Постройте модель ситуации к задаче перед решением</p>
           </div>
         </div>
         <div className="flex items-center gap-2">

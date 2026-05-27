@@ -57,6 +57,7 @@ const STAGES = {
   solving_hard: { label: "Решение задач", icon: "✏️", order: 7 },
   method_composition: { label: "Метод решения", icon: "🧩", order: 8 },
   step_by_step: { label: "По шагам", icon: "👣", order: 9 },
+  compact_solving: { label: "Своими словами", icon: "📝", order: 9 },
   completed: { label: "Завершено", icon: "🎉", order: 10 },
 };
 
@@ -1238,6 +1239,7 @@ function LearningContent() {
         {(stage === "solving_easy" || stage === "solving_medium" || stage === "solving_hard") && <StageSolving />}
         {stage === "method_composition" && <StageMethodComposition />}
         {stage === "step_by_step" && <StageStepByStep />}
+        {stage === "compact_solving" && <StageCompactSolving />}
         {stage === "completed" && <StageCompleted />}
       </div>
     </div>
@@ -5431,6 +5433,240 @@ function StudentAnswerView({ stepType, value }) {
 
   // text / solution-как-эталон / прочее — построчно (формулы как математика).
   return <MathText value={raw} />;
+}
+
+// ============================================================================
+// STAGE: COMPACT SOLVING (свёрнутый вариант, S1) — «реши своими словами»
+// ============================================================================
+function StageCompactSolving() {
+  const { session, updateSession } = useApp();
+  const [taskId, setTaskId] = useState(null);
+  const [data, setData] = useState(null); // {task, blocks}
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  // Ввод ученика (всё необязательно).
+  const [given, setGiven] = useState("");
+  const [equation, setEquation] = useState("");
+  const [solution, setSolution] = useState("");
+  const [answerNum, setAnswerNum] = useState("");
+  const [answerUnit, setAnswerUnit] = useState("");
+  const [checking, setChecking] = useState(false);
+  const [compare, setCompare] = useState(false);
+  const [matched, setMatched] = useState({}); // {blockKey: true} — «у меня так же»
+  const [offerFull, setOfferFull] = useState(false);
+
+  useEffect(() => {
+    if (!session?.id) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        setLoading(true);
+        const r = await fetch(`/api/session/${session.id}/next_task/`);
+        const d = await r.json();
+        const tid = d.task?.id;
+        if (!tid) { if (!cancelled) { setError("Нет доступной задачи"); setLoading(false); } return; }
+        const cr = await fetch(`/api/task/${tid}/compact_solution/`);
+        if (!cr.ok) throw new Error("Не удалось загрузить эталон");
+        const cd = await cr.json();
+        if (cancelled) return;
+        setTaskId(tid);
+        setData(cd);
+        const units = cd.task?.allowed_answer_units || [];
+        setAnswerUnit(units[0] || cd.task?.answer_unit || "");
+      } catch (e) {
+        if (!cancelled) setError(e.message);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [session?.id]);
+
+  const refBlocks = data?.blocks || [];
+  const refByKey = Object.fromEntries(refBlocks.map((b) => [b.key, b]));
+
+  const goStage = async (nextStage) => {
+    await ensureCSRFCookie();
+    await fetch(`/api/session/${session.id}/advance_stage/`, {
+      method: "POST", credentials: "include",
+      headers: { "Content-Type": "application/json", "X-CSRFToken": getCSRFCookie() },
+      body: JSON.stringify({ next_stage: nextStage }),
+    });
+    await updateSession();
+  };
+
+  // Переход к следующей задаче после финализации свёрнутого.
+  const advanceNext = async () => {
+    try {
+      const r = await fetch(`/api/session/${session.id}/next_task/`);
+      const d = await r.json();
+      if (d.is_completed) { await goStage("completed"); return; }
+      if (d.offer_practice_choice) { await updateSession(); return; } // развилку покажет solving-поток
+      const nextStage = d.support_stage || "task_list";
+      await goStage(nextStage);
+    } catch (e) {
+      console.error("compact advance failed", e);
+      await updateSession();
+    }
+  };
+
+  const submitCompact = async (acceptReference) => {
+    setChecking(true);
+    try {
+      await ensureCSRFCookie();
+      const matchedCount = Object.values(matched).filter(Boolean).length;
+      const res = await fetch(`/api/task/${taskId}/complete_compact/`, {
+        method: "POST", credentials: "include",
+        headers: { "Content-Type": "application/json", "X-CSRFToken": getCSRFCookie() },
+        body: JSON.stringify({
+          session_id: session.id,
+          matched_count: matchedCount,
+          answer_numeric: answerNum === "" ? null : Number(String(answerNum).replace(",", ".")),
+          answer_unit: answerUnit,
+          accept_reference: !!acceptReference,
+        }),
+      });
+      const out = await res.json();
+      if (out.clean || acceptReference) {
+        await advanceNext();
+      } else if (out.force_full) {
+        await goStage("step_by_step");
+      } else {
+        setOfferFull(true);
+      }
+    } catch (e) {
+      alert("Ошибка проверки: " + e.message);
+    } finally {
+      setChecking(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="max-w-3xl mx-auto text-center py-12">
+        <div className="animate-spin w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full mx-auto mb-4" />
+        <p className="text-slate-600">Загрузка задачи…</p>
+      </div>
+    );
+  }
+  if (error || !data) {
+    return (
+      <div className="max-w-3xl mx-auto card p-8 text-center">
+        <p className="text-rose-600 mb-4">{error || "Задача не найдена"}</p>
+        <button onClick={() => goStage("task_list")} className="btn-primary">Продолжить</button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-3xl mx-auto">
+      <div className="card p-6 md:p-8 mb-6">
+        <div className="eora-screen-header">
+          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Реши своими словами</h2>
+          <p className="eora-screen-lead">
+            Запиши решение так, как считаешь нужным — заполнять все поля необязательно. Когда будешь готов, сверишь с образцом.
+          </p>
+        </div>
+
+        <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 mb-5">
+          <p className="text-slate-800 leading-relaxed">{data.task.text}</p>
+        </div>
+
+        {/* 1. Модель ситуации */}
+        <SchemaEditorSection taskId={taskId} sessionId={session?.id} onSchemaSaved={() => {}} />
+
+        {/* 2. Дано / Найти */}
+        <div className="mb-5">
+          <label className="block text-sm font-semibold text-slate-800 mb-1">Дано / Найти</label>
+          <FormulaField key={`cg-${taskId}`} value={given} onChange={setGiven} placeholder="Что известно и что найти…" minHeight="56px" ariaLabel="Дано и найти" />
+        </div>
+
+        {/* 3. Уравнение */}
+        <div className="mb-5">
+          <label className="block text-sm font-semibold text-slate-800 mb-1">Уравнение</label>
+          <FormulaField key={`ce-${taskId}`} value={equation} onChange={setEquation} placeholder="Например: S = v · t" minHeight="56px" ariaLabel="Уравнение" />
+        </div>
+
+        {/* 4. Решение и ответ */}
+        <div className="mb-2">
+          <label className="block text-sm font-semibold text-slate-800 mb-1">Решение и ответ</label>
+          <FormulaField key={`cs-${taskId}`} value={solution} onChange={setSolution} placeholder="Подставь значения и вычисли…" minHeight="64px" ariaLabel="Решение" />
+        </div>
+        <div className="flex items-center gap-2 mb-6">
+          <span className="text-sm text-slate-600">Ответ:</span>
+          <NumericAnswerInput value={answerNum} onChange={setAnswerNum} placeholder="число" className="w-32" aria-label="Числовой ответ" />
+          <input type="text" value={answerUnit} onChange={(e) => setAnswerUnit(e.target.value)} placeholder="ед." className="input w-24" aria-label="Единицы" />
+        </div>
+
+        {!compare ? (
+          <div className="flex justify-end">
+            <button onClick={() => setCompare(true)} className="btn-primary btn-lg">Сверить с образцом</button>
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+            <div className="px-5 py-3 bg-slate-50 border-b border-slate-200">
+              <p className="text-sm font-semibold text-slate-800">Сверь каждый блок с образцом и отметь, где у тебя так же</p>
+            </div>
+            <div className="divide-y divide-slate-100">
+              {[
+                ["model", "Модель ситуации", null],
+                ["given", "Дано / Найти", given],
+                ["equation", "Уравнение", equation],
+                ["solution", "Решение и ответ", solution],
+              ].map(([key, title, mine]) => {
+                const ref = refByKey[key];
+                return (
+                  <div key={key} className="p-4">
+                    <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">{title}</div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                      <div>
+                        <div className="text-[11px] text-slate-400 mb-1">У тебя</div>
+                        {key === "model" ? (
+                          <div className="text-sm text-slate-500 italic">модель ситуации построена выше</div>
+                        ) : (
+                          <div className="text-sm text-slate-800"><MathText value={mine || "—"} /></div>
+                        )}
+                      </div>
+                      <div className="bg-emerald-50/40 rounded-lg p-2">
+                        <div className="text-[11px] text-emerald-600 mb-1">Образец</div>
+                        {ref?.kind === "schema" ? (
+                          <div className="text-sm text-slate-500 italic">см. модель учителя</div>
+                        ) : (
+                          <div className="text-sm text-slate-800"><MathText value={ref?.content || "—"} /></div>
+                        )}
+                      </div>
+                    </div>
+                    <label className="inline-flex items-center gap-2 text-sm cursor-pointer">
+                      <input type="checkbox" checked={!!matched[key]} onChange={(e) => setMatched({ ...matched, [key]: e.target.checked })} className="w-4 h-4 accent-emerald-600" />
+                      <span className="text-slate-700">У меня так же</span>
+                    </label>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="px-5 py-4 bg-slate-50 border-t border-slate-200 flex justify-end">
+              <button onClick={() => submitCompact(false)} disabled={checking} className="btn-primary btn-lg disabled:opacity-50">
+                {checking ? "Проверяем…" : "Готово"}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {offerFull && (
+        <FullScreenModal>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 text-center">
+            <h3 className="text-xl font-bold text-slate-900 mb-2">Разберём подробно?</h3>
+            <p className="text-slate-600 mb-6">Похоже, эта задача далась непросто. Хочешь разобрать её по шагам?</p>
+            <div className="flex flex-col gap-3">
+              <button onClick={() => { setOfferFull(false); goStage("step_by_step"); }} className="btn-primary btn-lg">Да, разобрать по шагам</button>
+              <button onClick={() => { setOfferFull(false); submitCompact(true); }} className="btn-secondary">Нет, идём дальше</button>
+            </div>
+          </div>
+        </FullScreenModal>
+      )}
+    </div>
+  );
 }
 
 function StageStepByStep() {

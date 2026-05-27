@@ -1115,7 +1115,25 @@ class LearningSession(models.Model):
         blank=True,
         help_text="История ошибок по шагам: {step_order: error_count}",
     )
-    
+
+    # --- Адаптивная шкала опоры (поэтапное формирование по Гальперину) ---
+    support_level = models.PositiveSmallIntegerField(
+        default=0,
+        help_text="Уровень опоры: 0 — самостоятельно, 1 — свёрнутый вариант, 2 — пооперационный контроль",
+    )
+    compact_fail_streak = models.PositiveSmallIntegerField(
+        default=0,
+        help_text="Сколько свёрнутых вариантов подряд не пройдено чисто (для назначения полного контроля)",
+    )
+    control_choice_offered = models.BooleanField(
+        default=False,
+        help_text="Предлагали ли ученику выбор «контрольная / ещё задача» перед последней задачей",
+    )
+    last_task_clean = models.BooleanField(
+        default=True,
+        help_text="Прошлая задача пройдена без срабатывания опоры (для расчёта переноса уровня)",
+    )
+
     # Итог
     score_percent = models.FloatField(default=0)
     passed = models.BooleanField(default=False)

@@ -34,6 +34,23 @@ def _compute_next_support_level(prev_level, last_clean, compact_fail_streak):
     return 0, 0
 
 
+def _apply_support_carry(session):
+    """Вызывается при ЗАВЕРШЕНИИ задачи: считает уровень опоры для СЛЕДУЮЩЕЙ задачи
+    и записывает в сессию. Идемпотентность обеспечивается тем, что зовётся один раз
+    на завершение (в точках complete/submit). Активно только при SCAFFOLD_V2."""
+    if not _scaffold_v2_enabled():
+        return
+    nl, ns = _compute_next_support_level(
+        session.support_level, session.last_task_clean, session.compact_fail_streak
+    )
+    # После задачи 1 даём шанс: задача 2 всегда стартует самостоятельно (S0).
+    if session.tasks_solved_count <= 1:
+        nl, ns = 0, 0
+    session.support_level = nl
+    session.compact_fail_streak = ns
+    session.last_task_clean = True
+
+
 def csrf(request):
     """Явно устанавливает CSRF cookie и возвращает токен."""
     return JsonResponse({"csrfToken": get_token(request)})
@@ -355,6 +372,7 @@ ALLOWED_STAGES = {
     "solving_hard",
     "method_composition",
     "step_by_step",
+    "compact_solving",
     "completed",
 }
 
@@ -363,13 +381,14 @@ ALLOWED_STAGE_TRANSITIONS = {
     "typical_task": {"learning_path_choice", "task_preview", "task_list"},
     "learning_path_choice": {"task_preview", "task_list"},
     "task_preview": {"task_list", "difficulty_assessment"},
-    "difficulty_assessment": {"solving_easy", "solving_medium", "solving_hard", "method_composition", "step_by_step"},
+    "difficulty_assessment": {"solving_easy", "solving_medium", "solving_hard", "method_composition", "step_by_step", "compact_solving"},
     "method_composition": {"step_by_step", "solving_medium", "task_list"},
-    "task_list": {"step_by_step", "solving_easy", "solving_medium", "solving_hard", "method_composition", "completed"},
-    "solving_easy": {"task_list", "step_by_step", "completed"},
-    "solving_medium": {"task_list", "step_by_step", "completed"},
-    "solving_hard": {"task_list", "step_by_step", "completed"},
-    "step_by_step": {"task_list", "step_by_step", "solving_easy", "solving_medium", "solving_hard", "completed"},
+    "task_list": {"step_by_step", "compact_solving", "solving_easy", "solving_medium", "solving_hard", "method_composition", "completed"},
+    "solving_easy": {"task_list", "step_by_step", "compact_solving", "completed"},
+    "solving_medium": {"task_list", "step_by_step", "compact_solving", "completed"},
+    "solving_hard": {"task_list", "step_by_step", "compact_solving", "completed"},
+    "step_by_step": {"task_list", "step_by_step", "compact_solving", "solving_easy", "solving_medium", "solving_hard", "completed"},
+    "compact_solving": {"task_list", "step_by_step", "compact_solving", "solving_easy", "solving_medium", "solving_hard", "completed"},
     "completed": {"completed"},
 }
 
@@ -1336,6 +1355,48 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
         # Пока берем первую подходящую
         next_task = available_tasks.first()
 
+        # --- Шкала опоры (SCAFFOLD_V2) ---
+        support_stage = None
+        if _scaffold_v2_enabled():
+            is_last = (session.tasks_solved_count + 1) >= session.target_tasks_count
+            chosen_id = request.query_params.get("chosen_task_id")
+            proceed_control = request.query_params.get("proceed_control")
+
+            # Развилка перед контрольной: предлагаем выбрать ещё задачу (один раз).
+            if is_last and session.support_level > 0 and not session.control_choice_offered \
+                    and not chosen_id and not proceed_control:
+                remaining = list(
+                    all_tasks.exclude(id__in=solved_task_ids)
+                    .values("id", "order", "title")
+                )
+                return Response({
+                    "offer_practice_choice": True,
+                    "remaining_tasks_list": remaining,
+                    "current_task_index": session.current_task_index,
+                    "tasks_solved": session.tasks_solved_count,
+                    "target_tasks_count": session.target_tasks_count,
+                }, status=status.HTTP_200_OK)
+
+            # Ученик выбрал конкретную задачу для самостоятельной тренировки.
+            if chosen_id:
+                picked = all_tasks.exclude(id__in=solved_task_ids).filter(id=chosen_id).first()
+                if picked:
+                    next_task = picked
+                session.control_choice_offered = True
+                session.save(update_fields=["control_choice_offered"])
+            elif proceed_control:
+                session.control_choice_offered = True
+                session.save(update_fields=["control_choice_offered"])
+
+            # Маршрутизация по уровню опоры (идемпотентно — зависит только от support_level).
+            if session.support_level == 1:
+                support_stage = "compact_solving"
+            elif session.support_level == 2:
+                support_stage = "step_by_step"
+            if support_stage and session.current_stage != support_stage:
+                session.current_stage = support_stage
+                session.save(update_fields=["current_stage"])
+
         illustration_url = None
         if next_task.illustration:
             try:
@@ -1359,6 +1420,8 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
             "tasks_correct": session.tasks_correct_count,
             "target_tasks_count": session.target_tasks_count,
             "remaining_tasks": max(0, session.target_tasks_count - session.tasks_solved_count),
+            "support_level": session.support_level,
+            "support_stage": support_stage,
         }, status=status.HTTP_200_OK)
 
     # --------------------------------------------------------------------------
@@ -1912,10 +1975,122 @@ class TaskViewSet(viewsets.GenericViewSet):
         if session.tasks_solved_count >= session.target_tasks_count:
             _compute_and_save_score(session)
 
+        # Завершён пооперационный (S2) → перенос опоры на следующую задачу (S1).
+        _apply_support_carry(session)
+        session.save()
+
         return Response({
             "ok": True,
             "tasks_solved_count": session.tasks_solved_count,
             "tasks_correct_count": session.tasks_correct_count,
+        }, status=status.HTTP_200_OK)
+
+    # --------------------------------------------------------------------------
+    # GET /api/task/<id>/compact_solution/
+    # Эталон для свёрнутого варианта (S1): существующие шаги, сгруппированные в 4 блока.
+    # --------------------------------------------------------------------------
+    @action(detail=True, methods=["get"])
+    def compact_solution(self, request, pk=None):
+        try:
+            task = Task.objects.prefetch_related("solution_steps__step").get(pk=pk)
+        except Task.DoesNotExist:
+            return Response({"detail": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        steps = sorted(task.solution_steps.all(), key=lambda ts: ts.step.order)
+        model_schema = None
+        for ts in steps:
+            if ts.step_type == "schema" and (ts.schema_data or {}).get("elements"):
+                model_schema = ts.schema_data  # последняя (самая полная) модель ситуации
+        given = next((ts.content for ts in steps if ts.step_type == "symbol"), "")
+        text_steps = [ts for ts in steps if ts.step_type == "text"]
+        equation = text_steps[0].content if text_steps else ""
+        solution = next((ts.content for ts in steps if ts.step_type == "solution"), "")
+        answer = text_steps[-1].content if len(text_steps) >= 2 else ""
+        solution_block = "\n".join([x for x in [solution, answer] if x])
+
+        return Response({
+            "task": {
+                "id": task.id,
+                "title": task.title,
+                "text": task.text,
+                "answer_unit": task.answer_unit or "",
+                "allowed_answer_units": task.allowed_answer_units or ([task.answer_unit] if task.answer_unit else []),
+            },
+            "blocks": [
+                {"key": "model", "title": "Модель ситуации", "kind": "schema", "schema_data": model_schema},
+                {"key": "given", "title": "Дано / Найти", "kind": "text", "content": given},
+                {"key": "equation", "title": "Уравнение", "kind": "math", "content": equation},
+                {"key": "solution", "title": "Решение и ответ", "kind": "math", "content": solution_block},
+            ],
+        }, status=status.HTTP_200_OK)
+
+    # --------------------------------------------------------------------------
+    # POST /api/task/<id>/complete_compact/
+    # Завершить свёрнутый вариант (S1): объективная проверка ответа + самооценка по блокам.
+    # --------------------------------------------------------------------------
+    @action(detail=True, methods=["post"])
+    def complete_compact(self, request, pk=None):
+        try:
+            task = Task.objects.get(pk=pk)
+        except Task.DoesNotExist:
+            return Response({"detail": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
+        session_id = request.data.get("session_id")
+        if not session_id:
+            return Response({"detail": "session_id required"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            session = LearningSession.objects.get(pk=session_id, user=request.user)
+        except LearningSession.DoesNotExist:
+            return Response({"detail": "Session not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        matched_count = int(request.data.get("matched_count") or 0)
+        answer_numeric = request.data.get("answer_numeric")
+        answer_unit = (request.data.get("answer_unit") or "").strip()
+        # accept_reference: ученику предложили разбор, но он отказался (взял эталон) —
+        # значит задачу финализируем как «не чисто», без ухода в пооперационный.
+        accept_reference = bool(request.data.get("accept_reference"))
+
+        is_answer_correct = False
+        if answer_numeric is not None and task.correct_answer is not None:
+            try:
+                is_answer_correct = task.check_answer(float(answer_numeric), answer_unit or task.answer_unit)
+            except (ValueError, TypeError):
+                is_answer_correct = False
+        # Успех (мягко): верный ответ И не меньше 2 из 4 блоков совпали.
+        clean = bool(is_answer_correct and matched_count >= 2)
+        # «Назначить разбор» = это был бы 2-й неуспех свёрнутого подряд.
+        force_full = (not clean) and (session.compact_fail_streak + 1 >= 2)
+        finalize = clean or accept_reference
+
+        if finalize:
+            previously_solved = TaskAttempt.objects.filter(
+                session=session, task=task, is_correct=True
+            ).exists()
+            if not previously_solved:
+                ta = TaskAttempt.objects.filter(session=session, task=task).order_by("id").first()
+                if ta:
+                    ta.is_correct = True
+                    ta.save(update_fields=["is_correct"])
+                else:
+                    TaskAttempt.objects.create(session=session, task=task, is_correct=True)
+                session.tasks_solved_count += 1
+                session.tasks_correct_count += 1
+                session.wrong_attempts_in_row = 0
+
+            session.last_task_clean = clean
+            if session.tasks_solved_count >= session.target_tasks_count:
+                _compute_and_save_score(session)
+            # Перенос опоры на следующую задачу (инкремент streak — внутри расчёта).
+            _apply_support_carry(session)
+            session.save()
+
+        return Response({
+            "ok": True,
+            "is_answer_correct": is_answer_correct,
+            "clean": clean,
+            "suggest_full": (not clean),
+            "force_full": force_full,
+            "finalized": finalize,
+            "tasks_solved_count": session.tasks_solved_count,
         }, status=status.HTTP_200_OK)
 
 

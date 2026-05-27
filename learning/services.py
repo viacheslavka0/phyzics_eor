@@ -175,6 +175,12 @@ class TaskSubmissionService:
             from .views import _compute_and_save_score
             _compute_and_save_score(self.session)
 
+        # Перенос опоры после чистого самостоятельного решения (S0) — под флагом SCAFFOLD_V2.
+        if is_correct and not previously_solved and not is_final_grade_task:
+            from .views import _apply_support_carry
+            _apply_support_carry(self.session)
+            self.session.save()
+
 
 class ComprehensionCheckService:
     """Проверка осмысления (вопросы + cloze)."""

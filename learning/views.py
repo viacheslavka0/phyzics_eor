@@ -8,6 +8,30 @@ from django.utils import timezone
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
 import json
+import os
+
+
+def _scaffold_v2_enabled():
+    """Флаг включения новой шкалы опоры (по умолчанию выкл — прод-поток не меняется).
+    Включается переменной окружения SCAFFOLD_V2_ENABLED=1 (для тестов/постепенного раската)."""
+    return os.environ.get("SCAFFOLD_V2_ENABLED", "0") == "1"
+
+
+def _compute_next_support_level(prev_level, last_clean, compact_fail_streak):
+    """Перенос уровня опоры на следующую задачу (Гальперин: сворачивание).
+    Возвращает (next_level, next_compact_fail_streak).
+    Правила: S2 → следующая S1 (не душим); S1 чисто → S0; S1 не чисто → перенос S1,
+    на 2-й раз подряд → назначаем S2; S0 → S0."""
+    if prev_level >= 2:
+        return 1, 0
+    if prev_level == 1:
+        if last_clean:
+            return 0, 0
+        streak = compact_fail_streak + 1
+        if streak >= 2:
+            return 2, 0
+        return 1, streak
+    return 0, 0
 
 
 def csrf(request):
@@ -882,6 +906,9 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
                 session.current_stage = "method_composition"
             else:
                 session.current_stage = "step_by_step"
+                # Старт задачи 1 на «трудно» = пооперационный контроль (S2).
+                # (Итог задачи 1 не переносится — сбрасывается на 2-й задаче.)
+                session.support_level = 2
 
         session.save()
 
@@ -1148,6 +1175,12 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
                     "requested_stage": next_stage,
                 }, status=status.HTTP_400_BAD_REQUEST)
             session.current_stage = next_stage
+            # Запись уровня опоры (инертно — читается маршрутизацией только при SCAFFOLD_V2).
+            if next_stage == "step_by_step":
+                session.support_level = max(session.support_level, 2)
+                session.last_task_clean = False
+            elif next_stage == "compact_solving":
+                session.support_level = max(session.support_level, 1)
             # Если переходим на этап "completed", завершаем сессию
             if next_stage == "completed" and not session.finished_at:
                 from django.utils import timezone

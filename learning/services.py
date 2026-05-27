@@ -160,6 +160,14 @@ class TaskSubmissionService:
             elif not is_correct:
                 self.session.wrong_attempts_in_row += 1
 
+        # Шкала опоры (Гальперин): 3 ошибки подряд = ученик уходит в пооперационный
+        # контроль (S2). Записываем состояние в сессию (пока инертно — читается
+        # маршрутизацией только при включённом SCAFFOLD_V2; поведение прода не меняется).
+        if not is_correct and self.session.wrong_attempts_in_row >= 3:
+            if self.session.support_level < 2:
+                self.session.support_level = 2
+            self.session.last_task_clean = False
+
         self.session.save()
 
         # Compute score if reached target

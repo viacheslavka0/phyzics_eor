@@ -5438,16 +5438,24 @@ function AlgorithmPeek({ steps }) {
   );
 }
 
-// Построчный рендер: строка с обратным слешем (LaTeX) → настоящая математика,
-// иначе — обычный текст. Так один и тот же контент может смешивать формулы и прозу
-// (формульные строки эталона/ответа авторятся как LaTeX, прозаические — как есть).
+// Строка — формула, если есть явный LaTeX (\) ИЛИ нет кириллицы и есть = с _/^
+// (такая строка безопасна для рендера как математика; русские слова MathLive
+// испортил бы).
+function isMathLine(line) {
+  if (!line) return false;
+  if (line.includes("\\")) return true;
+  if (/[А-Яа-яЁё]/.test(line)) return false;
+  return /=/.test(line) && /[_^]/.test(line);
+}
+
+// Построчный рендер: формульные строки → MathLive, проза → как есть.
 function MathText({ value, className = "" }) {
   const raw = value == null ? "" : String(value);
   const lines = raw.replace(/\r\n/g, "\n").split("\n");
   return (
     <div className={className}>
       {lines.map((line, i) =>
-        line.includes("\\") ? (
+        isMathLine(line) ? (
           <div key={i}>
             <FormulaDisplay value={line} />
           </div>
@@ -5525,17 +5533,20 @@ function StageCompactSolving() {
   const { session, updateSession } = useApp();
   const [taskId, setTaskId] = useState(null);
   const [data, setData] = useState(null); // {task, blocks}
+  const [illustrationUrl, setIllustrationUrl] = useState(null);
   const [progress, setProgress] = useState({ solved: 0, total: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showIntro, setShowIntro] = useState(true);
   // Ввод ученика (всё необязательно).
   const [given, setGiven] = useState("");
   const [equation, setEquation] = useState("");
   const [solution, setSolution] = useState("");
   const [answerNum, setAnswerNum] = useState("");
   const [answerUnit, setAnswerUnit] = useState("");
+  const [studentSchema, setStudentSchema] = useState(null);
   const [checking, setChecking] = useState(false);
-  const [compare, setCompare] = useState(false);
+  const [showCompare, setShowCompare] = useState(false);
   const [matched, setMatched] = useState({}); // {blockKey: true} — «у меня так же»
   const [offerFull, setOfferFull] = useState(false);
 
@@ -5555,6 +5566,7 @@ function StageCompactSolving() {
         if (cancelled) return;
         setTaskId(tid);
         setData(cd);
+        setIllustrationUrl(d.task?.illustration_url || null);
         setProgress({
           solved: d.tasks_solved || 0,
           total: d.target_tasks_count || session?.target_tasks_count || 6,
@@ -5647,71 +5659,107 @@ function StageCompactSolving() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto">
-      {/* Бейдж новой задачи + номер */}
-      <div className="flex items-center gap-2 mb-3">
-        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-wider">
-          <span>✨</span> Новая задача
-        </span>
+    <>
+      {/* Интро-модалка: объясняем, ЧТО просим сделать, прежде чем ученик увидит экран. */}
+      {showIntro && (
+        <FullScreenModal>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-7">
+            <div className="text-3xl mb-3">📝</div>
+            <h3 className="text-xl font-bold text-slate-900 mb-2">Реши своими словами</h3>
+            <p className="text-slate-600 text-sm leading-relaxed mb-6">
+              Прошлую задачу мы уже разобрали по шагам. Эту попробуй решить сам:
+              нарисуй модель ситуации, запиши «Дано», уравнение и расчёт.
+              Заполняй столько, сколько считаешь нужным — в конце сверишь с образцом
+              и числовой ответ проверится автоматически.
+            </p>
+            <button onClick={() => setShowIntro(false)} className="btn-primary btn-lg w-full">Приступить</button>
+          </div>
+        </FullScreenModal>
+      )}
+
+      <div className="max-w-7xl mx-auto px-2">
         {progress.total > 0 && (
-          <span className="text-xs text-slate-500">
-            {progress.solved + 1} из {progress.total}
-          </span>
+          <div className="text-xs text-slate-500 mb-3">Задача {progress.solved + 1} из {progress.total}</div>
         )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          {/* ЛЕВО — условие, иллюстрация, модель ситуации */}
+          <div className="lg:col-span-5">
+            <div className="lg:sticky lg:top-4 space-y-4">
+              <div className="card p-5">
+                <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Условие задачи</div>
+                {data.task.title && <div className="text-sm font-semibold text-slate-900 mb-2">{data.task.title}</div>}
+                <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 mb-3">
+                  <p className="text-slate-800 leading-relaxed text-sm">{data.task.text}</p>
+                </div>
+                {illustrationUrl && (
+                  <img
+                    src={illustrationUrl}
+                    alt="Иллюстрация"
+                    className="block max-w-[260px] w-full mx-auto rounded-lg border border-slate-200"
+                  />
+                )}
+              </div>
+              <SchemaEditorSection taskId={taskId} sessionId={session?.id} onSchemaSaved={setStudentSchema} />
+            </div>
+          </div>
+
+          {/* ПРАВО — поля заполнения */}
+          <div className="lg:col-span-7">
+            <div className="card p-6">
+              <h2 className="text-xl font-bold text-slate-900 mb-2 tracking-tight">Реши своими словами</h2>
+              <p className="text-sm text-slate-600 mb-5">
+                Заполни столько блоков, сколько считаешь нужным. Когда будешь готов — нажми «Сверить с образцом».
+              </p>
+
+              <div className="mb-5">
+                <label className="block text-sm font-semibold text-slate-800 mb-1">Дано / Найти</label>
+                <FormulaField key={`cg-${taskId}`} value={given} onChange={setGiven} placeholder="Что известно и что найти…" minHeight="56px" ariaLabel="Дано и найти" />
+              </div>
+
+              <div className="mb-5">
+                <label className="block text-sm font-semibold text-slate-800 mb-1">Уравнение</label>
+                <FormulaField key={`ce-${taskId}`} value={equation} onChange={setEquation} placeholder="Например: S = v · t" minHeight="56px" ariaLabel="Уравнение" />
+              </div>
+
+              <div className="mb-3">
+                <label className="block text-sm font-semibold text-slate-800 mb-1">Решение и ответ</label>
+                <FormulaField key={`cs-${taskId}`} value={solution} onChange={setSolution} placeholder="Подставь значения и вычисли…" minHeight="64px" ariaLabel="Решение" />
+              </div>
+              <div className="flex items-center gap-2 mb-6">
+                <span className="text-sm text-slate-600">Ответ:</span>
+                <NumericAnswerInput
+                  value={answerNum}
+                  onChange={(e) => setAnswerNum(e.target.value)}
+                  placeholder="число"
+                  className="w-32 px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400"
+                  aria-label="Числовой ответ"
+                />
+                <input
+                  type="text"
+                  value={answerUnit}
+                  onChange={(e) => setAnswerUnit(e.target.value)}
+                  placeholder="ед."
+                  className="w-24 px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400"
+                  aria-label="Единицы"
+                />
+              </div>
+
+              <div className="flex justify-end">
+                <button onClick={() => { setMatched({}); setShowCompare(true); }} className="btn-primary btn-lg">Сверить с образцом</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="card p-6 md:p-8 mb-6">
-        <div className="eora-screen-header">
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Реши своими словами</h2>
-          <p className="eora-screen-lead">
-            Прошлую задачу мы разобрали по шагам — теперь попробуй сам, в свободной форме.
-            Заполни столько блоков, сколько считаешь нужным; в конце сверишься с образцом и числовой ответ проверится автоматически.
-          </p>
-        </div>
-
-        {/* Условие задачи */}
-        <div className="mb-5">
-          <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Условие задачи</div>
-          {data.task.title && <div className="text-sm font-semibold text-slate-900 mb-1">{data.task.title}</div>}
-          <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
-            <p className="text-slate-800 leading-relaxed">{data.task.text}</p>
-          </div>
-        </div>
-
-        {/* 1. Модель ситуации */}
-        <SchemaEditorSection taskId={taskId} sessionId={session?.id} onSchemaSaved={() => {}} />
-
-        {/* 2. Дано / Найти */}
-        <div className="mb-5">
-          <label className="block text-sm font-semibold text-slate-800 mb-1">Дано / Найти</label>
-          <FormulaField key={`cg-${taskId}`} value={given} onChange={setGiven} placeholder="Что известно и что найти…" minHeight="56px" ariaLabel="Дано и найти" />
-        </div>
-
-        {/* 3. Уравнение */}
-        <div className="mb-5">
-          <label className="block text-sm font-semibold text-slate-800 mb-1">Уравнение</label>
-          <FormulaField key={`ce-${taskId}`} value={equation} onChange={setEquation} placeholder="Например: S = v · t" minHeight="56px" ariaLabel="Уравнение" />
-        </div>
-
-        {/* 4. Решение и ответ */}
-        <div className="mb-2">
-          <label className="block text-sm font-semibold text-slate-800 mb-1">Решение и ответ</label>
-          <FormulaField key={`cs-${taskId}`} value={solution} onChange={setSolution} placeholder="Подставь значения и вычисли…" minHeight="64px" ariaLabel="Решение" />
-        </div>
-        <div className="flex items-center gap-2 mb-6">
-          <span className="text-sm text-slate-600">Ответ:</span>
-          <NumericAnswerInput value={answerNum} onChange={setAnswerNum} placeholder="число" className="w-32" aria-label="Числовой ответ" />
-          <input type="text" value={answerUnit} onChange={(e) => setAnswerUnit(e.target.value)} placeholder="ед." className="input w-24" aria-label="Единицы" />
-        </div>
-
-        {!compare ? (
-          <div className="flex justify-end">
-            <button onClick={() => setCompare(true)} className="btn-primary btn-lg">Сверить с образцом</button>
-          </div>
-        ) : (
-          <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-            <div className="px-5 py-3 bg-slate-50 border-b border-slate-200">
-              <p className="text-sm font-semibold text-slate-800">Сверь каждый блок с образцом и отметь, где у тебя так же</p>
+      {/* Сверка — модалка в 2 колонки, модель ситуации рендерится графически. */}
+      {showCompare && (
+        <FullScreenModal>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-5xl w-full mx-4 max-h-[92vh] overflow-y-auto">
+            <div className="px-6 py-4 border-b border-slate-200">
+              <h3 className="text-lg font-bold text-slate-900">Сверь своё решение с образцом</h3>
+              <p className="text-sm text-slate-600">Отметь, где у тебя получилось так же.</p>
             </div>
             <div className="divide-y divide-slate-100">
               {[
@@ -5722,21 +5770,37 @@ function StageCompactSolving() {
               ].map(([key, title, mine]) => {
                 const ref = refByKey[key];
                 return (
-                  <div key={key} className="p-4">
-                    <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">{title}</div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                  <div key={key} className="px-6 py-4">
+                    <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">{title}</div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                       <div>
-                        <div className="text-[11px] text-slate-400 mb-1">У тебя</div>
+                        <div className="text-[11px] text-slate-400 mb-2">У тебя</div>
                         {key === "model" ? (
-                          <div className="text-sm text-slate-500 italic">модель ситуации построена выше</div>
+                          studentSchema?.elements?.length > 0 ? (
+                            <Suspense fallback={<div className="text-xs text-slate-400">…</div>}>
+                              <div className="border border-slate-200 rounded-lg overflow-auto bg-white">
+                                <SchemaEditor initialData={studentSchema} readOnly compact width={420} height={240} isTeacher={false} />
+                              </div>
+                            </Suspense>
+                          ) : (
+                            <div className="text-sm text-slate-400 italic">модель ситуации не построена</div>
+                          )
                         ) : (
                           <div className="text-sm text-slate-800"><MathText value={mine || "—"} /></div>
                         )}
                       </div>
                       <div className="bg-emerald-50/40 rounded-lg p-2">
-                        <div className="text-[11px] text-emerald-600 mb-1">Образец</div>
-                        {ref?.kind === "schema" ? (
-                          <div className="text-sm text-slate-500 italic">см. модель учителя</div>
+                        <div className="text-[11px] text-emerald-600 mb-2">Образец</div>
+                        {key === "model" ? (
+                          ref?.schema_data?.elements?.length > 0 ? (
+                            <Suspense fallback={<div className="text-xs text-slate-400">…</div>}>
+                              <div className="border border-slate-200 rounded-lg overflow-auto bg-white">
+                                <SchemaEditor initialData={ref.schema_data} readOnly compact width={420} height={240} isTeacher={false} />
+                              </div>
+                            </Suspense>
+                          ) : (
+                            <div className="text-sm text-slate-400 italic">образец не задан</div>
+                          )
                         ) : (
                           <div className="text-sm text-slate-800"><MathText value={ref?.content || "—"} /></div>
                         )}
@@ -5750,14 +5814,15 @@ function StageCompactSolving() {
                 );
               })}
             </div>
-            <div className="px-5 py-4 bg-slate-50 border-t border-slate-200 flex justify-end">
+            <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex flex-col-reverse sm:flex-row sm:justify-between gap-2">
+              <button onClick={() => setShowCompare(false)} className="btn-secondary">Назад к решению</button>
               <button onClick={() => submitCompact(false)} disabled={checking} className="btn-primary btn-lg disabled:opacity-50">
                 {checking ? "Проверяем…" : "Готово"}
               </button>
             </div>
           </div>
-        )}
-      </div>
+        </FullScreenModal>
+      )}
 
       {offerFull && (
         <FullScreenModal>
@@ -5771,7 +5836,7 @@ function StageCompactSolving() {
           </div>
         </FullScreenModal>
       )}
-    </div>
+    </>
   );
 }
 

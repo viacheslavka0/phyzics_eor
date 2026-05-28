@@ -1557,14 +1557,15 @@ class TaskViewSet(viewsets.GenericViewSet):
                 "step_title": tss.step.title,
                 "step_type": tss.step_type,
             }
-            if tss.step_type == "text":
-                step_data["content"] = tss.content
-                if tss.image:
-                    step_data["image_url"] = request.build_absolute_uri(tss.image.url)
-            else:
+            # content есть у всех типов кроме schema (там используется schema_data).
+            # Раньше отдавали content только для step_type == "text" — из-за этого
+            # шаги symbol/solution/boolean/text_pick приходили пустыми.
+            if tss.step_type == "schema":
                 step_data["schema_data"] = tss.schema_data
-                if tss.image:
-                    step_data["image_url"] = request.build_absolute_uri(tss.image.url)
+            else:
+                step_data["content"] = tss.content
+            if tss.image:
+                step_data["image_url"] = request.build_absolute_uri(tss.image.url)
             solution_steps.append(step_data)
 
         response_data = {

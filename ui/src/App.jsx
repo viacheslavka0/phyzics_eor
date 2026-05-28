@@ -4051,13 +4051,13 @@ function StageTaskList() {
                         {result.solution_summary && (
                           <div>
                             <p className="text-sm font-medium text-slate-600 mb-1">Краткое решение:</p>
-                            <p className="text-slate-700 whitespace-pre-line">{result.solution_summary}</p>
+                            <div className="text-slate-700"><MathText value={result.solution_summary} /></div>
                           </div>
                         )}
                         {result.solution_detailed && (
                           <div>
                             <p className="text-sm font-medium text-slate-600 mb-1">Развёрнутое решение:</p>
-                            <p className="text-slate-700 whitespace-pre-line">{result.solution_detailed}</p>
+                            <div className="text-slate-700"><MathText value={result.solution_detailed} /></div>
                           </div>
                         )}
                         {result.solution_image_url && (
@@ -4080,21 +4080,27 @@ function StageTaskList() {
                                     <div className="w-8 h-8 bg-indigo-600 text-white rounded-lg flex items-center justify-center font-bold text-sm flex-shrink-0">
                                       {step.order}
                                     </div>
-                                    <div className="flex-1">
+                                    <div className="flex-1 min-w-0">
                                       <h5 className="font-semibold text-slate-900">{step.step_title}</h5>
-                                      {step.step_type === "text" && step.content && (
-                                        <p className="text-sm text-slate-700 mt-2 whitespace-pre-line">{step.content}</p>
+                                      {step.step_type !== "schema" && step.content && (
+                                        <div className="text-sm text-slate-700 mt-2">
+                                          {step.step_type === "boolean" ? (
+                                            <span>{step.content === "yes" ? "Да" : step.content === "no" ? "Нет" : step.content}</span>
+                                          ) : (
+                                            <MathText value={step.content} />
+                                          )}
+                                        </div>
                                       )}
                                       {step.step_type === "schema" && step.schema_data && (
-                                        <div className="mt-3">
+                                        <div className="mt-3 -mx-1">
                                           <Suspense fallback={<div className="text-sm text-slate-500">Загрузка модели ситуации...</div>}>
-                                            <div className="border border-slate-300 rounded-lg overflow-hidden bg-white">
+                                            <div className="border border-slate-300 rounded-lg overflow-auto bg-white">
                                               <SchemaEditor
                                                 initialData={step.schema_data}
                                                 readOnly={true}
                                                 compact={true}
-                                                width={700}
-                                                height={400}
+                                                width={600}
+                                                height={340}
                                                 isTeacher={false}
                                               />
                                             </div>
@@ -5519,6 +5525,7 @@ function StageCompactSolving() {
   const { session, updateSession } = useApp();
   const [taskId, setTaskId] = useState(null);
   const [data, setData] = useState(null); // {task, blocks}
+  const [progress, setProgress] = useState({ solved: 0, total: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   // Ввод ученика (всё необязательно).
@@ -5548,6 +5555,10 @@ function StageCompactSolving() {
         if (cancelled) return;
         setTaskId(tid);
         setData(cd);
+        setProgress({
+          solved: d.tasks_solved || 0,
+          total: d.target_tasks_count || session?.target_tasks_count || 6,
+        });
         const units = cd.task?.allowed_answer_units || [];
         setAnswerUnit(units[0] || cd.task?.answer_unit || "");
       } catch (e) {
@@ -5637,16 +5648,34 @@ function StageCompactSolving() {
 
   return (
     <div className="max-w-3xl mx-auto">
+      {/* Бейдж новой задачи + номер */}
+      <div className="flex items-center gap-2 mb-3">
+        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-wider">
+          <span>✨</span> Новая задача
+        </span>
+        {progress.total > 0 && (
+          <span className="text-xs text-slate-500">
+            {progress.solved + 1} из {progress.total}
+          </span>
+        )}
+      </div>
+
       <div className="card p-6 md:p-8 mb-6">
         <div className="eora-screen-header">
           <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Реши своими словами</h2>
           <p className="eora-screen-lead">
-            Запиши решение так, как считаешь нужным — заполнять все поля необязательно. Когда будешь готов, сверишь с образцом.
+            Прошлую задачу мы разобрали по шагам — теперь попробуй сам, в свободной форме.
+            Заполни столько блоков, сколько считаешь нужным; в конце сверишься с образцом и числовой ответ проверится автоматически.
           </p>
         </div>
 
-        <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 mb-5">
-          <p className="text-slate-800 leading-relaxed">{data.task.text}</p>
+        {/* Условие задачи */}
+        <div className="mb-5">
+          <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Условие задачи</div>
+          {data.task.title && <div className="text-sm font-semibold text-slate-900 mb-1">{data.task.title}</div>}
+          <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <p className="text-slate-800 leading-relaxed">{data.task.text}</p>
+          </div>
         </div>
 
         {/* 1. Модель ситуации */}
@@ -6560,12 +6589,11 @@ function StageStepByStep() {
 
               const setTarget = () => {
                 const symbol = (draft.tSymbol || "").trim();
-                const text = (draft.tText || "").trim();
-                if (!symbol || !text) return;
+                if (!symbol) return;
                 const updated = entries.filter((e) => !e.isTarget);
-                updated.push({ symbol, fragment: text, isTarget: true });
+                updated.push({ symbol, fragment: "", isTarget: true });
                 setSymbolEntries({ ...symbolEntries, [currentStepOrder]: updated });
-                setSymbolDrafts({ ...symbolDrafts, [currentStepOrder]: { ...draft, tSymbol: "", tText: "" } });
+                setSymbolDrafts({ ...symbolDrafts, [currentStepOrder]: { ...draft, tSymbol: "" } });
               };
 
               return (
@@ -6643,17 +6671,9 @@ function StageStepByStep() {
                         placeholder="S"
                         className="w-20 px-2 py-2 border border-slate-300 rounded-lg font-mono text-center text-base focus:ring-2 focus:ring-indigo-400"
                       />
-                      <span className="text-slate-400 font-bold text-lg whitespace-nowrap">— ?</span>
-                      <input
-                        type="text"
-                        value={draft.tText || ""}
-                        onChange={(e) => setDraft({ tText: e.target.value })}
-                        onKeyDown={(e) => { if (e.key === "Enter") setTarget(); }}
-                        placeholder="что ищем (например: расстояние)"
-                        className="flex-1 min-w-0 px-3 py-2 border border-slate-300 rounded-lg text-base focus:ring-2 focus:ring-indigo-400"
-                      />
+                      <span className="text-slate-400 font-bold text-lg whitespace-nowrap flex-1">— ?</span>
                       <button type="button" onClick={setTarget}
-                        disabled={!draft.tSymbol?.trim() || !draft.tText?.trim()}
+                        disabled={!draft.tSymbol?.trim()}
                         className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap">
                         {targetEntry ? "Заменить" : "Указать"}
                       </button>
@@ -6685,8 +6705,7 @@ function StageStepByStep() {
                           <div className="text-xs font-semibold text-indigo-600 mb-1.5 uppercase tracking-wide">Найти:</div>
                           <div className="flex items-center gap-2 bg-indigo-50 rounded-lg px-3 py-2 border border-indigo-200 group">
                             <span className="font-mono font-semibold text-indigo-700 min-w-[50px]">{targetEntry.symbol}</span>
-                            <span className="text-slate-400">— ?</span>
-                            <span className="text-slate-700 flex-1 text-sm">{targetEntry.fragment}</span>
+                            <span className="text-slate-400 flex-1">— ?</span>
                             <button type="button" onClick={() => removeEntry(entries.indexOf(targetEntry))}
                               className="text-slate-300 hover:text-red-500 text-lg leading-none opacity-0 group-hover:opacity-100 transition-opacity">✕</button>
                           </div>
@@ -6988,27 +7007,34 @@ function StageStepByStep() {
           )}
 
           {/* Финальный ответ (после проверки или выбора) */}
-          {attempt?.final_answer && (
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5 mb-5 flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 text-sm font-bold">✓</div>
-              <div>
-                <div className="text-sm font-semibold text-emerald-800 mb-1">
-                  {attempt.is_correct && !attempt.needs_choice
-                    ? "Верно!"
-                    : attempt.chose_system_variant
-                      ? "Принят эталонный вариант"
-                      : "Принят ваш вариант"}
-                </div>
-                <div className="text-sm text-slate-700">
-                  {attempt.chose_system_variant ? (
-                    <ReferenceAnswerView value={attempt.final_answer} />
-                  ) : (
-                    <StudentAnswerView stepType={currentStep.step_type} value={attempt.final_answer} />
+          {attempt?.final_answer && (() => {
+            const boolWrong = currentStep.step_type === "boolean" && !attempt.is_correct && attempt.chose_system_variant;
+            const isVerno = attempt.is_correct && !attempt.needs_choice;
+            return (
+              <div className={`rounded-xl border p-5 mb-5 flex items-start gap-3 ${
+                boolWrong ? "border-amber-200 bg-amber-50" : "border-emerald-200 bg-emerald-50"
+              }`}>
+                <div className={`w-8 h-8 rounded-full text-white flex items-center justify-center flex-shrink-0 text-sm font-bold ${
+                  boolWrong ? "bg-amber-500" : "bg-emerald-500"
+                }`}>{boolWrong ? "i" : "✓"}</div>
+                <div>
+                  <div className={`text-sm font-semibold mb-1 ${boolWrong ? "text-amber-800" : "text-emerald-800"}`}>
+                    {isVerno ? "Верно!" : boolWrong ? "Правильный ответ:" : attempt.chose_system_variant ? "Принят эталонный вариант" : "Принят ваш вариант"}
+                  </div>
+                  <div className="text-sm text-slate-700">
+                    {attempt.chose_system_variant ? (
+                      <ReferenceAnswerView value={attempt.final_answer} />
+                    ) : (
+                      <StudentAnswerView stepType={currentStep.step_type} value={attempt.final_answer} />
+                    )}
+                  </div>
+                  {boolWrong && currentStep.hint && (
+                    <div className="mt-2 text-sm text-amber-900/80 italic">💡 {currentStep.hint}</div>
                   )}
                 </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* Навигация */}
           <div className="flex items-center justify-between mt-6 pt-5 border-t border-slate-200">

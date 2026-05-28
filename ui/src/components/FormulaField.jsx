@@ -92,7 +92,9 @@ const FormulaField = forwardRef(function FormulaField(
         // 'auto' — виртуальная матклавиатура всплывает на тач-устройствах (телефон/планшет),
         // на десктопе ученик печатает с физической клавиатуры (/ → дробь, ^ → степень).
         mf.mathVirtualKeyboardPolicy = "auto";
-        if (placeholder) mf.setAttribute("placeholder", placeholder);
+        // Placeholder в math-field рендерится как LaTeX — оборачиваем в \text{...},
+        // чтобы пробелы и кириллица отображались как обычный текст.
+        if (placeholder) mf.setAttribute("placeholder", `\\text{${placeholder}}`);
         if (ariaLabel) mf.setAttribute("aria-label", ariaLabel);
         mf.style.width = "100%";
         mf.style.minHeight = minHeight;

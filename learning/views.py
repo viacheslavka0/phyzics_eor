@@ -1805,7 +1805,17 @@ class TaskViewSet(viewsets.GenericViewSet):
             
             target_symbol = (target.get("symbol") if target else "") or ""
             target_fragment = (target.get("fragment") if target else "") or ""
-            reference_answer_for_response = f"{target_symbol} — {target_fragment}" if target_symbol or target_fragment else ""
+            # Показываем ученику полный эталон краткой записи (Дано + Найти) —
+            # это уже корректно записано в reference_solution.content. Если content
+            # пустой — собираем из items как fallback.
+            if reference_content:
+                reference_answer_for_response = reference_content
+            else:
+                givens = [(it.get("symbol", ""), it.get("fragment", "")) for it in items if not it.get("isTarget")]
+                lines = ["Дано:"] + [f"{s} = {f}" for s, f in givens if s]
+                if target_symbol:
+                    lines.append(f"Найти: {target_symbol}")
+                reference_answer_for_response = "\n".join(lines)
             
             try:
                 data = json.loads(student_answer) if student_answer else {}
@@ -1815,9 +1825,8 @@ class TaskViewSet(viewsets.GenericViewSet):
             student_symbol = (data.get("symbol") or "").strip()
             student_fragment = (data.get("fragment") or "").strip()
             
-            is_similar = bool(student_symbol and student_fragment and target_symbol and target_fragment) and (
-                student_symbol == target_symbol and student_fragment.lower() == target_fragment.lower()
-            )
+            # Для «Найти» сравниваем только символ — описание величины (fragment) необязательно.
+            is_similar = bool(student_symbol and target_symbol) and (student_symbol == target_symbol)
             needs_choice = False  # здесь выбора варианта не требуется
 
         else:
@@ -1864,6 +1873,16 @@ class TaskViewSet(viewsets.GenericViewSet):
             else:
                 step_attempt.final_answer = student_answer
             step_attempt.is_correct = True
+            step_attempt.save()
+            final_answer_value = step_attempt.final_answer
+        elif step_type == "boolean" and not is_similar:
+            # Булев шаг: при неверном ответе НЕ показываем сверку «Да/Нет» —
+            # это запутывает. Сразу фиксируем эталон как итог + помечаем как
+            # «принят эталонный вариант», чтобы фронт показал верный ответ + комментарий.
+            mapping = {"yes": "Да", "no": "Нет"}
+            step_attempt.final_answer = mapping.get(reference_normalized, reference_content)
+            step_attempt.is_correct = False
+            step_attempt.chose_system_variant = True
             step_attempt.save()
             final_answer_value = step_attempt.final_answer
         

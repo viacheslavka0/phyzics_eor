@@ -7191,7 +7191,7 @@ function StageStepByStep() {
                     </Suspense>
                   ) : (
                     <div className="flex items-center justify-center h-64 text-slate-400 text-sm">
-                      Вы ещё не сохранили свою модель ситуации. Нажмите «Сохранить» в редакторе.
+                      Модель ситуации ещё не построена.
                     </div>
                   )}
                 </div>
@@ -7498,6 +7498,7 @@ function SchemaEditorSection({ taskId, sessionId, onSchemaSaved }) {
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
+  const autoSaveTimer = useRef(null);
 
   // Загружаем начальную заготовку схемы
   const loadStarterSchema = useCallback(async () => {
@@ -7534,19 +7535,11 @@ function SchemaEditorSection({ taskId, sessionId, onSchemaSaved }) {
       onSchemaSaved(data);
     }
     setSaving(true);
-    
     try {
-      // Сохраняем схему ученика на сервер
       await fetch(`/api/task/${taskId}/save_student_schema/`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCSRFCookie()
-        },
-        body: JSON.stringify({
-          session_id: sessionId,
-          schema_data: data
-        })
+        headers: { "Content-Type": "application/json", "X-CSRFToken": getCSRFCookie() },
+        body: JSON.stringify({ session_id: sessionId, schema_data: data }),
       });
       setSaved(true);
     } catch (e) {
@@ -7556,6 +7549,22 @@ function SchemaEditorSection({ taskId, sessionId, onSchemaSaved }) {
       setSaving(false);
     }
   };
+
+  // Авто-сохранение с дебаунсом 800 мс при любых изменениях в редакторе —
+  // ученику больше не нужно нажимать «Сохранить» вручную.
+  const handleEditorChange = (data) => {
+    setSchemaData(data);
+    if (onSchemaSaved) onSchemaSaved(data); // сразу прокидываем наверх для сверки
+    if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
+    autoSaveTimer.current = setTimeout(() => {
+      handleSave(data);
+    }, 800);
+  };
+
+  // Чистим таймер при размонтировании.
+  useEffect(() => () => {
+    if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
+  }, []);
 
   return (
     <div className="mb-6 border-2 border-purple-200 rounded-xl overflow-hidden bg-purple-50/30">
@@ -7607,6 +7616,7 @@ function SchemaEditorSection({ taskId, sessionId, onSchemaSaved }) {
               <SchemaEditor
                 initialData={schemaData || starterSchema}
                 onSave={handleSave}
+                onChange={handleEditorChange}
                 mode="student"
               />
             </Suspense>

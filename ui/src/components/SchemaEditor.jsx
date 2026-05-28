@@ -1235,9 +1235,10 @@ const PropertiesPanel = ({ selectedElements, elements, onUpdate, onDelete, snapE
 // ГЛАВНЫЙ КОМПОНЕНТ РЕДАКТОРА
 // =============================================================================
 
-const SchemaEditor = ({ 
-  initialData = null, 
-  onSave, 
+const SchemaEditor = ({
+  initialData = null,
+  onSave,
+  onChange,
   readOnly = false,
   showReference = false,
   referenceData = null,
@@ -1261,6 +1262,15 @@ const SchemaEditor = ({
   
   const [selectedIds, setSelectedIds] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Авто-уведомление родителя об изменениях (для дебаунс-автосохранения),
+  // чтобы ученику не нужно было жать «Сохранить» — родитель сохранит сам.
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+  useEffect(() => {
+    if (readOnly) return;
+    onChangeRef.current?.({ width: canvasWidth, height, elements });
+  }, [elements, canvasWidth, height, readOnly]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showElementCreator, setShowElementCreator] = useState(false);

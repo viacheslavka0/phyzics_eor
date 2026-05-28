@@ -3362,11 +3362,13 @@ function StageTaskList() {
   const [showTaskOnboarding, setShowTaskOnboarding] = useState(() => {
     try { return !window.localStorage.getItem("eora_task_onboarding_done"); } catch { return true; }
   });
+  // Развилка перед контрольной (SCAFFOLD_V2): «готов к контрольной / выбрать ещё задачу».
+  const [practiceChoice, setPracticeChoice] = useState(null); // null | { remaining: [{id,title}] }
 
-  const loadNextTask = async () => {
+  const loadNextTask = async (queryString = "") => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/session/${session.id}/next_task/`);
+      const res = await fetch(`/api/session/${session.id}/next_task/${queryString}`);
       if (res.ok) {
     const data = await res.json();
         if (data.is_completed) {
@@ -3381,6 +3383,10 @@ function StageTaskList() {
         } else {
           const prevTaskId = currentTask?.id ?? null;
           setCurrentTask(data.task);
+          // Развилка перед контрольной (SCAFFOLD_V2): backend прислал список оставшихся.
+          if (data.offer_practice_choice && Array.isArray(data.remaining_tasks_list) && data.remaining_tasks_list.length > 0) {
+            setPracticeChoice({ remaining: data.remaining_tasks_list });
+          }
           if (prevTaskId != null && data.task?.id != null && data.task.id !== prevTaskId) {
             setShowTaskOnboarding(false);
           }
@@ -4224,6 +4230,41 @@ function StageTaskList() {
                 Закрыть
               </button>
             </div>
+          </div>
+        </FullScreenModal>
+      )}
+
+      {session?.difficulty_choice === "medium" && ksData?.solution_method?.steps?.length > 0 && (
+        <AlgorithmPeek steps={ksData.solution_method.steps} />
+      )}
+
+      {practiceChoice && (
+        <FullScreenModal>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 p-6">
+            <h3 className="text-xl font-bold text-slate-900 mb-2">Готов к итоговой задаче?</h3>
+            <p className="text-slate-600 text-sm mb-5">
+              Это последнее задание — учитель проверит твой ответ. Если чувствуешь, что хочешь
+              потренироваться ещё раз — можно решить любую из оставшихся задач.
+            </p>
+            <div className="space-y-2 mb-5 max-h-64 overflow-y-auto">
+              {practiceChoice.remaining.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => { setPracticeChoice(null); loadNextTask(`?chosen_task_id=${t.id}`); }}
+                  className="w-full text-left px-3 py-2 rounded-lg border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 text-sm"
+                >
+                  {t.title}
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => { setPracticeChoice(null); loadNextTask("?proceed_control=1"); }}
+              className="btn-primary btn-lg w-full"
+            >
+              Готов, перейти к итоговой
+            </button>
           </div>
         </FullScreenModal>
       )}
@@ -5354,6 +5395,42 @@ const encodeSolutionAnswer = (parts) =>
     calc: parts.calc || "",
     reasoning: parts.reasoning || "",
   });
+
+// Плавающая панель «Мой алгоритм» — показывается при старте «непросто», чтобы
+// ученик мог подсматривать в шаги метода во время решения. Сворачиваемая.
+function AlgorithmPeek({ steps }) {
+  const [open, setOpen] = useState(false);
+  if (!steps?.length) return null;
+  const sorted = [...steps].sort((a, b) => (a.order || 0) - (b.order || 0));
+  return (
+    <div className="fixed right-4 bottom-4 z-40 max-w-xs">
+      {open ? (
+        <div className="bg-white border border-indigo-200 rounded-2xl shadow-xl p-4">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-bold text-indigo-700">Мой алгоритм</span>
+            <button type="button" onClick={() => setOpen(false)} className="text-slate-400 hover:text-slate-700 text-lg leading-none">×</button>
+          </div>
+          <ol className="space-y-1.5">
+            {sorted.map((s) => (
+              <li key={s.order || s.id} className="flex gap-2 text-xs text-slate-700">
+                <span className="inline-flex w-5 h-5 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 font-bold flex-shrink-0">{s.order}</span>
+                <span className="leading-snug">{s.title}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="bg-indigo-600 text-white text-sm font-semibold px-3 py-2 rounded-full shadow-lg hover:bg-indigo-700"
+        >
+          📋 Мой алгоритм
+        </button>
+      )}
+    </div>
+  );
+}
 
 // Построчный рендер: строка с обратным слешем (LaTeX) → настоящая математика,
 // иначе — обычный текст. Так один и тот же контент может смешивать формулы и прозу

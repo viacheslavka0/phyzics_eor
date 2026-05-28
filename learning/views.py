@@ -1357,25 +1357,12 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
 
         # --- Шкала опоры (SCAFFOLD_V2) ---
         support_stage = None
+        offer_practice_choice = False
+        remaining_tasks_list = []
         if _scaffold_v2_enabled():
             is_last = (session.tasks_solved_count + 1) >= session.target_tasks_count
             chosen_id = request.query_params.get("chosen_task_id")
             proceed_control = request.query_params.get("proceed_control")
-
-            # Развилка перед контрольной: предлагаем выбрать ещё задачу (один раз).
-            if is_last and session.support_level > 0 and not session.control_choice_offered \
-                    and not chosen_id and not proceed_control:
-                remaining = list(
-                    all_tasks.exclude(id__in=solved_task_ids)
-                    .values("id", "order", "title")
-                )
-                return Response({
-                    "offer_practice_choice": True,
-                    "remaining_tasks_list": remaining,
-                    "current_task_index": session.current_task_index,
-                    "tasks_solved": session.tasks_solved_count,
-                    "target_tasks_count": session.target_tasks_count,
-                }, status=status.HTTP_200_OK)
 
             # Ученик выбрал конкретную задачу для самостоятельной тренировки.
             if chosen_id:
@@ -1387,6 +1374,15 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
             elif proceed_control:
                 session.control_choice_offered = True
                 session.save(update_fields=["control_choice_offered"])
+            # Развилка перед контрольной: предлагаем выбрать ещё задачу (один раз).
+            # Задачу ВСЁ РАВНО возвращаем (это последняя/контрольная) — fallback на случай,
+            # если фронт не покажет модалку; навигация не ломается.
+            elif is_last and session.support_level > 0 and not session.control_choice_offered:
+                offer_practice_choice = True
+                remaining_tasks_list = list(
+                    all_tasks.exclude(id__in=solved_task_ids).exclude(id=next_task.id)
+                    .values("id", "order", "title")
+                )
 
             # Маршрутизация по уровню опоры (идемпотентно — зависит только от support_level).
             if session.support_level == 1:
@@ -1422,6 +1418,8 @@ class LearningSessionViewSet(viewsets.GenericViewSet):
             "remaining_tasks": max(0, session.target_tasks_count - session.tasks_solved_count),
             "support_level": session.support_level,
             "support_stage": support_stage,
+            "offer_practice_choice": offer_practice_choice,
+            "remaining_tasks_list": remaining_tasks_list,
         }, status=status.HTTP_200_OK)
 
     # --------------------------------------------------------------------------

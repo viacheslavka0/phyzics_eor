@@ -5687,18 +5687,22 @@ function StageCompactSolving() {
           <div className="lg:col-span-5">
             <div className="lg:sticky lg:top-4 space-y-4">
               <div className="card p-5">
-                <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Условие задачи</div>
-                {data.task.title && <div className="text-sm font-semibold text-slate-900 mb-2">{data.task.title}</div>}
-                <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 mb-3">
+                <div className="flex items-start gap-3 mb-2">
+                  {illustrationUrl && (
+                    <img
+                      src={illustrationUrl}
+                      alt=""
+                      className="w-20 h-20 object-cover rounded-lg border border-slate-200 flex-shrink-0"
+                    />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Условие задачи</div>
+                    {data.task.title && <div className="text-sm font-semibold text-slate-900">{data.task.title}</div>}
+                  </div>
+                </div>
+                <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
                   <p className="text-slate-800 leading-relaxed text-sm">{data.task.text}</p>
                 </div>
-                {illustrationUrl && (
-                  <img
-                    src={illustrationUrl}
-                    alt="Иллюстрация"
-                    className="block max-w-[260px] w-full mx-auto rounded-lg border border-slate-200"
-                  />
-                )}
               </div>
               <SchemaEditorSection taskId={taskId} sessionId={session?.id} onSchemaSaved={setStudentSchema} />
             </div>

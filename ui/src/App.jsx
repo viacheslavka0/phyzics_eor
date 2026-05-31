@@ -595,7 +595,7 @@ function CatalogView() {
         <div className="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-md shadow-indigo-100 border border-slate-100">
-              <img src="/logo.png" alt="Логотип" className="w-8 h-8 object-contain" />
+              <img src={import.meta.env.BASE_URL + 'logo.png'} alt="Логотип" className="w-8 h-8 object-contain" />
             </div>
             <div>
               <h1 className="text-lg font-bold leading-tight">Физика</h1>

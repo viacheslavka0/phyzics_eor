@@ -71,10 +71,10 @@ function UnifiedLogin({ onLoggedIn }) {
       {/* Left panel - Branding (hidden on mobile) */}
       <div className="hidden md:flex md:w-1/2 items-center justify-center p-8 bg-gradient-to-br from-indigo-600 via-indigo-500 to-emerald-600">
         <div className="max-w-sm text-center text-white animate-fadeIn">
-          <div className="w-20 h-20 mx-auto mb-8 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-            <span className="text-4xl">⚛</span>
+          <div className="w-24 h-24 mx-auto mb-6 bg-white rounded-2xl flex items-center justify-center shadow-lg">
+            <img src="/logo.png" alt="Логотип" className="w-16 h-16 object-contain" />
           </div>
-          <h1 className="text-2xl font-bold mb-2 leading-snug">ЭОР по усвоению систем физических знаний</h1>
+          <h1 className="text-2xl font-bold mb-2 leading-snug text-white">ЭОР по усвоению систем физических знаний</h1>
           <p className="text-base text-indigo-100 mb-6">7–9 класс</p>
           <div className="border-t border-white/30 pt-6">
             <p className="text-sm italic text-indigo-200">

@@ -74,8 +74,8 @@ function UnifiedLogin({ onLoggedIn }) {
           <div className="w-20 h-20 mx-auto mb-8 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
             <span className="text-4xl">⚛</span>
           </div>
-          <h1 className="text-4xl font-bold mb-2">ЭОРА</h1>
-          <p className="text-lg text-indigo-100 mb-6">Физика · 7–9 класс</p>
+          <h1 className="text-2xl font-bold mb-2 leading-snug">ЭОР по усвоению систем физических знаний</h1>
+          <p className="text-base text-indigo-100 mb-6">7–9 класс</p>
           <div className="border-t border-white/30 pt-6">
             <p className="text-sm italic text-indigo-200">
               "Физика — это не просто формулы. Это язык, на котором говорит вселенная."

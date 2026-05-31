@@ -1642,8 +1642,10 @@ class TaskViewSet(viewsets.GenericViewSet):
         }, status=status.HTTP_200_OK)
 
     # --------------------------------------------------------------------------
-    # GET /api/task/<id>/step_by_step/
-    # Получить задачу с эталонным решением по шагам для пооперационного контроля
+    # GET /api/task/<id>/step_by_step/?session_id=<id>
+    # Получить задачу с эталонным решением по шагам для пооперационного контроля.
+    # Если передан session_id — также возвращает сохранённые попытки ученика
+    # (для восстановления прогресса после F5).
     # --------------------------------------------------------------------------
     @action(detail=True, methods=["get"])
     def step_by_step(self, request, pk=None):
@@ -1653,15 +1655,13 @@ class TaskViewSet(viewsets.GenericViewSet):
             ).get(pk=pk)
         except Task.DoesNotExist:
             return Response({"detail": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
-        
-        # Получаем метод решения
+
         try:
             method = task.ks.solution_method
             method_steps = method.steps.all().order_by("order")
         except SolutionMethod.DoesNotExist:
             return Response({"detail": "Solution method not found for this task"}, status=status.HTTP_404_NOT_FOUND)
-        
-        # Получаем эталонные решения по шагам
+
         solution_steps = {}
         for ts in task.solution_steps.all():
             solution_steps[ts.step.order] = {
@@ -1670,8 +1670,7 @@ class TaskViewSet(viewsets.GenericViewSet):
                 "step_type": ts.step_type,
                 "schema_data": ts.schema_data,
             }
-        
-        # Формируем список шагов с эталонными решениями
+
         steps_data = []
         for step in method_steps:
             ref = solution_steps.get(step.order, None)
@@ -1683,7 +1682,37 @@ class TaskViewSet(viewsets.GenericViewSet):
                 "step_type": ref["step_type"] if ref else "text",
                 "reference_solution": ref,
             })
-        
+
+        # Восстановление прогресса: загружаем сохранённые StepAttempts сессии.
+        saved_attempts = {}
+        student_schema = None
+        session_id = request.query_params.get("session_id")
+        if session_id:
+            try:
+                session = LearningSession.objects.get(pk=session_id, user=request.user)
+                task_attempt = (
+                    TaskAttempt.objects
+                    .filter(session=session, task=task)
+                    .prefetch_related("step_attempts__step")
+                    .order_by("id")
+                    .first()
+                )
+                if task_attempt:
+                    for sa in task_attempt.step_attempts.all():
+                        if sa.final_answer:
+                            saved_attempts[sa.step.order] = {
+                                "student_answer": sa.student_answer,
+                                "final_answer": sa.final_answer,
+                                "is_correct": sa.is_correct,
+                                "chose_system_variant": sa.chose_system_variant,
+                                "needs_choice": False,
+                            }
+                    # Схема ученика (для восстановления редактора)
+                    if task_attempt.schema_data:
+                        student_schema = task_attempt.schema_data
+            except LearningSession.DoesNotExist:
+                pass  # не ломаем загрузку — просто не восстанавливаем прогресс
+
         return Response({
             "task": {
                 "id": task.id,
@@ -1697,7 +1726,48 @@ class TaskViewSet(viewsets.GenericViewSet):
                 "description": method.description,
             },
             "steps": steps_data,
+            "saved_attempts": saved_attempts,
+            "student_schema": student_schema,
         }, status=status.HTTP_200_OK)
+
+    # --------------------------------------------------------------------------
+    # POST /api/task/<id>/save_student_schema/
+    # Сохранить схему ученика (автосохранение из SchemaEditorSection).
+    # GET  /api/task/<id>/save_student_schema/?session_id=<id>  — получить схему.
+    # --------------------------------------------------------------------------
+    @action(detail=True, methods=["post", "get"])
+    def save_student_schema(self, request, pk=None):
+        try:
+            task = Task.objects.get(pk=pk)
+        except Task.DoesNotExist:
+            return Response({"detail": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        session_id = request.data.get("session_id") or request.query_params.get("session_id")
+        if not session_id:
+            return Response({"detail": "session_id required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            session = LearningSession.objects.get(pk=session_id, user=request.user)
+        except LearningSession.DoesNotExist:
+            return Response({"detail": "Session not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        task_attempt = (
+            TaskAttempt.objects.filter(session=session, task=task).order_by("id").first()
+        )
+
+        if request.method == "GET":
+            schema = (task_attempt.schema_data or {}) if task_attempt else {}
+            return Response({"schema_data": schema if schema.get("elements") else None})
+
+        # POST — сохраняем схему
+        schema_data = request.data.get("schema_data") or {}
+        if not task_attempt:
+            task_attempt = TaskAttempt.objects.create(
+                session=session, task=task, is_correct=None
+            )
+        task_attempt.schema_data = schema_data
+        task_attempt.save(update_fields=["schema_data"])
+        return Response({"ok": True})
 
     # --------------------------------------------------------------------------
     # POST /api/task/<id>/check_step/

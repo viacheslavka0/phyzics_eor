@@ -74,11 +74,11 @@ function UnifiedLogin({ onLoggedIn }) {
           <div className="w-24 h-24 mx-auto mb-6 bg-white rounded-2xl flex items-center justify-center shadow-lg">
             <img src={import.meta.env.BASE_URL + 'logo.png'} alt="Логотип" className="w-16 h-16 object-contain" />
           </div>
-          <h1 className="text-2xl font-bold mb-2 leading-snug text-white">ЭОР по усвоению систем физических знаний</h1>
+          <h1 className="text-2xl font-bold mb-2 leading-snug text-emerald-100 drop-shadow-sm">ЭОР по усвоению систем физических знаний</h1>
           <p className="text-base text-indigo-100 mb-6">7–9 класс</p>
           <div className="border-t border-white/30 pt-6">
             <p className="text-sm italic text-indigo-200">
-              "Физика — это не просто формулы. Это язык, на котором говорит вселенная."
+              «Физика — это не просто формулы. Это язык, на котором говорит вселенная.»
             </p>
           </div>
         </div>
@@ -88,7 +88,7 @@ function UnifiedLogin({ onLoggedIn }) {
       <div className="w-full md:w-1/2 flex items-center justify-center p-4 sm:p-6">
         <div className="w-full max-w-sm animate-fadeIn">
           <div className="mb-8">
-            <h2 className="text-3xl font-bold text-slate-900 mb-1">Добро пожаловать</h2>
+            <h2 className="text-3xl font-bold text-indigo-700 mb-1">Добро пожаловать</h2>
             <p className="text-slate-600 text-sm">Введите учетные данные для входа</p>
           </div>
 

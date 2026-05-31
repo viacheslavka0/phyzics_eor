@@ -5911,14 +5911,37 @@ function StageStepByStep() {
   const loadTaskStepByStep = async (taskId) => {
     try {
       setLoading(true);
-      const res = await fetch(`/api/task/${taskId}/step_by_step/`);
+      // Передаём session_id — бэкенд вернёт saved_attempts и student_schema
+      // для восстановления прогресса после F5.
+      const url = session?.id
+        ? `/api/task/${taskId}/step_by_step/?session_id=${session.id}`
+        : `/api/task/${taskId}/step_by_step/`;
+      const res = await fetch(url);
       if (!res.ok) throw new Error("Не удалось загрузить задачу");
       const data = await res.json();
       setTaskData(data);
-      setCurrentStepIndex(0);
+
+      // Восстанавливаем прогресс если есть сохранённые попытки
+      if (data.saved_attempts && Object.keys(data.saved_attempts).length > 0) {
+        setStepAttempts(data.saved_attempts);
+        // Переходим к первому незавершённому шагу
+        const steps = data.steps || [];
+        const firstIncomplete = steps.findIndex(
+          (s) => !data.saved_attempts[s.order]?.final_answer
+        );
+        setCurrentStepIndex(firstIncomplete >= 0 ? firstIncomplete : steps.length - 1);
+      } else {
+        setCurrentStepIndex(0);
+        setStepAttempts({});
+      }
+
+      // Восстанавливаем схему ученика
+      if (data.student_schema?.elements?.length > 0) {
+        setSchemaStudentSnapshot(data.student_schema);
+      }
+
       setStudentAnswers({});
       setTextSelections({});
-      setStepAttempts({});
     } catch (e) {
       setError(e.message);
     } finally {
@@ -6528,59 +6551,60 @@ function StageStepByStep() {
             )}
 
             {/* boolean — ответ да/нет */}
-            {currentStep.step_type === "boolean" && (
-              <>
-                <label className="block text-sm font-medium text-slate-700 mb-3">
-                  Выберите ответ:
-                </label>
-                <div className="flex flex-col sm:flex-row gap-3 mb-4">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setStudentAnswers({
-                        ...studentAnswers,
-                        [currentStepOrder]: "yes",
-                      })
-                    }
-                    className={`flex-1 px-4 py-3 rounded-lg border text-sm font-medium transition-colors ${
-                      studentAnswers[currentStepOrder] === "yes"
-                        ? "bg-emerald-600 text-white border-emerald-600"
-                        : "bg-white text-slate-800 border-slate-300 hover:bg-emerald-50"
-                    }`}
-                  >
-                    Да
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setStudentAnswers({
-                        ...studentAnswers,
-                        [currentStepOrder]: "no",
-                      })
-                    }
-                    className={`flex-1 px-4 py-3 rounded-lg border text-sm font-medium transition-colors ${
-                      studentAnswers[currentStepOrder] === "no"
-                        ? "bg-rose-600 text-white border-rose-600"
-                        : "bg-white text-slate-800 border-slate-300 hover:bg-rose-50"
-                    }`}
-                  >
-                    Нет
-                  </button>
-                </div>
-                {currentStep.hint && (
-                  <p className="text-xs text-slate-500 mt-1 italic">💡 {currentStep.hint}</p>
-                )}
-                <div className="mt-4 flex justify-end">
-                  <button
-                    onClick={() => handleCheckStep(currentStepOrder)}
-                    disabled={checking || !studentAnswers[currentStepOrder]}
-                    className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {checking ? "Проверка..." : "Проверить"}
-                  </button>
-                </div>
-              </>
-            )}
+            {currentStep.step_type === "boolean" && (() => {
+              const boolChecked = !!attempt?.final_answer;
+              return (
+                <>
+                  <label className="block text-sm font-medium text-slate-700 mb-3">
+                    Выберите ответ:
+                  </label>
+                  <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                    <button
+                      type="button"
+                      disabled={boolChecked}
+                      onClick={() =>
+                        setStudentAnswers({ ...studentAnswers, [currentStepOrder]: "yes" })
+                      }
+                      className={`flex-1 px-4 py-3 rounded-lg border text-sm font-medium transition-colors disabled:cursor-not-allowed ${
+                        studentAnswers[currentStepOrder] === "yes" && !boolChecked
+                          ? "bg-emerald-600 text-white border-emerald-600"
+                          : "bg-white text-slate-800 border-slate-300 hover:bg-emerald-50 disabled:opacity-60"
+                      }`}
+                    >
+                      Да
+                    </button>
+                    <button
+                      type="button"
+                      disabled={boolChecked}
+                      onClick={() =>
+                        setStudentAnswers({ ...studentAnswers, [currentStepOrder]: "no" })
+                      }
+                      className={`flex-1 px-4 py-3 rounded-lg border text-sm font-medium transition-colors disabled:cursor-not-allowed ${
+                        studentAnswers[currentStepOrder] === "no" && !boolChecked
+                          ? "bg-rose-600 text-white border-rose-600"
+                          : "bg-white text-slate-800 border-slate-300 hover:bg-rose-50 disabled:opacity-60"
+                      }`}
+                    >
+                      Нет
+                    </button>
+                  </div>
+                  {currentStep.hint && !boolChecked && (
+                    <p className="text-xs text-slate-500 mt-1 italic">💡 {currentStep.hint}</p>
+                  )}
+                  {!boolChecked && (
+                    <div className="mt-4 flex justify-end">
+                      <button
+                        onClick={() => handleCheckStep(currentStepOrder)}
+                        disabled={checking || !studentAnswers[currentStepOrder]}
+                        className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {checking ? "Проверка..." : "Проверить"}
+                      </button>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
 
             {/* schema — ученик работает со схемой задачи (как в основном решении) */}
             {currentStep.step_type === "schema" && (
@@ -6590,11 +6614,13 @@ function StageStepByStep() {
                   модель для сравнения, и ты сможешь выбрать: перейти дальше или доработать свою.
                 </div>
 
-                {/* Схема ученика (живой редактор, сохраняется в сессию) */}
+                {/* Схема ученика (живой редактор, сохраняется в сессию).
+                    savedSchema — для восстановления после F5 (приходит из step_by_step). */}
                 <SchemaEditorSection
                   taskId={taskData.task.id}
                   sessionId={session?.id}
                   onSchemaSaved={setSchemaStudentSnapshot}
+                  savedSchema={schemaStudentSnapshot}
                 />
 
                 {currentStep.hint && (
@@ -7491,9 +7517,9 @@ function StageCompleted() {
 // SCHEMA EDITOR SECTION
 // ============================================================================
 
-function SchemaEditorSection({ taskId, sessionId, onSchemaSaved }) {
+function SchemaEditorSection({ taskId, sessionId, onSchemaSaved, savedSchema = null }) {
   const [isOpen, setIsOpen] = useState(true); // Открыт по умолчанию
-  const [schemaData, setSchemaData] = useState(null);
+  const [schemaData, setSchemaData] = useState(savedSchema); // восстановление после F5
   const [starterSchema, setStarterSchema] = useState(null);
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);

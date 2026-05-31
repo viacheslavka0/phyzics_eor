@@ -528,6 +528,7 @@ python manage.py check  # Validate Django
 ## Useful Resources in This Repo
 
 - **DEVLOG.md** — Session-by-session log of changes made
+- **DIPLOMA_STATUS.md** — Статус дипломной работы (НИР): что сделано, что осталось, как начать чат
 - **TROUBLESHOOTING.md** — Common issues & solutions
 - **DEPLOY.md** — Production deployment guide
 - **ui/REFACTORING_PLAN.md** — Plan to extract stage components

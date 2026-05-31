@@ -1001,8 +1001,8 @@ function LearningView() {
         <div className={`p-3 border-b border-slate-200 flex items-center ${sidebarCollapsed ? "justify-center" : "justify-between"}`}>
           {!sidebarCollapsed && (
             <button onClick={handleBackToCatalog} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-              <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center flex-shrink-0">
-                <span className="text-white font-bold text-lg">E</span>
+              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm border border-slate-100">
+                <img src={import.meta.env.BASE_URL + 'logo.png'} alt="Логотип" className="w-8 h-8 object-contain" />
               </div>
               <div className="text-left">
                 <div className="font-semibold text-sm text-slate-900">ЭОР</div>
@@ -1011,14 +1011,14 @@ function LearningView() {
             </button>
           )}
           {sidebarCollapsed && (
-            <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center flex-shrink-0 group-hover:hidden">
-              <span className="text-white font-bold text-lg">E</span>
+            <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0 group-hover:hidden shadow-sm border border-slate-100">
+              <img src={import.meta.env.BASE_URL + 'logo.png'} alt="Логотип" className="w-8 h-8 object-contain" />
             </div>
           )}
           {sidebarCollapsed && (
             <button onClick={handleBackToCatalog} className="hidden group-hover:flex items-center gap-3 hover:opacity-80 transition-opacity">
-              <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center flex-shrink-0">
-                <span className="text-white font-bold text-lg">E</span>
+              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm border border-slate-100">
+                <img src={import.meta.env.BASE_URL + 'logo.png'} alt="Логотип" className="w-8 h-8 object-contain" />
               </div>
               <div className="text-left">
                 <div className="font-semibold text-sm text-slate-900">ЭОР</div>
